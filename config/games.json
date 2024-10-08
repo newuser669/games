@@ -1,118 +1,18 @@
 [
   {
-    "link": "projects/1/index.html",
-    "imgSrc": "projects/1/meta/apple-touch-icon.png",
-    "title": "1"
-  },
-  {
-    "link": "projects/1v1space/index.html",
-    "imgSrc": "projects/1v1space/splash.png",
-    "title": "1v1.space"
-  },
-  {
     "link": "projects/2048/index.html",
     "imgSrc": "projects/2048/thumb.png",
     "title": "2048"
   },
   {
-    "link": "projects/9007199254740992/index.html",
-    "imgSrc": "projects/9007199254740992/logo-4.png",
-    "title": "9007199254740992"
-  },
-  {
-    "link": "projects/achievementunlocked/index.html",
-    "imgSrc": "projects/achievementunlocked/achievementunlocked.png",
-    "title": "Achievement Unlocked"
-  },
-  {
-    "link": "projects/adrenalinechallenge/index.html",
-    "imgSrc": "projects/adrenalinechallenge/adrenalinechallenge.jpg",
-    "title": "Adrenaline Challenge"
-  },
-  {
-    "link": "projects/among-us/index.html",
-    "imgSrc": "projects/among-us/red.png",
-    "title": "Among Us"
-  },
-  {
-    "link": "projects/avalanche/index.html",
-    "imgSrc": "projects/avalanche/avalanche.png",
-    "title": "Avalanche"
-  },
-  {
-    "link": "projects/backrooms/index.html",
-    "imgSrc": "projects/backrooms/img/splash.jpg",
-    "title": "Backrooms"
-  },
-  {
-    "link": "projects/basketball-stars/index.html",
-    "imgSrc": "projects/basketball-stars/assets/images/basketball-stars.png",
-    "title": "Basketball Stars"
-  },
-  {
-    "link": "projects/battleforgondor/index.html",
-    "imgSrc": "projects/battleforgondor/3557.jpg",
-    "title": "Battle for Gondor"
-  },
-  {
-    "link": "projects/bigredbutton/index.html",
-    "imgSrc": "projects/bigredbutton/bigredbutton.png",
-    "title": "Big Red Button"
-  },
-  {
-    "link": "projects/blackknight/index.html",
-    "imgSrc": "projects/blackknight/blackknight.png",
-    "title": "Black Knight"
-  },
-  {
-    "link": "projects/bloonstd/index.html",
-    "imgSrc": "projects/bloonstd/bloonstd.jpg",
-    "title": "Bloons TD"
-  },
-  {
-    "link": "projects/bloonstd2/index.html",
-    "imgSrc": "projects/bloonstd2/bloonstd2.png",
-    "title": "Bloons TD 2"
-  },
-  {
     "link": "projects/bloxors/index.html",
     "imgSrc": "projects/bloxors/block.png",
-    "title": "Bloxors"
-  },
-  {
-    "link": "projects/boxhead2play/index.html",
-    "imgSrc": "projects/boxhead2play/boxhead2play.jpg",
-    "title": "Box Head"
+    "title": "Bloxorz"
   },
   {
     "link": "projects/breakingthebank/index.html",
     "imgSrc": "projects/breakingthebank/breakingthebank.png",
     "title": "Breaking the Bank"
-  },
-  {
-    "link": "projects/btts/index.html",
-    "imgSrc": "projects/btts/images.png",
-    "title": "Big Tower Tiny Square"
-  },
-  {
-    "link": "projects/cannon-basketball-4/index.html",
-    "imgSrc": "projects/cannon-basketball-4/img/splash.png",
-    "title": "Cannon Basketball 4"
-  },
-  {
-    "link": "projects/canyondefense/index.html",
-    "imgSrc": "projects/canyondefense/canyondefense.png",
-    "title": "Canyon Defense"
-  },
-  {
-    "link": "projects/cell-machine/index.html",
-    "imgSrc": "projects/cell-machine/img/te9nDu.png",
-    "title": "Cell Machine"
-  },
-  {
-    "link": "projects/championarcher/index.html",
-    "imgSrc": "projects/championarcher/championarcher.png",
-    "title": "Champion Archer"
   },
   {
     "link": "projects/chrome-dino/index.html",
@@ -122,7 +22,7 @@
   {
     "link": "projects/circlo/index.html",
     "imgSrc": "projects/circlo/img/download.png",
-    "title": "circlO"
+    "title": "circloo"
   },
   {
     "link": "projects/connect3/index.html",
@@ -358,6 +258,11 @@
     "link": "projects/impossiblequiz/index.html",
     "imgSrc": "projects/impossiblequiz/impossiblequiz.png",
     "title": "Impossible Quiz"
+  },
+  {
+    "link": target=”_blank” "https://neal.fun/infinite-craft",
+    "imgSrc": "projects/interactivebuddy/interactivebuddy.jpg",
+    "title": "Infinite craft"
   },
   {
     "link": "projects/interactivebuddy/index.html",

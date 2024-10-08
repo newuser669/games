@@ -260,7 +260,7 @@
     "title": "Impossible Quiz"
   },
   {
-    "link": "target=”_blank”", "https://neal.fun/infinite-craft",
+    "link": "https://neal.fun/infinite-craft",
     "imgSrc": "projects/interactivebuddy/interactivebuddy.jpg",
     "title": "Infinite craft"
   },
@@ -308,11 +308,6 @@
     "link": "projects/minecraft/index.html",
     "imgSrc": "projects/minecraft/splash.jpeg",
     "title": "Eaglercraft"
-  },
-  {
-    "link": "projects/minecraft-classic/index.html",
-    "imgSrc": "projects/minecraft-classic/pack.png",
-    "title": "Minecraft Classic"
   },
   {
     "link": "projects/minesweeper/index.html",

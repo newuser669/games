@@ -50,6 +50,11 @@
     "title": "Duck Life 3"
   },
   {
+    "link": "projects/resent-client/index.html",
+    "imgSrc": "projects/resent-client/splash.jpg",
+    "title": "Eaglercraft (resent client)"
+  },
+  {
     "link": "projects/flappy-bird/index.html",
     "imgSrc": "projects/flappy-bird/assets/thumb.png",
     "title": "Flappy Bird"

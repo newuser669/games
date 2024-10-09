@@ -25,11 +25,6 @@
     "title": "circloo"
   },
   {
-    "link": "projects/connect3/index.html",
-    "imgSrc": "projects/connect3/connect3.png",
-    "title": "Connect 3"
-  },
-  {
     "link": "projects/cookie-clicker/index.html",
     "imgSrc": "projects/cookie-clicker/cookie1.jpeg",
     "title": "Cookie Clicker"

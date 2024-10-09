@@ -35,6 +35,11 @@
     "title": "Doodle Jump"
   },
   {
+    "link": "projects/ducklife1/index.html",
+    "imgSrc": "projects/ducklife1/ducklife.png",
+    "title": "Duck Life 1"
+  },
+  {
     "link": "projects/ducklife2/index.html",
     "imgSrc": "projects/ducklife2/ducklife2.png",
     "title": "Duck Life 2"
@@ -45,9 +50,19 @@
     "title": "Duck Life 3"
   },
   {
+    "link": "projects/minecraft-18/index.html",
+    "imgSrc": "projects/minecraft-18/splash.png",
+    "title": "Eaglercraft"
+  },
+  {
     "link": "projects/resent-client/1.8/index.html",
     "imgSrc": "projects/resent-client/splash.jpg",
     "title": "Eaglercraft (resent client)"
+  },
+  {
+    "link": "projects/escapingtheprison/index.html",
+    "imgSrc": "projects/escapingtheprison/escapingtheprison.jpg",
+    "title": "Escaping The Prison"
   },
   {
     "link": "projects/flappy-bird/index.html",
@@ -63,6 +78,11 @@
     "link": "projects/geodash/index.html",
     "imgSrc": "projects/geodash/geoscratchicon.png",
     "title": "Geometry Dash (Scratch)"
+  },
+  {
+    "link": "projects/google-feud/index.html",
+    "imgSrc": "projects/google-feud/splash.png",
+    "title": "Google Feud"
   },
   {
     "link": "projects/google-snake/index.html",
@@ -90,6 +110,11 @@
     "title": "Infinite craft"
   },
   {
+    "link": "projects/jetpack-joyride/index.html",
+    "imgSrc": "projects/jetpack-joyride/splash.jpg",
+    "title": "Jetpack Joyride"
+  },
+  {
     "link": "projects/krunker/index.html",
     "imgSrc": "projects/krunker/img/krunker-io.jpg",
     "title": "Krunker"
@@ -98,6 +123,16 @@
     "link": "projects/learntofly/index.html",
     "imgSrc": "projects/learntofly/learntofly.png",
     "title": "Learn To Fly"
+  },
+  {
+    "link": "projects/learntofly2/index.html",
+    "imgSrc": "projects/learntofly2/learn-to-fly-2.jpg",
+    "title": "Learn To Fly 2"
+  },
+  {
+    "link": "projects/linerider/linerider.html",
+    "imgSrc": "projects/linerider/6954B825-C61C-41E0-BFD9-7EA4FC6D0FE1.jpeg",
+    "title": "Minesweeper"
   },
   {
     "link": "projects/minesweeper/index.html",
@@ -135,9 +170,29 @@
     "title": "Portal (Flash)"
   },
   {
+    "link": "projects/run/index.html",
+    "imgSrc": "projects/run/run.png",
+    "title": "Run 1"
+  },
+  {
+    "link": "projects/Run 2/index.html",
+    "imgSrc": "projects/Run 2/run-2-logo.jpg",
+    "title": "Run 2"
+  },
+  {
+    "link": "projects/Run 3/Run 3.html",
+    "imgSrc": "projects/Run 3/image_proxy.jpg",
+    "title": "Run 3"
+  },
+  {
     "link": "https://scratch.mit.edu",
     "imgSrc": "projects/scratch.png",
     "title": "Scratch"
+  },
+  {
+    "link": "projects/slitherio/slitherio.html",
+    "imgSrc": "projects/slitherio/7EDEF379-07A2-4604-B552-C0A3DB2D70BE.jpeg",
+    "title": "Slither.io"
   },
   {
     "link": "projects/slope/index.html",
@@ -180,8 +235,13 @@
     "title": "This Is The Only Level"
   },
   {
+    "link": "projects/wbwwb-master/index.html",
+    "imgSrc": "projects/wbwwb-master/wbwwb.png",
+    "title": "We Become What We Behold"
+  },
+  {
     "link": "projects/webretro-local/index.html",
-    "imgSrc": "projects/webretro-local/assets/icon204.png",
+    "imgSrc": "projects/webretro-local/assets/icons/iconm256.png",
     "title": "Web Retro Local"
   },
   {

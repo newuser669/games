@@ -1,4 +1,4 @@
-function getRandomGreeting() {
+  function getRandomGreeting() {
   var greetings = [
     "Did you know I was featured on the talk tuah podcast?",
     "Cedric is a gyatt",
@@ -6,6 +6,8 @@ function getRandomGreeting() {
     "Shoutout to Drake!",
     "are you a gooner?",
     "𝒇𝒓𝒆𝒂𝒌𝒚",
+    "microwaving Delson",
+    "heavy! throw it back!",
     "Dwight's fire drill was not effective.",
     "I'm in Spain without the A",
     "youtube.com/watch?v=dQw4w9WgXcQ",

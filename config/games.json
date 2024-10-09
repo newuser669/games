@@ -70,6 +70,11 @@
     "title": "Google Snake"
   },
   {
+    "link": "https://totaljerkface.com/happy_wheels.tjf",
+    "imgSrc": "projects/happywheels.png",
+    "title": "Happy Wheels"
+  },
+  {
     "link": "projects/idle-breakout/index.html",
     "imgSrc": "projects/idle-breakout/img/thumbnail.png",
     "title": "Idle Breakout"
@@ -130,9 +135,19 @@
     "title": "Portal (Flash)"
   },
   {
+    "link": "https://scratch.mit.edu",
+    "imgSrc": "projects/scratch.png",
+    "title": "Scratch"
+  },
+  {
     "link": "projects/slope/index.html",
     "imgSrc": "projects/slope/slope4.jpeg",
     "title": "Slope"
+  },
+  {
+    "link": "https://slowroads.io",
+    "imgSrc": "projects/slope/slope4.jpeg",
+    "title": "Slowroads"
   },
   {
     "link": "projects/solitaire/index.html",

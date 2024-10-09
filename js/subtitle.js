@@ -5,6 +5,8 @@
     "Powered by baby oil!",
     "Shoutout to Drake!",
     "are you a gooner?",
+    "wouldn't it be funny?",
+    "do you smell it?",
     "𝒇𝒓𝒆𝒂𝒌𝒚",
     "microwaving Delson",
     "heavy! throw it back!",

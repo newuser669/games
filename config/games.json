@@ -95,11 +95,6 @@
     "title": "Learn To Fly"
   },
   {
-    "link": "projects/minecraft/index.html",
-    "imgSrc": "projects/minecraft/splash.jpeg",
-    "title": "Eaglercraft"
-  },
-  {
     "link": "projects/minesweeper/index.html",
     "imgSrc": "projects/minesweeper/img/minesweeper.png",
     "title": "Minesweeper"

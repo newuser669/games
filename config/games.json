@@ -75,6 +75,11 @@
     "title": "Flash Tetris"
   },
   {
+    "link": "https://openguessr.com",
+    "imgSrc": "projects/geoguessr.png",
+    "title": "Geoguessr"
+  },
+  {
     "link": "projects/geodash/index.html",
     "imgSrc": "projects/geodash/geoscratchicon.png",
     "title": "Geometry Dash (Scratch)"
@@ -128,11 +133,6 @@
     "link": "projects/learntofly2/index.html",
     "imgSrc": "projects/learntofly2/learn-to-fly-2.jpg",
     "title": "Learn To Fly 2"
-  },
-  {
-    "link": "projects/linerider/linerider.html",
-    "imgSrc": "projects/linerider/6954B825-C61C-41E0-BFD9-7EA4FC6D0FE1.jpeg",
-    "title": "Line Rider"
   },
   {
     "link": "projects/minesweeper/index.html",

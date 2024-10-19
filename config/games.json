@@ -10,6 +10,11 @@
     "title": "Agar.io"
   },
   {
+    "link": "https://en.akinator.com",
+    "imgSrc": "projects/akinator.jpeg",
+    "title": "Akinator"
+  },
+  {
     "link": "projects/appel/index.html",
     "imgSrc": "projects/appel.png",
     "title": "Appel"
@@ -128,6 +133,16 @@
     "link": "https://totaljerkface.com/happy_wheels.tjf",
     "imgSrc": "projects/happywheels.png",
     "title": "Happy Wheels"
+  },
+  {
+    "link": "https://totaljerkface.com/happy_wheels.tjf",
+    "imgSrc": "projects/happywheels.png",
+    "title": "Happy Wheels"
+  },
+  {
+    "link": "https://hole-io.com",
+    "imgSrc": "projects/Hole.jpg",
+    "title": "Hole.io"
   },
   {
     "link": "projects/humanbenchmark/index.html",
@@ -300,7 +315,7 @@
     "title": "This Is The Only Level"
   },
   {
-    "link": "projects/wbwwb-master/index.html",
+    "link": "https://ncase.itch.io/wbwwb",
     "imgSrc": "projects/wbwwb-master/wbwwb.png",
     "title": "We Become What We Behold"
   },
@@ -308,6 +323,11 @@
     "link": "listofroms/listofroms.html",
     "imgSrc": "projects/webretro-local/assets/icons/iconm256.png",
     "title": "Web Retro"
+  },
+  {
+    "link": "https://www.whatbeatsrock.com",
+    "imgSrc": "projects/rock.png",
+    "title": "What Beats Rock?"
   },
   {
     "link": "projects/worlds-hardest-game/index.html",

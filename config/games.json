@@ -5,6 +5,11 @@
     "title": "2048"
   },
   {
+    "link": "https://agar.io",
+    "imgSrc": "projects/agar.jpeg",
+    "title": "Agar.io"
+  },
+  {
     "link": "projects/appel/index.html",
     "imgSrc": "projects/appel.png",
     "title": "Appel"
@@ -23,6 +28,11 @@
     "link": "projects/buildroyale/index.html",
     "imgSrc": "projects/buildroyale.png",
     "title": "Build Royale"
+  },
+  {
+    "link": "https://chess.com",
+    "imgSrc": "projects/chess.png",
+    "title": "Chess.com"
   },
   {
     "link": "projects/chrome-dino/index.html",
@@ -90,6 +100,11 @@
     "title": "Flash Tetris"
   },
   {
+    "link": "https://www.newgrounds.com/portal/view/665992",
+    "imgSrc": "projects/complex.png",
+    "title": "Fleeing the Complex"
+  },
+  {
     "link": "https://openguessr.com",
     "imgSrc": "projects/geoguessr.png",
     "title": "Geoguessr"
@@ -133,6 +148,11 @@
     "link": "projects/impossiblequiz/index.html",
     "imgSrc": "projects/impossiblequiz/impossiblequiz.png",
     "title": "Impossible Quiz"
+  },
+  {
+    "link": "https://www.newgrounds.com/portal/view/618518",
+    "imgSrc": "projects/airship.png",
+    "title": "Infiltrating the Airship"
   },
   {
     "link": "https://neal.fun/infinite-craft",

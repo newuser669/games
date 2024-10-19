@@ -15,6 +15,11 @@
     "title": "Breaking the Bank"
   },
   {
+    "link": "projects/buildroyale/index.html",
+    "imgSrc": "projects/buildroyale.png",
+    "title": "Build Royale"
+  },
+  {
     "link": "projects/chrome-dino/index.html",
     "imgSrc": "projects/chrome-dino/icons/icon-256.png",
     "title": "Chrome Dino"
@@ -28,6 +33,11 @@
     "link": "projects/cookie-clicker/index.html",
     "imgSrc": "projects/cookie-clicker/cookie1.jpeg",
     "title": "Cookie Clicker"
+  },
+  {
+    "link": "projects/cpstest/index.html",
+    "imgSrc": "projects/cpstest.png",
+    "title": "CPS Test"
   },
   {
     "link": "projects/doodle-jump/index.html",
@@ -98,6 +108,16 @@
     "link": "https://totaljerkface.com/happy_wheels.tjf",
     "imgSrc": "projects/happywheels.png",
     "title": "Happy Wheels"
+  },
+  {
+    "link": "projects/humanbenchmark/index.html",
+    "imgSrc": "projects/humanbenchmark.PNG",
+    "title": "Human or not?"
+  },
+  {
+    "link": "projects/humanornot/index.html",
+    "imgSrc": "projects/humanornot.png",
+    "title": "Human or not?"
   },
   {
     "link": "projects/idle-breakout/index.html",
@@ -175,12 +195,12 @@
     "title": "Run 1"
   },
   {
-    "link": "projects/Run 2/index.html",
+    "link": "projects/run2/index.html",
     "imgSrc": "projects/Run 2/run-2-logo.jpg",
     "title": "Run 2"
   },
   {
-    "link": "projects/run 3/Run 3.html",
+    "link": "projects/run3/index.html",
     "imgSrc": "projects/run 3/image_proxy.jpg",
     "title": "Run 3"
   },
@@ -190,12 +210,17 @@
     "title": "Scratch"
   },
   {
+    "link": "projects/skribbl/index.html",
+    "imgSrc": "projects/skribbl.jpeg",
+    "title": "Skribbl.io"
+  },
+  {
     "link": "http://slither.com/io",
     "imgSrc": "projects/slitherio/7EDEF379-07A2-4604-B552-C0A3DB2D70BE.jpeg",
     "title": "Slither.io"
   },
   {
-    "link": "projects/slope/index.html",
+    "link": "projects/slopegame/index.html",
     "imgSrc": "projects/slope/slope4.jpeg",
     "title": "Slope"
   },
@@ -228,6 +253,11 @@
     "link": "projects/there-is-no-game/index.html",
     "imgSrc": "projects/there-is-no-game/logo.png",
     "title": "There Is No Game"
+  },
+  {
+    "link": "projects/thirtydollarwebsite/index.html",
+    "imgSrc": "projects/thirty.png",
+    "title": "Thirty Dollar Website"
   },
   {
     "link": "projects/thisistheonlylevel/index.html",

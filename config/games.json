@@ -5,6 +5,11 @@
     "title": "2048"
   },
   {
+    "link": "projects/appel/index.html",
+    "imgSrc": "projects/appel.png",
+    "title": "Appel"
+  },
+  {
     "link": "projects/bloxors/index.html",
     "imgSrc": "projects/bloxors/block.png",
     "title": "Bloxorz"

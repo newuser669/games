@@ -112,7 +112,7 @@
   {
     "link": "projects/humanbenchmark/index.html",
     "imgSrc": "projects/humanbenchmark.PNG",
-    "title": "Human or not?"
+    "title": "Human Benchmark"
   },
   {
     "link": "projects/humanornot/index.html",
@@ -155,6 +155,11 @@
     "title": "Learn To Fly 2"
   },
   {
+    "link": "projects/linerider/index.html",
+    "imgSrc": "projects/linerider.png",
+    "title": "Line Rider"
+  },
+  {
     "link": "projects/minesweeper/index.html",
     "imgSrc": "projects/minesweeper/img/minesweeper.png",
     "title": "Minesweeper"
@@ -178,6 +183,11 @@
     "link": "projects/motox3m-winter/index.html",
     "imgSrc": "projects/motox3m-winter/download.jpeg",
     "title": "MotoX3M Winter"
+  },
+  {
+    "link": "projects/paperclip/index.html",
+    "imgSrc": "projects/paperclips.png",
+    "title": "Universal Paperclips"
   },
   {
     "link": "https://paper-io.com",
@@ -225,7 +235,7 @@
     "title": "Slope"
   },
   {
-    "link": "https://slowroads.io",
+    "link": "projects/slowroads/index.html",
     "imgSrc": "projects/slowroads.jpg",
     "title": "Slowroads"
   },

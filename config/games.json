@@ -185,6 +185,11 @@
     "title": "Line Rider"
   },
   {
+    "link": "https://makeitmeme.com/en",
+    "imgSrc": "projects/makeitmeme.png",
+    "title": "Make it Meme"
+  },
+  {
     "link": "projects/minesweeper/index.html",
     "imgSrc": "projects/minesweeper/img/minesweeper.png",
     "title": "Minesweeper"

@@ -245,6 +245,11 @@
     "title": "Scratch"
   },
   {
+    "link": "projects/shadybears/index.html",
+    "imgSrc": "projects/shadybears/shadybears.png",
+    "title": "Shady Bears"
+  },
+  {
     "link": "projects/skribbl/index.html",
     "imgSrc": "projects/skribbl.jpeg",
     "title": "Skribbl.io"

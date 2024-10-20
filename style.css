@@ -3,4 +3,10 @@
     src: url('/minecraft_font.ttf') format('truetype');
     font-weight: 300;
     font-style: normal;
+},
+{
+    font-family: 'nova';
+    src: url('/NovaRound-Regular.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
 }

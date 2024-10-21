@@ -28,9 +28,6 @@ function getRandomGreeting() {
   if (selectedGreeting === "silly little guy ↓") {
     sillylittleguy = true;
   }
-  if (selectedGreeting === "umm what do I press to shoot? - Peter Griffin") {
-    sillylittleguy = true;
-  }
 
   return selectedGreeting;
 }

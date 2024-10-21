@@ -2,21 +2,22 @@ let specificGreetingSelected = false;
 
 function getRandomGreeting() {
   var greetings = [
-    "Did you know I was featured on the talk tuah podcast?",
+    "did you know I was featured on the talk tuah podcast?",
     "Cedric is a gyatt",
-    "Powered by baby oil!",
-    "Shoutout to Drake!",
-    "are you a gooner?",
+    "yo Pierre, you wanna come out here?",
+    "yuh - Drake",
     "wouldn't it be funny?",
     "do you smell it?",
+    "no, this is Patrick!",
     "𝒇𝒓𝒆𝒂𝒌𝒚",
     "microwaving Delson",
     "heavy! throw it back!",
     "Dwight's fire drill was not effective.",
     "I'm in Spain without the A",
     "youtube.com/watch?v=dQw4w9WgXcQ",
+    "your UPS package is delayed.",
     "silly little guy ↓",
-    "May I please have a water?",
+    "may I please have a water?",
     "umm what do I press to shoot? - Peter Griffin",
     "Why do they call it oven if you food oven the cold food of out hot eat the oven?",
   ];

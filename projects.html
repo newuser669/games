@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US">
-  <head>
+<head>
     <title>games | gamesinclass</title>
     <meta name="keywords" content="games site, games" />
     <meta property="og:title" content="gamesinclass" />
@@ -15,135 +15,139 @@
     <link rel="stylesheet" href="/style.css" type="text/css" />
     <script src="/js/main.js"></script>
     <style>
-      p {
-        text-align: center;
-        max-width: 270px;
-        margin: 20px auto;
-      }
-      button {
-        cursor: pointer;
-        background-color: #22c55e;
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        border-radius: 20px;
-        margin-top: 20px;
-      }
-      .game-link {
-        height: auto;
-        width: 300px;
-        text-decoration: none;
-      }
-      .game-tile {
-        background-color: #0e0e0e;
-        height: auto;
-        width: 300px;
-        border-radius: 30px;
-      }
-      .game-icon {
-        border-radius: 30px;
-        width: 300px;
-        height: 300px;
-      }
-      .game-title {
-        font-size: 22px;
-        font-weight: bold;
-        color: #ffffff;
-        text-align: center;
-        margin: auto;
-      }
-      .flex-container {
-        display: flex;
-        flex-direction: row;
-        order: 0;
-        flex-grow: 0;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-      }
-      .container {
-        padding: 8px;
-      }
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
+        p {
+            text-align: center;
+            max-width: 270px;
+            margin: 20px auto;
         }
-        100% {
-          transform: rotate(360deg);
+        
+        .game-link {
+            height: auto;
+            width: 300px;
+            text-decoration: none;
+            display: inline-block; /* Make the link a block for better hover effects */
+            border-radius: 30px;
+            transition: transform 0.3s ease;
         }
-      }
+
+        .game-tile {
+            background-color: #0e0e0e;
+            border-radius: 30px;
+            padding: 20px; /* Add some padding for a better layout */
+            box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.5), 
+                        -6px -6px 12px rgba(255, 255, 255, 0.1);
+            transition: box-shadow 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+        }
+
+        .game-tile:hover {
+            box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.7), 
+                        -8px -8px 16px rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px); /* Lift effect on hover */
+        }
+
+        .game-icon {
+            border-radius: 30px;
+            width: 100%; /* Adjust width for responsiveness */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .game-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            margin: auto;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            padding: 8px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
-  </head>
-  <body style="background-color: #000000; color: #ffffff; font-family: minecraft; text-decoration: none; text-align: center;">
+</head>
+<body style="background-color: #000000; color: #ffffff; font-family: minecraft; text-decoration: none; text-align: center;">
     <input type="text" id="search" onkeyup="searchGames()" placeholder="Search for games..." style="width: 100%; font-size: 18px; padding: 6px 20px; margin: auto; border-radius: 30px; max-width: 600px; margin-bottom: 10px;" />
     <div id="loader" style="display: block; border: 16px solid #f3f3f3; border-top: 16px solid #3498db; border-radius: 50%; width: 120px; height: 120px; animation: spin 0.3s linear infinite; margin: auto; margin-top: 1rem;"></div>
     <div id="game-container" class="flex-container"></div>
     <p class="text-center">
-      <a href="/index.html" style="text-decoration: none;">
-        <button style="cursor: pointer; background-color: #b625cc; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; border-radius: 20px; margin-top: 5px;">
-          Go to the homepage
-        </button>
-      </a>
+        <a href="/index.html" style="text-decoration: none;">
+            <button style="cursor: pointer; background-color: #b625cc; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; border-radius: 20px; margin-top: 5px;">
+                Go to the homepage
+            </button>
+        </a>
     </p>
     <button id="back-to-top" style="display: none; position: fixed; bottom: 20px; right: 20px;">Back to top</button>
     <script>
-      let games = [];
-      fetch("config/games.json")
-      .then((response) => response.json())
-      .then((data) => {
-        games = data;
-        const container = document.getElementById("game-container");
-        data.forEach((project) => {
-          const game = document.createElement("a");
-          game.href = project.link;
-            game.className = "game-link container";
-            game.innerHTML = `
-            <div class="game-tile">
-              <img class="game-icon" src="${project.imgSrc}" alt="icon" />
-              <p class="game-title">${project.title}</p>
-              </div>`;
-              container.appendChild(game);
-          });
-          document.getElementById("loader").style.display = "none";
-        })
-        .catch((error) => console.error("Error:", error));
+        let games = [];
+        fetch("config/games.json")
+            .then((response) => response.json())
+            .then((data) => {
+                games = data;
+                const container = document.getElementById("game-container");
+                data.forEach((project) => {
+                    const game = document.createElement("a");
+                    game.href = project.link;
+                    game.className = "game-link container";
+                    game.innerHTML = `
+                        <div class="game-tile">
+                            <img class="game-icon" src="${project.imgSrc}" alt="icon" />
+                            <p class="game-title">${project.title}</p>
+                        </div>`;
+                    container.appendChild(game);
+                });
+                document.getElementById("loader").style.display = "none";
+            })
+            .catch((error) => console.error("Error:", error));
 
-      function searchGames() {
-        const input = document.getElementById("search");
-        const filter = input.value.toUpperCase();
-        const container = document.getElementById("game-container");
-        container.innerHTML = "";
-        games
-          .filter((game) => game.title.toUpperCase().includes(filter))
-          .forEach((project) => {
-            const game = document.createElement("a");
-            game.href = project.link;
-            game.className = "game-link container";
-            game.innerHTML = `
-            <div class="game-tile">
-              <img class="game-icon" src="${project.imgSrc}" alt="icon" loading="lazy" />
-              <p class="game-title">${project.title}</p>
-              </div>`;
-            container.appendChild(game);
-          });
+        function searchGames() {
+            const input = document.getElementById("search");
+            const filter = input.value.toUpperCase();
+            const container = document.getElementById("game-container");
+            container.innerHTML = "";
+            games
+                .filter((game) => game.title.toUpperCase().includes(filter))
+                .forEach((project) => {
+                    const game = document.createElement("a");
+                    game.href = project.link;
+                    game.className = "game-link container";
+                    game.innerHTML = `
+                        <div class="game-tile">
+                            <img class="game-icon" src="${project.imgSrc}" alt="icon" loading="lazy" />
+                            <p class="game-title">${project.title}</p>
+                        </div>`;
+                    container.appendChild(game);
+                });
         }
+
         const backToTopButton = document.getElementById('back-to-top');
         window.onscroll = function () {
-          if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-            backToTopButton.style.display = "block";
-          } else {
-          backToTopButton.style.display = "none";
-        }
-      };
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                backToTopButton.style.display = "block";
+            } else {
+                backToTopButton.style.display = "none";
+            }
+        };
 
-      backToTopButton.onclick = function () {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-      };
+        backToTopButton.onclick = function () {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        };
     </script>
-  </body>
+</body>
 </html>

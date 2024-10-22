@@ -38,6 +38,6 @@ document.getElementById("subtitle").innerText = getRandomGreeting();
 // Show the image if specificGreetingSelected is true
 if (sillylittleguy) {
   const imageElement = document.getElementById("specialImage");
-  imageElement.src = "https://i.pinimg.com/736x/da/55/b7/da55b7cd90942123eef642f922a12a1e.jpg"; // Update this with your image path
+  imageElement.src = "/sillyguy.png"; // Update this with your image path
   imageElement.style.display = "block"; // Show the image
 }

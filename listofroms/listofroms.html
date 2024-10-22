@@ -33,7 +33,7 @@
 
         button {
             cursor: pointer;
-            background-color: #22c55e; /* Consistent color */
+            background: linear-gradient(145deg, #1a1a1a, #0e0e0e);
             border: none;
             color: white;
             padding: 15px 32px;
@@ -45,13 +45,20 @@
             margin-top: 20px;
             box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.5), 
                         -6px -6px 12px rgba(255, 255, 255, 0.1);
-            transition: box-shadow 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+            transition: all 0.3s ease;
         }
 
         button:hover {
-            box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.7), 
-                        -8px -8px 16px rgba(255, 255, 255, 0.2);
-            transform: translateY(-4px); /* Lift effect on hover */
+            background: linear-gradient(145deg, #0e0e0e, #1a1a1a);
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5), 
+                        -4px -4px 8px rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 
+                        -2px -2px 4px rgba(255, 255, 255, 0.2);
+            transform: translateY(2px);
         }
     </style>
 </head>

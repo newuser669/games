@@ -20,6 +20,7 @@ function getRandomGreeting() {
         "may I please have a water?",
         "umm what do I press to shoot? - Peter Griffin",
         "Why do they call it oven if you food oven the cold food of out hot eat the oven?",
+        "this ain't cheddar, this quiche",
         'We do not speak of <span class="red-text">THE CLOCK INCIDENT</span>', // Added greeting
     ];
 

@@ -14,9 +14,9 @@
     <title>gamesinclass</title>
     <style>
         body {
-            background-color: #000000;
+            background-color: #000000; /* Solid black background */
             color: #ffffff;
-            font-family: minecraft;
+            font-family: 'Minecraft', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -24,15 +24,20 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            cursor: default; /* Show the default cursor */
+            overflow: hidden; /* Prevent scrolling */
+            position: relative; /* Set position relative for absolute positioning of glow */
         }
 
         h1 {
             font-size: 3em;
             text-align: center;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Add some shadow to the heading */
         }
 
         #subtitle {
             font-size: 1.5em;
+            margin: 10px 0;
         }
 
         .red-text {
@@ -68,9 +73,21 @@
                         -2px -2px 4px rgba(255, 255, 255, 0.2);
             transform: translateY(2px);
         }
+
+        /* Cursor glow effect with fade out */
+        #cursorGlow {
+            position: absolute;
+            width: 120px; /* Size increased to 1.5x (80px -> 120px) */
+            height: 120px; /* Size increased to 1.5x (80px -> 120px) */
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 10%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none; /* Prevent interaction */
+            transform: translate(-50%, -50%); /* Center the glow */
+            transition: background 0.3s ease;
+        }
     </style>
 </head>
 <body>
+    <div id="cursorGlow"></div> <!-- Glow effect div -->
     <h1>gamesinclass</h1>
     <span id="subtitle">...</span>
     <p style="text-align: center; max-width: 600px; margin: 20px auto;">
@@ -83,5 +100,13 @@
     </p>
     <img id="specialImage" src="" alt="Special Image" style="display: none; max-width: 300px; margin-top: 20px; border-radius: 15%;" />
     <script src="/js/subtitle.js"></script> <!-- Link to the JavaScript file -->
+    <script>
+        const cursorGlow = document.getElementById('cursorGlow');
+
+        document.addEventListener('mousemove', (e) => {
+            cursorGlow.style.left = `${e.clientX}px`; // Update horizontal position
+            cursorGlow.style.top = `${e.clientY}px`; // Update vertical position
+        });
+    </script>
 </body>
 </html>

@@ -20,7 +20,6 @@ function getRandomGreeting() {
         "may I please have a water?",
         "umm what do I press to shoot? - Peter Griffin",
         "Why do they call it oven if you food oven the cold food of out hot eat the oven?",
-        "this ain't cheddar, this quiche",
         'We do not speak of <span class="red-text">THE CLOCK INCIDENT</span>', // Added greeting
     ];
 
@@ -41,14 +40,16 @@ document.getElementById("subtitle").innerHTML = getRandomGreeting(); // Use inne
 if (specificGreetingSelected) {
     const imageElement = document.getElementById("specialImage");
 
-    // Generate a random number (0 or 1) for 50% chance
-    const randomImageChoice = Math.random() < 0.5 ? 0 : 1;
+    // Generate a random number between 0 and 100 for the probability distribution
+    const randomChoice = Math.random() * 100;
 
-    // Set the image source based on the random choice
-    if (randomImageChoice === 0) {
-        imageElement.src = "/sillyguy.png"; // Update this with your first image path
+    // Determine which image to show based on the random number
+    if (randomChoice < 50) {
+        imageElement.src = "/sillyguy.png"; // Update this with your first image path (50% chance)
+    } else if (randomChoice < 99) {
+        imageElement.src = "/maxwell.png"; // Update this with your second image path (49% chance)
     } else {
-        imageElement.src = "/maxwell.png"; // Update this with your second image path
+        imageElement.src = "/petah.jpg"; // Update this with your third image path (1% chance)
     }
 
     imageElement.style.display = "block"; // Show the image

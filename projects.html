@@ -15,6 +15,19 @@
     <link rel="stylesheet" href="/style.css" type="text/css" />
     <script src="/js/main.js"></script>
     <style>
+        body {
+            background-color: #000000; /* Solid black background */
+            color: #ffffff;
+            font-family: 'Minecraft', sans-serif;
+            text-decoration: none;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling */
+            position: relative; /* Set position relative for absolute positioning of glow */
+            cursor: default; /* Show the default cursor */
+        }
+
         p {
             text-align: center;
             max-width: 270px;
@@ -79,13 +92,26 @@
                 transform: rotate(360deg);
             }
         }
+
+        /* Cursor glow effect with fade out */
+        #cursorGlow {
+            position: absolute;
+            width: 120px; /* Size increased to 1.5x (80px -> 120px) */
+            height: 120px; /* Size increased to 1.5x (80px -> 120px) */
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 10%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none; /* Prevent interaction */
+            transform: translate(-50%, -50%); /* Center the glow */
+            transition: background 0.3s ease;
+        }
     </style>
 </head>
-<body style="background-color: #000000; color: #ffffff; font-family: minecraft; text-decoration: none; text-align: center;">
+<body>
+    <div id="cursorGlow"></div> <!-- Glow effect div -->
     <input type="text" id="search" onkeyup="searchGames()" placeholder="Search for games..." style="width: 100%; font-size: 18px; padding: 6px 20px; margin: auto; border-radius: 30px; max-width: 600px; margin-bottom: 10px;" />
     <div id="loader" style="display: block; border: 16px solid #f3f3f3; border-top: 16px solid #3498db; border-radius: 50%; width: 120px; height: 120px; animation: spin 0.3s linear infinite; margin: auto; margin-top: 1rem;"></div>
     <div id="game-container" class="flex-container"></div>
     <button id="back-to-top" style="display: none; position: fixed; bottom: 20px; right: 20px;">Back to top</button>
+    
     <script>
         let games = [];
         fetch("config/games.json")
@@ -141,6 +167,14 @@
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
         };
+
+        // Cursor glow effect script
+        const cursorGlow = document.getElementById('cursorGlow');
+
+        document.addEventListener('mousemove', (e) => {
+            cursorGlow.style.left = `${e.clientX}px`; // Update horizontal position
+            cursorGlow.style.top = `${e.clientY}px`; // Update vertical position
+        });
     </script>
 </body>
 </html>

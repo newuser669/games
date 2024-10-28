@@ -16,21 +16,21 @@
             background-color: #000000;
             color: #ffffff;
             font-family: sans-serif;
-            margin: 0; /* Removed padding */
+            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            min-height: 100vh; /* Ensure full height for scrollable content */
-            overflow-y: auto; /* Enable vertical scrolling */
-            cursor: default; /* Show the default cursor */
+            min-height: 100vh;
+            overflow-y: auto;
+            cursor: default;
         }
 
         .info {
             margin-bottom: 10px;
             text-align: center;
-            color: #ffffff; /* Ensures text is visible on black background */
-            display: none; /* Hidden by default */
+            color: #ffffff;
+            display: none;
         }
 
         button {
@@ -44,7 +44,7 @@
             display: inline-block;
             font-size: 16px;
             border-radius: 20px;
-            margin: 10px 0; /* Centered with top/bottom margin */
+            margin: 10px 0;
             box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.5), 
                         -6px -6px 12px rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
@@ -63,20 +63,19 @@
             transform: translateY(2px);
         }
 
-        /* Cursor glow effect */
         #cursorGlow {
             position: absolute;
-            width: 120px; /* Size increased to 1.5x (80px -> 120px) */
-            height: 120px; /* Size increased to 1.5x (80px -> 120px) */
+            width: 120px;
+            height: 120px;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 10%, rgba(255, 255, 255, 0) 70%);
-            pointer-events: none; /* Prevent interaction */
-            transform: translate(-50%, -50%); /* Center the glow */
+            pointer-events: none;
+            transform: translate(-50%, -50%);
             transition: background 0.3s ease;
         }
     </style>
 </head>
 <body>
-    <div id="cursorGlow"></div> <!-- Glow effect div -->
+    <div id="cursorGlow"></div>
     
     <div style="text-align: center;">
         <p>
@@ -95,6 +94,7 @@
     
         <div class="info" id="userAgent"></div>
         <div class="info" id="ipAddress"></div>
+        <div class="info" id="ispInfo"></div> <!-- Added for ISP information -->
         <div class="info" id="networkType"></div>
         <div class="info" id="languages"></div>
         <div class="info" id="timeZone"></div>
@@ -105,14 +105,12 @@
     </div>
 
     <script>
-        // Cursor glow effect script
         const cursorGlow = document.getElementById('cursorGlow');
         document.addEventListener('mousemove', (e) => {
-            cursorGlow.style.left = `${e.clientX}px`; // Update horizontal position
-            cursorGlow.style.top = `${e.clientY}px`; // Update vertical position
+            cursorGlow.style.left = `${e.clientX}px`;
+            cursorGlow.style.top = `${e.clientY}px`;
         });
 
-        // Toggle client information visibility
         const toggleInfoBtn = document.getElementById('toggleInfoBtn');
         const infoElements = document.querySelectorAll('.info');
 
@@ -123,22 +121,27 @@
             });
             toggleInfoBtn.innerText = isHidden ? 'Hide Client Information' : 'Client Information';
             if (isHidden) {
-                infoElements[0].style.display = 'block'; // Ensure the first element is shown
+                infoElements[0].style.display = 'block';
             }
         });
 
-        // Get browser user agent
         const userAgent = navigator.userAgent;
         document.getElementById('userAgent').innerText = `User Agent: ${userAgent}`;
 
-        // Get IP address using an external API
+        // Get IP address and ISP information using an external API
         fetch('https://api.ipify.org?format=json')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('ipAddress').innerText = `IP Address: ${data.ip}`;
+                // Fetch ISP information
+                return fetch(`https://ipapi.co/${data.ip}/json/`);
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ispInfo').innerText = `ISP: ${data.org || 'Unknown'}`;
             })
             .catch(err => {
-                console.error('Error fetching IP address:', err);
+                console.error('Error fetching IP address or ISP:', err);
             });
 
         // Get network type if supported

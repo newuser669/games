@@ -12,9 +12,9 @@ function getRandomGreeting() {
         "do you smell it?",
         "no, this is Patrick!",
         "𝒇𝒓𝒆𝒂𝒌𝒚",
+        "hawk 2: ah!",
         "microwaving Delson",
         "heavy! throw it back!",
-        "hawk two: ah!",
         "Dwight's fire drill was not effective.",
         "I'm in Spain without the A",
         "youtube.com/watch?v=dQw4w9WgXcQ",
@@ -49,19 +49,17 @@ function startTitleDrift() {
     clearInterval(titleDriftInterval);
 
     titleDriftInterval = setInterval(() => {
-        position += isMovingLeft ? -1 : 1; // Adjust position based on direction
+        position += isMovingLeft ? -1 : 1; // Move left or right
 
-        // Apply position to the title and subtitle
+        // Update position
         title.style.transform = `translateX(${position}px)`;
         subtitle.style.transform = `translateX(${position}px)`;
 
-        // Change direction when reaching screen edges
-        if (position < -100) { // Arbitrary left edge threshold
-            isMovingLeft = false;
-        } else if (position > 100) { // Arbitrary right edge threshold
-            isMovingLeft = true;
+        // Change direction when reaching edges
+        if (position <= -200 || position >= 200) { // Adjust these values as needed
+            isMovingLeft = !isMovingLeft;
         }
-    }, 20); // Adjust the interval timing for speed
+    }, 10); // Adjust the speed of drifting
 }
 
 document.getElementById("subtitle").innerHTML = getRandomGreeting(); // Use innerHTML to allow HTML content

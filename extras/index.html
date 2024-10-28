@@ -9,31 +9,30 @@
     <meta name="description" content="gamesinclass" />
     <meta name="author" content="Cedric" />
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>gamesinclass</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gamesinclass - Client Info</title>
     <style>
         body {
             background-color: #000000;
             color: #ffffff;
             font-family: sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 0; /* Removed padding */
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden; /* Prevent scrolling */
-            position: relative; /* Set position relative for absolute positioning of glow */
+            justify-content: flex-start;
+            min-height: 100vh; /* Ensure full height for scrollable content */
+            overflow-y: auto; /* Enable vertical scrolling */
             cursor: default; /* Show the default cursor */
         }
-        
-        p {
+
+        .info {
+            margin-bottom: 10px;
             text-align: center;
-            max-width: 600px;
-            margin: 20px auto;
+            color: #ffffff; /* Ensures text is visible on black background */
+            display: none; /* Hidden by default */
         }
-        
+
         button {
             cursor: pointer;
             background: linear-gradient(145deg, #1a1a1a, #0e0e0e);
@@ -45,7 +44,7 @@
             display: inline-block;
             font-size: 16px;
             border-radius: 20px;
-            margin-top: 20px;
+            margin: 10px 0; /* Centered with top/bottom margin */
             box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.5), 
                         -6px -6px 12px rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
@@ -64,7 +63,7 @@
             transform: translateY(2px);
         }
 
-        /* Cursor glow effect with fade out */
+        /* Cursor glow effect */
         #cursorGlow {
             position: absolute;
             width: 120px; /* Size increased to 1.5x (80px -> 120px) */
@@ -78,31 +77,110 @@
 </head>
 <body>
     <div id="cursorGlow"></div> <!-- Glow effect div -->
-    <p>
-        gamesinclass extras<br />
-                <a href="clientinfo.html" style="text-decoration: none;">
-            <button>Client info</button>
-        </a><br />
-        <a href="/projects/movie/index.html" style="text-decoration: none;">
-            <button>FreeCinema</button>
-        </a><br />
-        <a href="minecraft_Regular.ttf" style="text-decoration: none;">
-            <button>Minecraft font</button>
-        </a><br />
-        <a href="https://github.com/PolyMC/PolyMC/releases/download/6.1/PolyMC-Windows-Setup-6.1.exe" style="text-decoration: none;">
-            <button>PolyMC</button>
-        </a><br />
-        <br />
-    </p>
     
+    <div style="text-align: center;">
+        <p>
+            gamesinclass extras<br />
+            <a href="/projects/movie/index.html" style="text-decoration: none;">
+                <button>FreeCinema</button>
+            </a><br />
+            <a href="minecraft_Regular.ttf" style="text-decoration: none;">
+                <button>Minecraft font</button>
+            </a><br />
+            <a href="https://github.com/PolyMC/PolyMC/releases/download/6.1/PolyMC-Windows-Setup-6.1.exe" style="text-decoration: none;">
+                <button>PolyMC</button>
+            </a><br />
+            <button id="toggleInfoBtn">Client Information</button>
+        </p>
+    
+        <div class="info" id="userAgent"></div>
+        <div class="info" id="ipAddress"></div>
+        <div class="info" id="networkType"></div>
+        <div class="info" id="languages"></div>
+        <div class="info" id="timeZone"></div>
+        <div class="info" id="screenResolution"></div>
+        <div class="info" id="viewportSize"></div>
+        <div class="info" id="cookiesEnabled"></div>
+        <div class="info" id="batteryStatus"></div>
+    </div>
+
     <script>
         // Cursor glow effect script
         const cursorGlow = document.getElementById('cursorGlow');
-
         document.addEventListener('mousemove', (e) => {
             cursorGlow.style.left = `${e.clientX}px`; // Update horizontal position
             cursorGlow.style.top = `${e.clientY}px`; // Update vertical position
         });
+
+        // Toggle client information visibility
+        const toggleInfoBtn = document.getElementById('toggleInfoBtn');
+        const infoElements = document.querySelectorAll('.info');
+
+        toggleInfoBtn.addEventListener('click', () => {
+            const isHidden = infoElements[0].style.display === 'none';
+            infoElements.forEach(info => {
+                info.style.display = isHidden ? 'block' : 'none';
+            });
+            toggleInfoBtn.innerText = isHidden ? 'Hide Client Information' : 'Client Information';
+            if (isHidden) {
+                infoElements[0].style.display = 'block'; // Ensure the first element is shown
+            }
+        });
+
+        // Get browser user agent
+        const userAgent = navigator.userAgent;
+        document.getElementById('userAgent').innerText = `User Agent: ${userAgent}`;
+
+        // Get IP address using an external API
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ipAddress').innerText = `IP Address: ${data.ip}`;
+            })
+            .catch(err => {
+                console.error('Error fetching IP address:', err);
+            });
+
+        // Get network type if supported
+        if ('connection' in navigator) {
+            const connection = navigator.connection;
+            document.getElementById('networkType').innerText = `Network Type: ${connection.effectiveType}`;
+        } else {
+            document.getElementById('networkType').innerText = `Network Type: Not supported`;
+        }
+
+        // Get language
+        const languages = navigator.languages.join(', ');
+        document.getElementById('languages').innerText = `Languages: ${languages}`;
+
+        // Get time zone
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        document.getElementById('timeZone').innerText = `Time Zone: ${timeZone}`;
+
+        // Get screen resolution
+        const screenWidth = window.screen.width;
+        const screenHeight = window.screen.height;
+        document.getElementById('screenResolution').innerText = `Screen Resolution: ${screenWidth} x ${screenHeight}`;
+
+        // Get viewport size
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        document.getElementById('viewportSize').innerText = `Viewport Size: ${viewportWidth} x ${viewportHeight}`;
+
+        // Check if cookies are enabled
+        const cookiesEnabled = navigator.cookieEnabled ? "Yes" : "No";
+        document.getElementById('cookiesEnabled').innerText = `Cookies Enabled: ${cookiesEnabled}`;
+
+        // Get battery status if supported
+        if (navigator.getBattery) {
+            navigator.getBattery().then(battery => {
+                const level = battery.level * 100;
+                const charging = battery.charging ? "Charging" : "Not Charging";
+                document.getElementById('batteryStatus').innerText = `Battery Level: ${level}% (${charging})`;
+            });
+        } else {
+            document.getElementById('batteryStatus').innerText = `Battery Status: Not supported`;
+        }
     </script>
 </body>
 </html>

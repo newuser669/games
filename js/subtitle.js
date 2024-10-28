@@ -14,6 +14,7 @@ function getRandomGreeting() {
         "𝒇𝒓𝒆𝒂𝒌𝒚",
         "microwaving Delson",
         "heavy! throw it back!",
+        "hawk two: ah!",
         "Dwight's fire drill was not effective.",
         "I'm in Spain without the A",
         "youtube.com/watch?v=dQw4w9WgXcQ",

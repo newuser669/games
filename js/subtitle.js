@@ -1,4 +1,6 @@
 let specificGreetingSelected = false;
+let isMovingLeft = true; // Initial direction
+let titleDriftInterval; // To store the interval for drifting title and subtitle
 
 function getRandomGreeting() {
     var greetings = [
@@ -20,18 +22,45 @@ function getRandomGreeting() {
         "may I please have a water?",
         "umm what do I press to shoot? - Peter Griffin",
         "Why do they call it oven if you food oven the cold food of out hot eat the oven?",
-        'We do not speak of <span class="red-text">THE CLOCK INCIDENT</span>', // Added greeting
+        'We do not speak of <span class="red-text">THE CLOCK INCIDENT</span>',
+        "virtually insane!", // Added specific greeting
     ];
 
     var randomIndex = Math.floor(Math.random() * greetings.length);
     var selectedGreeting = greetings[randomIndex];
 
-    // Check for a specific greeting
+    // Check for specific greetings
     if (selectedGreeting === "silly little guy ↓") {
         specificGreetingSelected = true;
+    } else if (selectedGreeting === "virtually insane!") {
+        startTitleDrift(); // Start drifting if the greeting is "virtually insane!"
     }
 
     return selectedGreeting;
+}
+
+function startTitleDrift() {
+    const title = document.querySelector('h1');
+    const subtitle = document.getElementById('subtitle');
+    let position = 0; // Initial position
+
+    // Clear any existing intervals
+    clearInterval(titleDriftInterval);
+
+    titleDriftInterval = setInterval(() => {
+        position += isMovingLeft ? -1 : 1; // Adjust position based on direction
+
+        // Apply position to the title and subtitle
+        title.style.transform = `translateX(${position}px)`;
+        subtitle.style.transform = `translateX(${position}px)`;
+
+        // Change direction when reaching screen edges
+        if (position < -100) { // Arbitrary left edge threshold
+            isMovingLeft = false;
+        } else if (position > 100) { // Arbitrary right edge threshold
+            isMovingLeft = true;
+        }
+    }, 20); // Adjust the interval timing for speed
 }
 
 document.getElementById("subtitle").innerHTML = getRandomGreeting(); // Use innerHTML to allow HTML content
@@ -44,9 +73,9 @@ if (specificGreetingSelected) {
     const randomChoice = Math.random() * 100;
 
     // Determine which image to show based on the random number
-    if (randomChoice < 50) {
+    if (randomChoice < 33) {
         imageElement.src = "/sillyguy.png"; // Update this with your first image path (50% chance)
-    } else if (randomChoice < 99) {
+    } else if (randomChoice < 67) {
         imageElement.src = "/maxwell.png"; // Update this with your second image path (49% chance)
     } else {
         imageElement.src = "/petah.jpg"; // Update this with your third image path (1% chance)

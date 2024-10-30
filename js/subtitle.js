@@ -64,7 +64,35 @@ function startTitleDrift() {
 }
 
 document.getElementById("subtitle").innerHTML = getRandomGreeting(); // Use innerHTML to allow HTML content
+        const cursorGlow = document.getElementById('cursorGlow');
 
+        document.addEventListener('mousemove', (e) => {
+            cursorGlow.style.left = `${e.clientX}px`; // Update horizontal position
+            cursorGlow.style.top = `${e.clientY}px`; // Update vertical position
+        });
+
+        function createSnowflakes() {
+            const snowContainer = document.getElementById('snow-container');
+            const snowflakeCount = 100; // Adjust the number of snowflakes
+
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                
+                // Randomize position and animation duration
+                const left = Math.random() * 100; // Random left position
+                const animationDuration = Math.random() * 3 + 2; // Random duration between 2 and 5 seconds
+                
+                snowflake.style.left = `${left}vw`;
+                snowflake.style.animationDuration = `${animationDuration}s`;
+                snowflake.style.animationDelay = `${Math.random() * 5}s`; // Random delay to stagger the snowfall
+
+                snowContainer.appendChild(snowflake);
+            }
+        }
+
+        // Start creating snowflakes when the page loads
+        window.onload = createSnowflakes;
 // Show a random image if specificGreetingSelected is true
 if (specificGreetingSelected) {
     const imageElement = document.getElementById("specialImage");

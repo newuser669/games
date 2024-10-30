@@ -13,6 +13,7 @@ function getRandomGreeting() {
         "no, this is Patrick!",
         "𝒇𝒓𝒆𝒂𝒌𝒚",
         "hawk 2: ah!",
+        "🎃merry halloweenmas🎃",
         "microwaving Delson",
         "heavy! throw it back!",
         "Dwight's fire drill was not effective.",
@@ -24,7 +25,7 @@ function getRandomGreeting() {
         "umm what do I press to shoot? - Peter Griffin",
         "Why do they call it oven if you food oven the cold food of out hot eat the oven?",
         'We do not speak of <span class="red-text">THE CLOCK INCIDENT</span>',
-        "virtually insane!", // Added specific greeting
+        "virtually insane!",
     ];
 
     var randomIndex = Math.floor(Math.random() * greetings.length);
@@ -34,7 +35,7 @@ function getRandomGreeting() {
     if (selectedGreeting === "silly little guy ↓") {
         specificGreetingSelected = true;
     } else if (selectedGreeting === "virtually insane!") {
-        startTitleDrift(); // Start drifting if the greeting is "virtually insane!"
+        startTitleDrift();
     }
 
     return selectedGreeting;
@@ -73,11 +74,11 @@ if (specificGreetingSelected) {
 
     // Determine which image to show based on the random number
     if (randomChoice < 33) {
-        imageElement.src = "/sillyguy.png"; // Update this with your first image path (50% chance)
+        imageElement.src = "/sillyguy.png";
     } else if (randomChoice < 67) {
-        imageElement.src = "/maxwell.png"; // Update this with your second image path (49% chance)
+        imageElement.src = "/maxwell.png";
     } else {
-        imageElement.src = "/petah.jpg"; // Update this with your third image path (1% chance)
+        imageElement.src = "/petah.jpg";
     }
 
     imageElement.style.display = "block"; // Show the image

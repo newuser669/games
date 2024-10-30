@@ -73,9 +73,11 @@ if (specificGreetingSelected) {
     const randomChoice = Math.random() * 100;
 
     // Determine which image to show based on the random number
-    if (randomChoice < 33) {
+    if (randomChoice < 25) {
         imageElement.src = "/sillyguy.png";
-    } else if (randomChoice < 67) {
+    } else if (randomChoice < 50) {
+        imageElement.src = "/ieatkids.png";
+    } else if (randomChoice < 75) {
         imageElement.src = "/maxwell.png";
     } else {
         imageElement.src = "/petah.jpg";

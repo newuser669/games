@@ -150,7 +150,7 @@
     </div>
 
     <h1>gamesinclass</h1>
-    <span id="subtitle">...</span>
+    <span id="subtitle">Loading...</span> <!-- Subtitle element -->
 
     <p style="text-align: center; max-width: 600px; margin: 20px auto;">
         <a href="/projects.html" style="text-decoration: none;">
@@ -171,6 +171,7 @@
             getWeather(defaultCity);
             updateClock();
             setInterval(updateClock, 1000); // Update clock every second
+            updateSubtitle(); // Update subtitle on load
         };
 
         // Get weather data
@@ -200,6 +201,11 @@
         function updateClock() {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString(); // Get time with seconds
+        }
+
+        // Update subtitle function (you can modify this to fit your needs)
+        function updateSubtitle() {
+            document.getElementById('subtitle').innerText = "Welcome to the Game!";
         }
     </script>
 </body>

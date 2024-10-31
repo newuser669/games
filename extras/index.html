@@ -89,6 +89,7 @@
             <a href="https://github.com/PolyMC/PolyMC/releases/download/6.1/PolyMC-Windows-Setup-6.1.exe" style="text-decoration: none;">
                 <button>PolyMC</button>
             </a><br />
+            <button id="randomSiteBtn">Open Random Site</button>
             <button id="toggleInfoBtn">Client Information</button>
         </p>
     
@@ -105,6 +106,12 @@
     </div>
 
     <script>
+        const sitesList = [
+            'https://sliding.toys/mystic-square/8-puzzle/daily/',
+            'https://longdogechallenge.com/',
+            // Add other sites here as needed
+        ];
+
         const cursorGlow = document.getElementById('cursorGlow');
         document.addEventListener('mousemove', (e) => {
             cursorGlow.style.left = `${e.clientX}px`;
@@ -125,6 +132,14 @@
             }
         });
 
+        // Function to open a random site
+        document.getElementById('randomSiteBtn').addEventListener('click', () => {
+            const randomIndex = Math.floor(Math.random() * sitesList.length);
+            const randomSite = sitesList[randomIndex];
+            window.open(randomSite, '_blank');
+        });
+
+        // Existing code for fetching and displaying information...
         const userAgent = navigator.userAgent;
         document.getElementById('userAgent').innerText = `User Agent: ${userAgent}`;
 
@@ -133,7 +148,6 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById('ipAddress').innerText = `IP Address: ${data.ip}`;
-                // Fetch ISP information
                 return fetch(`https://ipapi.co/${data.ip}/json/`);
             })
             .then(response => response.json())

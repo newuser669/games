@@ -89,29 +89,22 @@
             <a href="https://github.com/PolyMC/PolyMC/releases/download/6.1/PolyMC-Windows-Setup-6.1.exe" style="text-decoration: none;">
                 <button>PolyMC</button>
             </a><br />
-            <button id="randomSiteBtn">Open Random Site</button>
             <button id="toggleInfoBtn">Client Information</button>
         </p>
     
         <div class="info" id="userAgent"></div>
         <div class="info" id="ipAddress"></div>
         <div class="info" id="ispInfo"></div> <!-- Added for ISP information -->
-        <div class="info" id="networkType"></div>
         <div class="info" id="languages"></div>
         <div class="info" id="timeZone"></div>
         <div class="info" id="screenResolution"></div>
         <div class="info" id="viewportSize"></div>
         <div class="info" id="cookiesEnabled"></div>
         <div class="info" id="batteryStatus"></div>
+        <div class="info" id="hardwareConcurrency"></div> <!-- Added for hardware concurrency -->
     </div>
 
     <script>
-        const sitesList = [
-            'https://sliding.toys/mystic-square/8-puzzle/daily/',
-            'https://longdogechallenge.com/',
-            // Add other sites here as needed
-        ];
-
         const cursorGlow = document.getElementById('cursorGlow');
         document.addEventListener('mousemove', (e) => {
             cursorGlow.style.left = `${e.clientX}px`;
@@ -132,14 +125,6 @@
             }
         });
 
-        // Function to open a random site
-        document.getElementById('randomSiteBtn').addEventListener('click', () => {
-            const randomIndex = Math.floor(Math.random() * sitesList.length);
-            const randomSite = sitesList[randomIndex];
-            window.open(randomSite, '_blank');
-        });
-
-        // Existing code for fetching and displaying information...
         const userAgent = navigator.userAgent;
         document.getElementById('userAgent').innerText = `User Agent: ${userAgent}`;
 
@@ -148,6 +133,7 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById('ipAddress').innerText = `IP Address: ${data.ip}`;
+                // Fetch ISP information
                 return fetch(`https://ipapi.co/${data.ip}/json/`);
             })
             .then(response => response.json())
@@ -157,14 +143,6 @@
             .catch(err => {
                 console.error('Error fetching IP address or ISP:', err);
             });
-
-        // Get network type if supported
-        if ('connection' in navigator) {
-            const connection = navigator.connection;
-            document.getElementById('networkType').innerText = `Network Type: ${connection.effectiveType}`;
-        } else {
-            document.getElementById('networkType').innerText = `Network Type: Not supported`;
-        }
 
         // Get language
         const languages = navigator.languages.join(', ');
@@ -198,6 +176,10 @@
         } else {
             document.getElementById('batteryStatus').innerText = `Battery Status: Not supported`;
         }
+
+        // Get hardware concurrency
+        const hardwareConcurrency = navigator.hardwareConcurrency;
+        document.getElementById('hardwareConcurrency').innerText = `Available Processors: ${hardwareConcurrency || 'Not supported'}`;
     </script>
 </body>
 </html>

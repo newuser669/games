@@ -195,6 +195,11 @@
     "title": "Minesweeper"
   },
   {
+    "link": "https://monkeytype.com",
+    "imgSrc": "projects/monkey.jpg",
+    "title": "Monkeytype"
+  },
+  {
     "link": "projects/motox3m/index.html",
     "imgSrc": "projects/motox3m/splash.jpg",
     "title": "MotoX3M"

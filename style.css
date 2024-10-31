@@ -17,7 +17,6 @@ body {
     justify-content: center;
     height: 100vh;
     cursor: default; /* Show the default cursor */
-    overflow: hidden; /* Prevent scrolling */
     position: relative; /* Set position relative for absolute positioning of glow */
 }
 

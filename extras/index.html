@@ -89,7 +89,9 @@
             <a href="https://github.com/PolyMC/PolyMC/releases/download/6.1/PolyMC-Windows-Setup-6.1.exe" style="text-decoration: none;">
                 <button>PolyMC</button>
             </a><br />
-            <button id="toggleInfoBtn">Client Information</button>
+                <button id="randomSiteBtn">Take me to a useless website</button>
+            </a><br />
+                <button id="toggleInfoBtn">Client Information</button>
         </p>
     
         <div class="info" id="userAgent"></div>
@@ -105,11 +107,22 @@
     </div>
 
     <script>
+            const sitesList = [
+            'https://sliding.toys/mystic-square/8-puzzle/daily/',
+            'https://longdogechallenge.com/',
+        ];
         const cursorGlow = document.getElementById('cursorGlow');
         document.addEventListener('mousemove', (e) => {
             cursorGlow.style.left = `${e.clientX}px`;
             cursorGlow.style.top = `${e.clientY}px`;
         });
+
+        document.getElementById('randomSiteBtn').addEventListener('click', () => {
+            const randomIndex = Math.floor(Math.random() * sitesList.length);
+            const randomSite = sitesList[randomIndex];
+            window.open(randomSite, '_blank');
+        });
+
 
         const toggleInfoBtn = document.getElementById('toggleInfoBtn');
         const infoElements = document.querySelectorAll('.info');

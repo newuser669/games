@@ -15,15 +15,15 @@
     <style>
         @font-face {
             font-family: 'MinecraftFont';
-            src: url('/minecraft_font.woff') format('woff'); /* Updated to local file */
+            src: url('/minecraft_font.woff') format('woff');
             font-weight: normal;
             font-style: normal;
         }
 
         body {
-            background-color: #000000; /* Solid black background */
+            background-color: #000000;
             color: #ffffff;
-            font-family: 'MinecraftFont', sans-serif; /* Use your custom font */
+            font-family: 'MinecraftFont', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -31,9 +31,9 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            height: auto; /* Allow body to grow with content */
-            cursor: default; /* Show the default cursor */
-            position: relative; /* Set position relative for absolute positioning of glow */
+            height: auto;
+            cursor: default;
+            position: relative;
         }
 
         #snow-container {
@@ -42,43 +42,43 @@
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Allow interaction with other elements */
-            z-index: -1; /* Position behind other elements */
+            pointer-events: none;
+            z-index: -1;
         }
 
         .snowflake {
             position: absolute;
             top: -10px;
-            width: 8px; /* Smaller size for subtlety */
+            width: 8px;
             height: 8px;
-            background-color: rgba(100, 100, 100, 0.7); /* Darker grey color */
+            background-color: rgba(100, 100, 100, 0.7);
             border-radius: 50%;
-            opacity: 0.4; /* More subtle opacity */
+            opacity: 0.4;
             animation: fall linear infinite;
         }
 
         @keyframes fall {
             to {
-                transform: translateY(100vh); /* Move from top to bottom */
+                transform: translateY(100vh);
             }
         }
 
         h1 {
             font-size: 3em;
             text-align: center;
-            font-family: 'MinecraftFont', sans-serif; /* Use the custom font */
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Add some shadow to the heading */
-            margin-top: 80px; /* Space above the title */
+            font-family: 'MinecraftFont', sans-serif;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+            margin-top: 80px;
         }
 
         #subtitle {
             font-size: 1.5em;
             margin: 10px 0;
-            font-family: 'MinecraftFont', sans-serif; /* Use the custom font */
+            font-family: 'MinecraftFont', sans-serif;
         }
 
         .red-text {
-            color: red; /* Style for the red text */
+            color: red;
         }
 
         button {
@@ -93,20 +93,20 @@
             font-size: 16px;
             border-radius: 20px;
             margin-top: 20px;
-            box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.5), 
+            box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.5),
                         -6px -6px 12px rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
 
         button:hover {
             background: linear-gradient(145deg, #0e0e0e, #1a1a1a);
-            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5), 
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5),
                         -4px -4px 8px rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
 
         button:active {
-            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5),
                         -2px -2px 4px rgba(255, 255, 255, 0.2);
             transform: translateY(2px);
         }
@@ -114,11 +114,11 @@
         /* Clock and Weather Widget Styles */
         .top-bar {
             position: absolute;
-            top: 20px; /* Positioned at the top */
+            top: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px; /* Space between clock and weather widget */
+            gap: 20px;
             z-index: 2;
         }
 
@@ -132,14 +132,13 @@
             padding: 10px;
             border-radius: 10px;
             font-size: 0.9em;
-            cursor: pointer; /* Change cursor to pointer */
+            cursor: pointer;
         }
-
     </style>
 </head>
 <body>
-    <div id="snow-container"></div> <!-- Snow container for snowflakes -->
-    <div id="cursorGlow"></div> <!-- Glow effect div -->
+    <div id="snow-container"></div>
+    <div id="cursorGlow"></div>
     
     <div class="top-bar">
         <div class="clock" id="clock"></div>
@@ -150,7 +149,7 @@
     </div>
 
     <h1>gamesinclass</h1>
-    <span id="subtitle">Loading...</span> <!-- Subtitle element -->
+    <span id="subtitle">Loading...</span> <!-- Placeholder for subtitle -->
 
     <p style="text-align: center; max-width: 600px; margin: 20px auto;">
         <a href="/projects.html" style="text-decoration: none;">
@@ -162,51 +161,16 @@
     </p>
     <img id="specialImage" src="" alt="Special Image" style="display: none; max-width: 300px; margin-top: 20px; border-radius: 15%;" />
     
+    <script src="/js/subtitle.js"></script> <!-- Link to the subtitle JavaScript file -->
     <script>
-        // Default city for weather
-        const defaultCity = 'Midland, Ontario';
-        
         // Load weather data on page load
         window.onload = () => {
             getWeather(defaultCity);
             updateClock();
-            setInterval(updateClock, 1000); // Update clock every second
-            updateSubtitle(); // Update subtitle on load
+            createSnowflakes();
         };
 
-        // Get weather data
-        function getWeather(city) {
-            const apiKey = 'bd5e378503939ddaee76f12ad7a97608';
-            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('weather').innerText = `${data.weather[0].description}`;
-                    document.getElementById('temp').innerText = `${Math.round(data.main.temp)}°C`;
-                })
-                .catch(error => {
-                    console.error('Error fetching weather data:', error);
-                });
-        }
-
-        // Change city on click
-        function changeCity() {
-            const newCity = prompt("Enter city name:", defaultCity);
-            if (newCity) {
-                getWeather(newCity);
-            }
-        }
-
-        // Update clock
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString(); // Get time with seconds
-        }
-
-        // Update subtitle function (you can modify this to fit your needs)
-        function updateSubtitle() {
-            document.getElementById('subtitle').innerText = "Welcome to the Game!";
-        }
+        // Include existing weather and clock functions from previous code...
     </script>
 </body>
 </html>

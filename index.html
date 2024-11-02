@@ -138,7 +138,6 @@
 </head>
 <body>
     <div id="snow-container"></div>
-    <div id="cursorGlow"></div>
     
     <div class="top-bar">
         <div class="clock" id="clock"></div>
@@ -149,7 +148,7 @@
     </div>
 
     <h1>gamesinclass</h1>
-    <span id="subtitle">Loading...</span> <!-- Placeholder for subtitle -->
+    <span id="subtitle">Loading...</span>
 
     <p style="text-align: center; max-width: 600px; margin: 20px auto;">
         <a href="/projects.html" style="text-decoration: none;">
@@ -161,8 +160,11 @@
     </p>
     <img id="specialImage" src="" alt="Special Image" style="display: none; max-width: 300px; margin-top: 20px; border-radius: 15%;" />
     
-    <script src="/js/subtitle.js"></script> <!-- Link to the subtitle JavaScript file -->
+    <script src="/js/subtitle.js"></script>
     <script>
+        // Default city
+        let defaultCity = 'Midland,CA'; // Set default location as Midland, Canada
+
         // Load weather data on page load
         window.onload = () => {
             getWeather(defaultCity);
@@ -170,7 +172,54 @@
             createSnowflakes();
         };
 
-        // Include existing weather and clock functions from previous code...
+        // Fetch weather data
+        function getWeather(city) {
+            const apiKey = 'bd5e378503939ddaee76f12ad7a97608'; // Your actual API key
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cod === 200) { // Check for a successful response
+                        document.getElementById('weather').innerText = data.weather[0].description;
+                        document.getElementById('temp').innerText = `${Math.round(data.main.temp)}°C`;
+                    } else {
+                        document.getElementById('weather').innerText = "Error fetching weather data";
+                        document.getElementById('temp').innerText = "";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                });
+        }
+
+        // Update city on selection
+        function changeCity() {
+            const city = prompt("Enter city and country code (e.g., 'Toronto,CA'):") || defaultCity;
+            localStorage.setItem('city', city);
+            getWeather(city);
+        }
+
+        // Update clock every second
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+
+        // Snow effect function
+        function createSnowflakes() {
+            setInterval(() => {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+                document.getElementById('snow-container').appendChild(snowflake);
+
+                snowflake.addEventListener('animationend', () => {
+                    snowflake.remove();
+                });
+            }, 300);
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,1802 @@
+<html><head><base href="." /><title>SimpleDocs</title><style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Dark mode colors */
+:root {
+  --bg-color: #1a1a1a;
+  --text-color: #e0e0e0;
+  --border-color: #404040;
+  --menu-bg: #2d2d2d;
+  --menu-hover: #404040;
+  --dialog-bg: #2d2d2d;
+  --button-bg: #404040;
+  --button-text: #e0e0e0;
+  --primary-blue: #4d90fe;
+}
+
+/* Apply dark mode */
+body {
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.menu-bar {
+    background: var(--menu-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 4px;
+    display: none; /* Change from 'flex' to 'none' */
+}
+
+.menu-item {
+    position: relative;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.menu-item:hover {
+    background: var(--menu-hover);
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--dialog-bg);
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    min-width: 200px;
+    display: none;
+    z-index: 100;
+}
+
+.menu-item:hover .dropdown {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background: var(--menu-hover);
+}
+
+.dropdown-item .shortcut {
+    margin-left: auto;
+    color: #9e9e9e;
+    font-size: 0.85em;
+}
+
+.dropdown-divider {
+    border-top: 1px solid var(--border-color);
+    margin: 4px 0;
+}
+
+.editor {
+    margin: 20px;
+    padding: 20px;
+    min-height: 500px;
+    /* Removed border */
+    border-radius: 4px;
+    outline: none;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Add background color to body */
+body {
+    background: var(--bg-color);
+}
+
+.search-menu {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    background: var(--dialog-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    padding: 16px;
+    display: none;
+    z-index: 1000;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    background: var(--bg-color);
+    color: var(--text-color);
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.search-results {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.search-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.search-item:hover {
+    background: var(--menu-hover);
+}
+
+.search-item .material-icons {
+    color: #9e9e9e;
+}
+
+.search-item-description {
+    color: #9e9e9e;
+    font-size: 0.9em;
+}
+
+.formatting-dialog, .color-picker-dialog, .highlight-picker-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--dialog-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    z-index: 2000;
+    display: none;
+    color: var(--text-color);
+}
+
+.color-picker-dialog input[type="color"], .highlight-picker-dialog input[type="color"] {
+    width: 100%;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.color-picker-buttons, .formatting-buttons, .highlight-picker-dialog .color-picker-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.color-picker-buttons button, .formatting-buttons button, .highlight-picker-dialog .color-picker-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.apply {
+    background: var(--primary-blue);
+    color: var(--button-text);
+}
+
+.cancel {
+    background: var(--button-bg);
+    color: var(--button-text);
+}
+
+.document-stats {
+    padding: 16px 0;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+#document-info-dialog {
+    min-width: 400px;
+}
+
+/* Add styles for image resizing */
+.editor img {
+    position: relative;
+    max-width: 100%;
+}
+
+.image-selected {
+    outline: 2px solid var(--primary-blue);
+}
+
+.resize-handle {
+    position: fixed; /* Changed from absolute to fixed */
+    width: 12px; /* Increased from 8px */
+    height: 12px; /* Increased from 8px */
+    background: var(--primary-blue);
+    border: 2px solid white; /* Made border thicker */
+    z-index: 1000; /* Increase z-index to ensure handles stay on top */
+}
+
+.resize-handle:hover {
+    background: white;
+    cursor: pointer;
+}
+
+.resize-handle.nw {
+    cursor: nw-resize;
+}
+
+.resize-handle.ne {
+    cursor: ne-resize;
+}
+
+.resize-handle.sw {
+    cursor: sw-resize;
+}
+
+.resize-handle.se {
+    cursor: se-resize;
+}
+
+#pen-tool-dialog {
+    min-width: 600px;
+    min-height: 400px;
+}
+
+#drawingToolCanvas {
+    width: 100%;
+    height: 300px;
+    border: 1px solid var(--border-color);
+    margin: 10px 0;
+    cursor: crosshair;
+    background: var(--bg-color);
+}
+
+.done {
+    background: var(--primary-blue);
+    color: var(--button-text);
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+[style*="font-size: xxx-large"] {
+    font-size: 2.5em !important;
+    font-weight: 400;
+    color: var(--text-color);
+    margin: 20px 0;
+    line-height: 1.2;
+}
+
+.alignment-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.alignment-option:hover {
+    background: var(--menu-hover);
+}
+
+.alignment-option.selected {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+/* Add to existing styles */
+.drawing-tool-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.drawing-tool-option:hover {
+    background: var(--menu-hover);
+}
+
+.drawing-tool-option.selected {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+#lineCanvas {
+    width: 100%;
+    height: 300px;
+    border: 1px solid var(--border-color);
+    margin: 10px 0;
+    cursor: crosshair;
+}
+
+/* Add styles for shapes */
+.shape-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.shape-option:hover {
+    background: var(--menu-hover);
+}
+
+.shape-option.selected {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+#shapesCanvas {
+    width: 100%;
+    height: 300px;
+    border: 1px solid var(--border-color);
+    margin: 10px 0;
+    cursor: crosshair;
+}
+
+.highlight-picker-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--dialog-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    z-index: 2000;
+    display: none;
+    color: var(--text-color);
+}
+
+.highlight-picker-dialog input[type="color"] {
+    width: 100%;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+/* Add to existing styles */
+.special-chars-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.special-char {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.special-char:hover {
+    background: var(--menu-hover);
+    transform: scale(1.1);
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+</head>
+<body>
+<div class="menu-bar">
+    <div class="menu-item">Press Shift+Tab for menu</div>
+</div>
+
+<div class="search-menu">
+    <input type="text" class="search-input" placeholder="Search" style="text-align: center;">
+    <div class="search-results">
+        <div class="search-item" data-command="download">
+            <span class="material-icons">download</span>
+            <div>
+                <div>Download</div>
+                <div class="search-item-description">Download as PDF</div>
+            </div>
+        </div>
+        
+        <!-- New Save as JSON menu item -->
+        <div class="search-item" data-command="saveAsJson">
+            <span class="material-icons">code</span>
+            <div>
+                <div>Save as JSON</div>
+                <div class="search-item-description">Save document as JSON file</div>
+            </div>
+        </div>
+        
+        <!-- New Import JSON menu item -->
+        <div class="search-item" data-command="importJson">
+            <span class="material-icons">upload_file</span>
+            <div>
+                <div>Import JSON</div>
+                <div class="search-item-description">Import document from JSON file</div>
+            </div>
+        </div>
+
+        <!-- View menu items -->
+        <div class="search-item" data-command="fullScreen">
+            <span class="material-icons">fullscreen</span>
+            <div>
+                <div>Full Screen</div>
+                <div class="search-item-description">Toggle full screen mode</div>
+            </div>
+        </div>
+        
+        <!-- Format menu items -->
+        <div class="search-item" data-command="bold">
+            <span class="material-icons">format_bold</span>
+            <div>
+                <div>Bold</div>
+                <div class="search-item-description">Make text bold</div>
+            </div>
+        </div>
+        <div class="search-item" data-command="italic">
+            <span class="material-icons">format_italic</span>
+            <div>
+                <div>Italic</div>
+                <div class="search-item-description">Make text italic</div>
+            </div>
+        </div>
+        <div class="search-item" data-command="underline">
+            <span class="material-icons">format_underlined</span>
+            <div>
+                <div>Underline</div>
+                <div class="search-item-description">Underline text</div>
+            </div>
+        </div>
+        <div class="search-item" data-command="textColor">
+            <span class="material-icons">format_color_text</span>
+            <div>
+                <div>Text Color</div>
+                <div class="search-item-description">Change text color</div>
+            </div>
+        </div>
+        
+        <!-- New Highlight Color menu item -->
+        <div class="search-item" data-command="highlightColor">
+            <span class="material-icons">brush</span>
+            <div>
+                <div>Highlight Color</div>
+                <div class="search-item-description">Change text highlight color</div>
+            </div>
+        </div>
+
+        <!-- New Special Characters menu item -->
+        <div class="search-item" data-command="specialChars">
+            <span class="material-icons">translate</span>
+            <div>
+                <div>Special Characters</div>
+                <div class="search-item-description">Add accents and special characters</div>
+            </div>
+        </div>
+
+        <div class="search-item" data-command="clearFormatting">
+            <span class="material-icons">format_clear</span>
+            <div>
+                <div>Clear Formatting</div>
+                <div class="search-item-description">Remove all formatting from text</div>
+            </div>
+        </div>
+        
+        <!-- New Alignment menu item -->
+        <div class="search-item" data-command="alignment">
+            <span class="material-icons">format_align_left</span>
+            <div>
+                <div>Alignment</div>
+                <div class="search-item-description">Change text alignment</div>
+            </div>
+        </div>
+        
+        <!-- New Title menu item -->
+        <div class="search-item" data-command="title">
+            <span class="material-icons">title</span>
+            <div>
+                <div>Title</div>
+                <div class="search-item-description">Make text into document title</div>
+            </div>
+        </div>
+        
+        <!-- New Drawing menu item -->
+        <div class="search-item" data-command="drawing">
+            <span class="material-icons">brush</span>
+            <div>
+                <div>Drawing</div>
+                <div class="search-item-description">Draw with pen, lines, and shapes</div>
+            </div>
+        </div>
+
+        <!-- Document Info menu item -->
+        <div class="search-item" data-command="documentInfo">
+            <span class="material-icons">analytics</span>
+            <div>
+                <div>Document Info</div>
+                <div class="search-item-description">View word count and other statistics</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="editor" contenteditable="true">
+press shift+tab for menu
+</div>
+
+<div class="color-picker-dialog">
+    <input type="color" id="textColorPicker">
+    <div class="color-picker-buttons">
+        <button class="cancel">Cancel</button>
+        <button class="apply">Apply</button>
+    </div>
+</div>
+
+<div class="highlight-picker-dialog">
+    <input type="color" id="highlightColorPicker">
+    <div class="color-picker-buttons">
+        <button class="cancel">Cancel</button>
+        <button class="apply">Apply</button>
+    </div>
+</div>
+
+<div class="formatting-dialog" id="formatting-bold">
+    <div class="formatting-message">
+        <span class="material-icons">format_bold</span>
+        <p>Make selected text bold</p>
+    </div>
+    <div class="formatting-buttons">
+        <button class="cancel">Cancel</button>
+        <button class="apply" disabled>Apply</button>
+    </div>
+</div>
+
+<div class="formatting-dialog" id="formatting-italic">
+    <div class="formatting-message">
+        <span class="material-icons">format_italic</span>
+        <p>Make selected text italic</p>
+    </div>
+    <div class="formatting-buttons">
+        <button class="cancel">Cancel</button>
+        <button class="apply" disabled>Apply</button>
+    </div>
+</div>
+
+<div class="formatting-dialog" id="formatting-underline">
+    <div class="formatting-message">
+        <span class="material-icons">format_underlined</span>
+        <p>Underline selected text</p>
+    </div>
+    <div class="formatting-buttons">
+        <button class="cancel">Cancel</button>
+        <button class="apply" disabled>Apply</button>
+    </div>
+</div>
+
+<div class="formatting-dialog" id="formatting-clearFormatting">
+    <div class="formatting-message">
+        <span class="material-icons">format_clear</span>
+        <p>Remove all formatting from selected text</p>
+    </div>
+    <div class="formatting-buttons">
+        <button class="cancel">Cancel</button>
+        <button class="apply" disabled>Apply</button>
+    </div>
+</div>
+
+<div class="formatting-dialog" id="document-info-dialog">
+    <div class="formatting-message">
+        <span class="material-icons">analytics</span>
+        <p>Document Statistics</p>
+    </div>
+    <div class="document-stats">
+        <div class="stat-row">
+            <span>Words:</span>
+            <span id="word-count">0</span>
+        </div>
+        <div class="stat-row">
+            <span>Characters (with spaces):</span>
+            <span id="char-count-with-spaces">0</span>
+        </div>
+        <div class="stat-row">
+            <span>Characters (no spaces):</span>
+            <span id="char-count-no-spaces">0</span>
+        </div>
+    </div>
+    <div class="formatting-buttons">
+        <button class="apply">Close</button>
+    </div>
+</div>
+
+<!-- Title Formatting Dialog -->
+<div class="formatting-dialog" id="formatting-title">
+    <div class="formatting-message">
+        <span class="material-icons">title</span>
+        <p>Enter document title</p>
+    </div>
+    <input type="text" id="title-input" placeholder="Untitled document" style="
+        width: 100%;
+        padding: 8px 12px;
+        margin: 10px 0;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background: var(--bg-color);
+        color: var(--text-color);
+        font-size: 16px;
+        outline: none;
+    ">
+    <div class="formatting-buttons">
+        <button class="cancel">Cancel</button>
+        <button class="apply">Apply</button>
+    </div>
+</div>
+
+<!-- Drawing Tools Dialog -->
+<div class="formatting-dialog" id="drawing-dialog">
+    <div class="formatting-message">
+        <span class="material-icons">brush</span>
+        <p>Drawing Tools</p>
+    </div>
+    <div style="margin: 15px 0;">
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="drawing-tool-option" data-tool="pen">
+                <span class="material-icons">edit</span>
+                Freehand
+            </button>
+            <button class="drawing-tool-option" data-tool="line">
+                <span class="material-icons">horizontal_rule</span>
+                Line
+            </button>
+            <button class="drawing-tool-option" data-tool="shape">
+                <span class="material-icons">gesture</span>
+                Shapes
+            </button>
+        </div>
+        <div id="shape-options" style="display: none; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+            <button class="shape-option" data-shape="rectangle">
+                <span class="material-icons">crop_square</span>
+                Rectangle
+            </button>
+            <button class="shape-option" data-shape="circle">
+                <span class="material-icons">circle</span>
+                Circle
+            </button>
+            <button class="shape-option" data-shape="triangle">
+                <span class="material-icons">change_history</span>
+                Triangle
+            </button>
+            <button class="shape-option" data-shape="pentagon">
+                <span class="material-icons">pentagon</span>
+                Pentagon
+            </button>
+            <button class="shape-option" data-shape="hexagon">
+                <span class="material-icons">hexagon</span>
+                Hexagon
+            </button>
+            <button class="shape-option" data-shape="star">
+                <span class="material-icons">star</span>
+                Star
+            </button>
+        </div>
+        <canvas id="drawingToolCanvas"></canvas>
+    </div>
+    <div class="formatting-buttons">
+        <button class="cancel">Cancel</button>
+        <button class="done">Done</button>
+    </div>
+</div>
+
+<!-- New Special Characters Dialog -->
+<div class="formatting-dialog" id="special-chars-dialog">
+    <div class="formatting-message">
+        <span class="material-icons">translate</span>
+        <p>Special Characters</p>
+    </div>
+    <div class="special-chars-grid">
+        <!-- Common Letters with Accents -->
+        <button class="special-char">á</button>
+        <button class="special-char">à</button>
+        <button class="special-char">â</button>
+        <button class="special-char">ä</button>
+        <button class="special-char">ã</button>
+        <button class="special-char">å</button>
+        <button class="special-char">é</button>
+        <button class="special-char">è</button>
+        <button class="special-char">ê</button>
+        <button class="special-char">ë</button>
+        <button class="special-char">í</button>
+        <button class="special-char">ì</button>
+        <button class="special-char">î</button>
+        <button class="special-char">ï</button>
+        <button class="special-char">ó</button>
+        <button class="special-char">ò</button>
+        <button class="special-char">ô</button>
+        <button class="special-char">ö</button>
+        <button class="special-char">õ</button>
+        <button class="special-char">ú</button>
+        <button class="special-char">ù</button>
+        <button class="special-char">û</button>
+        <button class="special-char">ü</button>
+        <button class="special-char">ý</button>
+        <button class="special-char">ñ</button>
+        <button class="special-char">ç</button>
+        <!-- Currency and Other Special Characters -->
+        <button class="special-char">€</button>
+        <button class="special-char">£</button>
+        <button class="special-char">¥</button>
+        <button class="special-char">©</button>
+        <button class="special-char">®</button>
+        <button class="special-char">™</button>
+        <button class="special-char">°</button>
+        <button class="special-char">±</button>
+        <button class="special-char">×</button>
+        <button class="special-char">÷</button>
+        <button class="special-char">µ</button>
+        <button class="special-char">¼</button>
+        <button class="special-char">½</button>
+        <button class="special-char">¾</button>
+        <button class="special-char">≈</button>
+        <button class="special-char">≠</button>
+        <button class="special-char">≤</button>
+        <button class="special-char">≥</button>
+    </div>
+    <div class="formatting-buttons">
+        <button class="apply">Close</button>
+    </div>
+</div>
+
+<script>
+function saveAsJson() {
+    // Create document object with metadata and content
+    const documentData = {
+        title: document.title.replace(' - SimpleDocs', ''),
+        lastModified: new Date().toISOString(),
+        content: editor.innerHTML,
+        version: "1.0"
+    };
+    
+    // Convert to JSON string
+    const jsonString = JSON.stringify(documentData, null, 2);
+    
+    // Create blob and download
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${documentData.title || 'document'}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function importJson() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    
+    input.onchange = e => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const documentData = JSON.parse(e.target.result);
+                
+                // Update document title if present
+                if (documentData.title) {
+                    document.title = `${documentData.title} - SimpleDocs`;
+                }
+                
+                // Update editor content
+                if (documentData.content) {
+                    editor.innerHTML = documentData.content;
+                }
+                
+                // Optional: Log last modified date if needed
+                if (documentData.lastModified) {
+                    console.log('Document last modified:', new Date(documentData.lastModified));
+                }
+                
+            } catch (error) {
+                console.error('Error importing JSON:', error);
+                alert('Error importing JSON file. Please make sure the file is properly formatted.');
+            }
+        };
+        reader.readAsText(file);
+    };
+    
+    input.click();
+}
+
+function downloadPDF() {
+    // Create a clone of the editor
+    const element = editor.cloneNode(true);
+
+    // Remove any resize handles
+    const handles = element.querySelectorAll('.resize-handle');
+    handles.forEach(handle => handle.remove());
+    
+    // Remove selected image styling
+    const selectedImages = element.querySelectorAll('.image-selected');
+    selectedImages.forEach(img => img.classList.remove('image-selected'));
+    
+    // Remove initial placeholder text if present
+    if (element.textContent.trim() === 'press shift+tab for menu') {
+        element.textContent = '';
+    }
+
+    // Create a temporary container with white background
+    const container = document.createElement('div');
+    container.style.background = 'white';
+    container.style.color = 'black';
+    container.style.padding = '20px';
+    container.appendChild(element);
+
+    // Override any inherited dark mode styles
+    element.style.background = 'white';
+    element.style.color = 'black';
+
+    // Configure PDF options
+    const opt = {
+        margin: [1, 1, 1, 1],
+        filename: 'document.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+            scale: 2,
+            backgroundColor: 'white',
+            useCORS: true
+        },
+        jsPDF: { 
+            unit: 'in', 
+            format: 'letter', 
+            orientation: 'portrait'
+        }
+    };
+
+    // Generate PDF from the temporary container
+    html2pdf().set(opt).from(container).save().then(() => {
+        // Cleanup
+        container.remove();
+    });
+}
+
+const editor = document.querySelector('.editor');
+const searchMenu = document.querySelector('.search-menu');
+const searchInput = document.querySelector('.search-input');
+const searchItems = document.querySelectorAll('.search-item');
+
+// Clear initial text when user starts typing
+editor.addEventListener('focus', function() {
+    if (editor.textContent === 'press shift+tab for menu') {
+        editor.textContent = '';
+    }
+});
+
+// Updated event listener for Shift+Tab to show search menu
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab' && e.shiftKey) {
+        e.preventDefault();
+        
+        // If menu is already open, close it
+        if (searchMenu.style.display === 'block') {
+            searchMenu.style.display = 'none';
+            editor.focus();
+            return;
+        }
+        
+        // Store the current selection before showing menu
+        const selection = window.getSelection();
+        const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+        
+        // Show menu and focus search input
+        searchMenu.style.display = 'block';
+        searchInput.focus();
+        
+        // Keep the text selection if there was one
+        if (range) {
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+
+        // Reset search
+        searchInput.value = '';
+        searchItems.forEach(item => {
+            item.style.display = 'flex';
+        });
+    }
+    
+    // Update handling of other keys to prevent them from affecting the document
+    // when search menu is open
+    if (searchMenu.style.display === 'block') {
+        if (e.key === 'Escape') {
+            searchMenu.style.display = 'none';
+            editor.focus();
+        }
+        // Prevent typing in the editor when menu is open
+        if (!e.target.classList.contains('search-input')) {
+            searchInput.focus();
+        }
+    }
+});
+
+// Handle search functionality
+searchInput.addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    searchItems.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(searchTerm) ? 'flex' : 'none';
+    });
+});
+
+// Autosave functionality
+function saveToLocalStorage() {
+    const documentData = {
+        title: document.title.replace(' - SimpleDocs', ''),
+        lastModified: new Date().toISOString(),
+        content: editor.innerHTML
+    };
+    localStorage.setItem('simpledocs_autosave', JSON.stringify(documentData));
+    console.log('Autosaved to local storage');
+}
+
+// Set up autosave timer
+let autosaveTimeout;
+editor.addEventListener('input', function() {
+    clearTimeout(autosaveTimeout);
+    autosaveTimeout = setTimeout(saveToLocalStorage, 5000);
+});
+
+// Load autosaved content when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const savedData = localStorage.getItem('simpledocs_autosave');
+    if (savedData) {
+        try {
+            const documentData = JSON.parse(savedData);
+            editor.innerHTML = documentData.content;
+            document.title = `${documentData.title} - SimpleDocs`;
+            console.log('Loaded autosaved content from', documentData.lastModified);
+        } catch (error) {
+            console.error('Error loading autosaved content:', error);
+        }
+    }
+});
+
+function handleFormatting(command) {
+    const dialog = document.querySelector(`#formatting-${command}`);
+    const applyBtn = dialog.querySelector('.apply');
+    const cancelBtn = dialog.querySelector('.cancel');
+    
+    dialog.style.display = 'block';
+    
+    const checkSelection = () => {
+        applyBtn.disabled = !window.getSelection().toString().length;
+    };
+    
+    checkSelection();
+    document.addEventListener('selectionchange', checkSelection);
+    
+    cancelBtn.onclick = () => {
+        dialog.style.display = 'none';
+        document.removeEventListener('selectionchange', checkSelection);
+    };
+    
+    applyBtn.onclick = () => {
+        document.execCommand(command, false);
+        dialog.style.display = 'none';
+        document.removeEventListener('selectionchange', checkSelection);
+    };
+}
+
+// Updated event listener for search items
+searchItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+        const selection = window.getSelection();
+        const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+        
+        const command = this.dataset.command;
+
+        switch(command) {
+            // File operations
+            case 'download':
+                downloadPDF();
+                break;
+                
+            // New Save as JSON functionality
+            case 'saveAsJson':
+                saveAsJson();
+                break;
+
+            // New Import JSON functionality
+            case 'importJson':
+                importJson();
+                break;
+
+            // Edit operations
+            
+            // Format operations
+            case 'bold':
+            case 'italic':
+            case 'underline':
+                handleFormatting(command);
+                break;
+            case 'textColor':
+                const colorDialog = document.querySelector('.color-picker-dialog');
+                const colorPicker = document.querySelector('#textColorPicker');
+                const applyColorBtn = colorDialog.querySelector('.apply');
+                const cancelColorBtn = colorDialog.querySelector('.cancel');
+                
+                colorDialog.style.display = 'block';
+                
+                const checkColorSelection = () => {
+                    applyColorBtn.disabled = !window.getSelection().toString().length;
+                };
+                
+                checkColorSelection();
+                document.addEventListener('selectionchange', checkColorSelection);
+                
+                applyColorBtn.onclick = () => {
+                    document.execCommand('foreColor', false, colorPicker.value);
+                    colorDialog.style.display = 'none';
+                    document.removeEventListener('selectionchange', checkColorSelection);
+                };
+                
+                cancelColorBtn.onclick = () => {
+                    colorDialog.style.display = 'none';
+                    document.removeEventListener('selectionchange', checkColorSelection);
+                };
+                break;
+
+            // New Highlight Color functionality
+            case 'highlightColor':
+                const highlightDialog = document.querySelector('.highlight-picker-dialog');
+                const highlightPicker = document.querySelector('#highlightColorPicker');
+                const applyHighlightBtn = highlightDialog.querySelector('.apply');
+                const cancelHighlightBtn = highlightDialog.querySelector('.cancel');
+                
+                highlightDialog.style.display = 'block';
+                
+                const checkHighlightSelection = () => {
+                    applyHighlightBtn.disabled = !window.getSelection().toString().length;
+                };
+                
+                checkHighlightSelection();
+                document.addEventListener('selectionchange', checkHighlightSelection);
+                
+                applyHighlightBtn.onclick = () => {
+                    document.execCommand('backColor', false, highlightPicker.value);
+                    highlightDialog.style.display = 'none';
+                    document.removeEventListener('selectionchange', checkHighlightSelection);
+                };
+                
+                cancelHighlightBtn.onclick = () => {
+                    highlightDialog.style.display = 'none';
+                    document.removeEventListener('selectionchange', checkHighlightSelection);
+                };
+                break;
+
+            case 'clearFormatting':
+                const clearDialog = document.querySelector('#formatting-clearFormatting');
+                const clearApplyBtn = clearDialog.querySelector('.apply');
+                const clearCancelBtn = clearDialog.querySelector('.cancel');
+                
+                clearDialog.style.display = 'block';
+                
+                const checkClearSelection = () => {
+                    clearApplyBtn.disabled = !window.getSelection().toString().length;
+                };
+                
+                checkClearSelection();
+                document.addEventListener('selectionchange', checkClearSelection);
+                
+                clearCancelBtn.onclick = () => {
+                    clearDialog.style.display = 'none';
+                    document.removeEventListener('selectionchange', checkClearSelection);
+                };
+                
+                clearApplyBtn.onclick = () => {
+                    const selection = window.getSelection();
+                    if (selection.rangeCount > 0) {
+                        const range = selection.getRangeAt(0);
+                        const selectedContent = range.extractContents();
+                        
+                        // Create temporary container to process content
+                        const tempDiv = document.createElement('div');
+                        tempDiv.appendChild(selectedContent);
+                        
+                        // Remove all formatting including custom font sizes and highlights
+                        const processNode = (node) => {
+                            if (node.nodeType === 3) { // Text node
+                                return node.cloneNode(true);
+                            }
+                            if (node.nodeType === 1) { // Element node
+                                // If it's a span or div, just keep the text content
+                                // This will remove font sizes, colors, and highlights
+                                if (node.tagName === 'SPAN' || node.tagName === 'DIV') {
+                                    const textNode = document.createTextNode(node.textContent);
+                                    return textNode;
+                                }
+                                // For other elements, clone and process children
+                                const clone = document.createElement(node.tagName);
+                                Array.from(node.childNodes).forEach(child => {
+                                    clone.appendChild(processNode(child));
+                                });
+                                return clone;
+                            }
+                            return node.cloneNode(true);
+                        };
+                        
+                        // Process and insert clean content
+                        const cleanContent = Array.from(tempDiv.childNodes).map(processNode);
+                        cleanContent.forEach(node => range.insertNode(node));
+                        
+                        // Clean up empty nodes
+                        const cleanup = (element) => {
+                            if (element.nodeType === 1) {
+                                if (element.textContent.trim() === '') {
+                                    element.remove();
+                                } else {
+                                    Array.from(element.childNodes).forEach(cleanup);
+                                }
+                            }
+                        };
+                        cleanup(editor);
+                    }
+                    clearDialog.style.display = 'none';
+                    document.removeEventListener('selectionchange', checkClearSelection);
+                };
+                break;
+            case 'alignment':
+                const alignDialog = document.querySelector('#formatting-alignment');
+                const alignApplyBtn = alignDialog.querySelector('.apply');
+                const alignCancelBtn = alignDialog.querySelector('.cancel');
+                const alignOptions = alignDialog.querySelectorAll('.alignment-option');
+                let selectedAlignment = null;
+                
+                alignDialog.style.display = 'block';
+                
+                // Check if there is selected text and disable apply button if not
+                const checkSelection = () => {
+                    alignApplyBtn.disabled = !window.getSelection().toString().length;
+                };
+                
+                checkSelection();
+                document.addEventListener('selectionchange', checkSelection);
+                
+                // Handle alignment option selection
+                alignOptions.forEach(option => {
+                    option.onclick = () => {
+                        alignOptions.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        selectedAlignment = option.dataset.align;
+                        // Only enable apply if there's both a selection and an alignment chosen
+                        alignApplyBtn.disabled = !window.getSelection().toString().length;
+                    };
+                });
+                
+                // Handle cancel
+                alignCancelBtn.onclick = () => {
+                    alignDialog.style.display = 'none';
+                    alignOptions.forEach(opt => opt.classList.remove('selected'));
+                    selectedAlignment = null;
+                    document.removeEventListener('selectionchange', checkSelection);
+                };
+                
+                // Handle apply
+                alignApplyBtn.onclick = () => {
+                    if (selectedAlignment && window.getSelection().toString().length > 0) {
+                        document.execCommand('justify' + selectedAlignment);
+                    }
+                    alignDialog.style.display = 'none';
+                    alignOptions.forEach(opt => opt.classList.remove('selected'));
+                    selectedAlignment = null;
+                    document.removeEventListener('selectionchange', checkSelection);
+                };
+                break;
+            case 'title':
+                const titleDialog = document.querySelector('#formatting-title');
+                const titleInput = document.querySelector('#title-input');
+                const applyTitleBtn = titleDialog.querySelector('.apply');
+                const cancelTitleBtn = titleDialog.querySelector('.cancel');
+                
+                // Show dialog and focus input
+                titleDialog.style.display = 'block';
+                titleInput.value = document.title.replace(' - SimpleDocs', '');
+                titleInput.focus();
+                titleInput.select();
+                
+                // No need for selection check since we're using an input
+                applyTitleBtn.disabled = false;
+                
+                cancelTitleBtn.onclick = () => {
+                    titleDialog.style.display = 'none';
+                };
+                
+                applyTitleBtn.onclick = () => {
+                    const newTitle = titleInput.value.trim() || 'Untitled document';
+                    // Update document title with new name
+                    document.title = `${newTitle} - SimpleDocs`;
+                    titleDialog.style.display = 'none';
+                };
+                
+                // Handle enter key in input
+                titleInput.onkeydown = (e) => {
+                    if (e.key === 'Enter') {
+                        applyTitleBtn.click();
+                    } else if (e.key === 'Escape') {
+                        cancelTitleBtn.click();
+                    }
+                };
+                break;
+                
+            // View operations
+            case 'fullScreen':
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+                break;
+
+            // Document Info menu item
+            case 'documentInfo':
+                const infoDialog = document.querySelector('#document-info-dialog');
+                const closeBtn = infoDialog.querySelector('.apply');
+                
+                const text = editor.innerText;
+                const wordCount = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+                const charCountWithSpaces = text.length;
+                const charCountNoSpaces = text.replace(/\s/g, '').length;
+                
+                document.getElementById('word-count').textContent = wordCount;
+                document.getElementById('char-count-with-spaces').textContent = charCountWithSpaces;
+                document.getElementById('char-count-no-spaces').textContent = charCountNoSpaces;
+                
+                infoDialog.style.display = 'block';
+                
+                closeBtn.onclick = () => {
+                    infoDialog.style.display = 'none';
+                };
+                break;
+
+            // New Drawing functionality
+            case 'drawing':
+                const drawingDialog = document.querySelector('#drawing-dialog');
+                const canvas = document.querySelector('#drawingToolCanvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Show dialog and set up canvas
+                drawingDialog.style.display = 'block';
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                
+                // Set up drawing style
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+                
+                let isDrawing = false;
+                let startX, startY;
+                let currentTool = null;
+                let currentShape = null;
+                
+                // Create temp canvas for live drawing
+                let tempCanvas = document.createElement('canvas');
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height;
+                let tempCtx = tempCanvas.getContext('2d');
+                
+                // Tool selection handlers
+                const toolOptions = drawingDialog.querySelectorAll('.drawing-tool-option');
+                const shapeOptions = drawingDialog.querySelector('#shape-options');
+                
+                toolOptions.forEach(option => {
+                    option.onclick = () => {
+                        toolOptions.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        currentTool = option.dataset.tool;
+                        
+                        // Show/hide shape options
+                        shapeOptions.style.display = currentTool === 'shape' ? 'flex' : 'none';
+                        currentShape = null;
+                    };
+                });
+                
+                // Shape selection handlers
+                const shapes = drawingDialog.querySelectorAll('.shape-option');
+                shapes.forEach(shape => {
+                    shape.onclick = () => {
+                        shapes.forEach(s => s.classList.remove('selected'));
+                        shape.classList.add('selected');
+                        currentShape = shape.dataset.shape;
+                    };
+                });
+                
+                function startDrawing(e) {
+                    isDrawing = true;
+                    const rect = canvas.getBoundingClientRect();
+                    startX = e.clientX - rect.left;
+                    startY = e.clientY - rect.top;
+                    
+                    if (currentTool === 'pen') {
+                        ctx.beginPath();
+                        ctx.moveTo(startX, startY);
+                    } else {
+                        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+                        tempCtx.drawImage(canvas, 0, 0);
+                    }
+                }
+                
+                function draw(e) {
+                    if (!isDrawing) return;
+                    
+                    const rect = canvas.getBoundingClientRect();
+                    const currentX = e.clientX - rect.left;
+                    const currentY = e.clientY - rect.top;
+                    
+                    if (currentTool === 'pen') {
+                        ctx.lineTo(currentX, currentY);
+                        ctx.stroke();
+                    } else {
+                        // Clear canvas and restore previous state
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(tempCanvas, 0, 0);
+                        
+                        if (currentTool === 'line') {
+                            ctx.beginPath();
+                            ctx.moveTo(startX, startY);
+                            ctx.lineTo(currentX, currentY);
+                            ctx.stroke();
+                        } else if (currentTool === 'shape' && currentShape) {
+                            drawShape(currentShape, startX, startY, currentX - startX, currentY - startY);
+                        }
+                    }
+                }
+                
+                function drawShape(shape, x, y, width, height) {
+                    ctx.beginPath();
+                    
+                    switch(shape) {
+                        case 'rectangle':
+                            ctx.rect(x, y, width, height);
+                            break;
+                        case 'circle':
+                            const radius = Math.sqrt(width * width + height * height) / 2;
+                            ctx.arc(x, y, radius, 0, Math.PI * 2);
+                            break;
+                        case 'triangle':
+                            const centerX = x;
+                            const centerY = y;
+                            const size = Math.max(Math.abs(width), Math.abs(height));
+                            ctx.moveTo(centerX, centerY - size/2);
+                            ctx.lineTo(centerX - size/2, centerY + size/2);
+                            ctx.lineTo(centerX + size/2, centerY + size/2);
+                            ctx.closePath();
+                            break;
+                        case 'pentagon':
+                            const pentagonSize = Math.max(Math.abs(width), Math.abs(height));
+                            for (let i = 0; i < 5; i++) {
+                                const angle = (i * 2 * Math.PI / 5) - Math.PI/2;
+                                const px = x + pentagonSize/2 * Math.cos(angle);
+                                const py = y + pentagonSize/2 * Math.sin(angle);
+                                i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+                            }
+                            ctx.closePath();
+                            break;
+                        case 'hexagon':
+                            const hexagonSize = Math.max(Math.abs(width), Math.abs(height));
+                            for (let i = 0; i < 6; i++) {
+                                const angle = (i * 2 * Math.PI / 6);
+                                const hx = x + hexagonSize/2 * Math.cos(angle);
+                                const hy = y + hexagonSize/2 * Math.sin(angle);
+                                i === 0 ? ctx.moveTo(hx, hy) : ctx.lineTo(hx, hy);
+                            }
+                            ctx.closePath();
+                            break;
+                        case 'star':
+                            const starSize = Math.max(Math.abs(width), Math.abs(height));
+                            const outerRadius = starSize/2;
+                            const innerRadius = outerRadius * 0.4;
+                            
+                            for (let i = 0; i < 10; i++) {
+                                const angle = (i * Math.PI / 5) - Math.PI/2;
+                                const radius = i % 2 === 0 ? outerRadius : innerRadius;
+                                const sx = x + radius * Math.cos(angle);
+                                const sy = y + radius * Math.sin(angle);
+                                i === 0 ? ctx.moveTo(sx, sy) : ctx.lineTo(sx, sy);
+                            }
+                            ctx.closePath();
+                            break;
+                    }
+                    ctx.stroke();
+                }
+                
+                function endDrawing() {
+                    isDrawing = false;
+                    if (currentTool !== 'pen') {
+                        tempCtx.clearRect(0, 0, canvas.width, canvas.height);
+                        tempCtx.drawImage(canvas, 0, 0);
+                    }
+                }
+                
+                // Add event listeners
+                canvas.addEventListener('mousedown', startDrawing);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', endDrawing);
+                canvas.addEventListener('mouseout', endDrawing);
+                
+                // Handle Done button click
+                const doneBtn = drawingDialog.querySelector('.done');
+                doneBtn.onclick = () => {
+                    const dataUrl = canvas.toDataURL();
+                    editor.focus();
+                    document.execCommand('insertImage', false, dataUrl);
+                    
+                    // Close dialog and clean up
+                    drawingDialog.style.display = 'none';
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    toolOptions.forEach(opt => opt.classList.remove('selected'));
+                    shapes.forEach(s => s.classList.remove('selected'));
+                    currentTool = null;
+                    currentShape = null;
+                    
+                    // Remove event listeners
+                    canvas.removeEventListener('mousedown', startDrawing);
+                    canvas.removeEventListener('mousemove', draw);
+                    canvas.removeEventListener('mouseup', endDrawing);
+                    canvas.removeEventListener('mouseout', endDrawing);
+                };
+                
+                // Handle Cancel button click
+                const cancelBtn = drawingDialog.querySelector('.cancel');
+                cancelBtn.onclick = () => {
+                    drawingDialog.style.display = 'none';
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    toolOptions.forEach(opt => opt.classList.remove('selected'));
+                    shapes.forEach(s => s.classList.remove('selected'));
+                    currentTool = null;
+                    currentShape = null;
+                    
+                    // Remove event listeners
+                    canvas.removeEventListener('mousedown', startDrawing);
+                    canvas.removeEventListener('mousemove', draw);
+                    canvas.removeEventListener('mouseup', endDrawing);
+                    canvas.removeEventListener('mouseout', endDrawing);
+                };
+                break;
+
+            // New Special Characters functionality
+            case 'specialChars':
+                const specialCharsDialog = document.querySelector('#special-chars-dialog');
+                const closeSpecialCharsBtn = specialCharsDialog.querySelector('.apply');
+                const specialCharBtns = specialCharsDialog.querySelectorAll('.special-char');
+                
+                specialCharsDialog.style.display = 'block';
+                
+                // Handle special character button clicks
+                specialCharBtns.forEach(btn => {
+                    btn.onclick = () => {
+                        const char = btn.textContent;
+                        document.execCommand('insertText', false, char);
+                    };
+                });
+                
+                // Handle close button
+                closeSpecialCharsBtn.onclick = () => {
+                    specialCharsDialog.style.display = 'none';
+                };
+                break;
+        }
+        
+        searchMenu.style.display = 'none';
+        editor.focus();
+        
+        if (range) {
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+        
+        e.preventDefault();
+    });
+});
+
+// Close search menu when clicking outside
+document.addEventListener('click', function(e) {
+    if (!searchMenu.contains(e.target)) {
+        searchMenu.style.display = 'none';
+    }
+});
+
+// Initialize title
+document.title = 'Untitled document - SimpleDocs';
+
+// Updated adjustFontSize function with better handling
+function adjustFontSize(increase) {
+    const selection = window.getSelection();
+    if (!selection) return;
+    
+    const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+    
+    if (!range || !selection.toString()) return;
+    
+    // Create a span with the new font size
+    const span = document.createElement('span');
+    
+    // Use extractContents to preserve nested formatting
+    const selectedContent = range.extractContents();
+    span.appendChild(selectedContent);
+    
+    // Get current font size, defaulting to 16px if not set
+    const computedStyle = window.getComputedStyle(span);
+    const currentSize = parseFloat(computedStyle.fontSize) || 16;
+    
+    // Adjust by 1px with no restrictions
+    const newSize = increase ? currentSize + 1 : currentSize - 1;
+    span.style.fontSize = `${newSize}px`;
+    
+    // Insert the adjusted content
+    range.insertNode(span);
+    
+    // Maintain selection for continued adjustments
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    selection.addRange(newRange);
+}
+
+// Update the keyboard event listener
+document.addEventListener('keydown', e => {
+    if (e.ctrlKey) {
+        switch(e.key.toLowerCase()) {
+            case '=':
+            case '+':
+                e.preventDefault();
+                adjustFontSize(true);
+                break;
+            case '-':
+                e.preventDefault();
+                adjustFontSize(false);
+                break;
+            // New keyboard shortcuts for cut, copy, and paste
+            case 'x': // Cut
+                document.execCommand('cut');
+                break;
+            case 'c': // Copy
+                document.execCommand('copy');
+                break;
+            case 'v': // Paste
+                document.execCommand('paste');
+                break;
+        }
+    }
+});
+
+// Optimize image resizing
+function handleImageResize(img) {
+    const previousSelected = editor.querySelector('.image-selected');
+    if (previousSelected) {
+        previousSelected.classList.remove('image-selected');
+        document.querySelectorAll('.resize-handle').forEach(h => h.remove());
+    }
+    
+    img.classList.add('image-selected');
+    
+    ['nw', 'ne', 'sw', 'se'].forEach(pos => {
+        const handle = document.createElement('div');
+        handle.className = `resize-handle ${pos}`;
+        img.parentNode.appendChild(handle);
+        
+        updateHandlePosition(handle, img, pos);
+        
+        handle.addEventListener('mousedown', initResize);
+    });
+}
+
+function updateHandlePosition(handle, img, pos) {
+    if (!handle || !img || !pos) return;
+    
+    const rect = img.getBoundingClientRect();
+    const isTop = pos.includes('n');
+    const isLeft = pos.includes('w');
+    
+    // Use fixed positioning relative to viewport
+    if (rect) {
+        handle.style.top = (rect[isTop ? 'top' : 'bottom'] - 6) + 'px';
+        handle.style.left = (rect[isLeft ? 'left' : 'right'] - 6) + 'px';
+    }
+}
+
+function initResize(e) {
+    e.preventDefault();
+    const handle = e.target;
+    const img = editor.querySelector('.image-selected');
+    
+    // Guard clause - if no image is selected, return early
+    if (!img) return;
+    
+    const startX = e.clientX;
+    const startWidth = img.offsetWidth;
+    const startHeight = img.offsetHeight;
+    const aspectRatio = startWidth / startHeight;
+    
+    const handleResize = e => {
+        // Calculate the change in width
+        const delta = e.clientX - startX;
+        let newWidth;
+        
+        // Determine resize direction based on handle class
+        if (handle.classList.contains('w')) {
+            newWidth = Math.max(50, startWidth - delta);
+        } else {
+            newWidth = Math.max(50, startWidth + delta);
+        }
+        
+        // Maintain aspect ratio
+        const newHeight = newWidth / aspectRatio;
+        
+        // Apply new dimensions
+        img.style.width = newWidth + 'px';
+        img.style.height = newHeight + 'px';
+        
+        // Update handle positions
+        const handles = document.querySelectorAll('.resize-handle');
+        handles.forEach(h => {
+            if (h && img) {
+                updateHandlePosition(h, img, h.className.split(' ')[1]);
+            }
+        });
+    };
+    
+    // Add mousemove listener
+    window.addEventListener('mousemove', handleResize);
+    
+    // Remove listener on mouseup
+    window.addEventListener('mouseup', () => {
+        window.removeEventListener('mousemove', handleResize);
+    }, { once: true });
+}
+
+// Image resizing functionality
+editor.addEventListener('click', function(e) {
+    if (e.target.tagName === 'IMG') {
+        handleImageResize(e.target);
+    }
+});
+
+// Remove selection when clicking outside image
+document.addEventListener('click', function(e) {
+    // If we clicked on anything other than an image or resize handle
+    if (!e.target.closest('img') && !e.target.closest('.resize-handle')) {
+        // Find and remove all selected image classes and resize handles
+        const selectedImages = document.querySelectorAll('.image-selected');
+        selectedImages.forEach(img => img.classList.remove('image-selected'));
+        
+        const handles = document.querySelectorAll('.resize-handle');
+        handles.forEach(handle => handle.remove());
+    }
+});
+
+// Add a blur event listener to the editor to handle focus loss
+editor.addEventListener('blur', function(e) {
+    // Only remove handles if we're not clicking on a resize handle
+    if (!e.relatedTarget || !e.relatedTarget.classList.contains('resize-handle')) {
+        const selectedImages = document.querySelectorAll('.image-selected');
+        selectedImages.forEach(img => img.classList.remove('image-selected'));
+        
+        const handles = document.querySelectorAll('.resize-handle');
+        handles.forEach(handle => handle.remove());
+    }
+});
+
+// Update the input handler for hyphen
+editor.addEventListener('input', function(e) {
+    const selection = window.getSelection();
+    if (!selection || !selection.rangeCount) return;
+    
+    const range = selection.getRangeAt(0);
+    if (!range) return;
+    
+    const currentLine = range.startContainer;
+    const currentLineText = currentLine.textContent || '';
+    
+    // If user just typed a hyphen at the start of a line
+    if (currentLineText.trim() === '-') {
+        // Auto-add space after hyphen
+        const div = document.createElement('div');
+        div.textContent = '- '; // Add space after hyphen
+        
+        if (currentLine.nodeType === Node.TEXT_NODE) {
+            currentLine.parentNode.replaceChild(div, currentLine);
+        }
+        
+        // Position cursor after the hyphen but before the space
+        const newRange = document.createRange();
+        newRange.setStart(div.firstChild, 2);
+        newRange.setEnd(div.firstChild, 2);
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+    }
+});
+
+// Update Enter key handler for bullet points
+editor.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        const selection = window.getSelection();
+        if (!selection || !selection.rangeCount) return;
+        
+        const range = selection.getRangeAt(0);
+        if (!range) return;
+        
+        const currentLine = range.startContainer;
+        const currentLineText = currentLine.textContent || '';
+        
+        // Check if the current line starts with "-"
+        if (currentLineText.trim().startsWith('-')) {
+            e.preventDefault();
+            
+            // If the line is empty except for the "-", remove it and stop the pattern
+            if (currentLineText.trim() === '-') {
+                if (currentLine.nodeType === Node.TEXT_NODE) {
+                    currentLine.parentNode.textContent = '';
+                } else {
+                    currentLine.textContent = '';
+                }
+                return;
+            }
+            
+            // Create a new line with the bullet point
+            const newLine = document.createElement('div');
+            newLine.textContent = '- ';
+
+            // Insert the new line after the current one
+            if (currentLine.nodeType === Node.TEXT_NODE) {
+                currentLine.parentNode.after(newLine);
+            } else {
+                currentLine.after(newLine);
+            }
+            
+            // Move cursor to the new line after the hyphen and space
+            const newRange = document.createRange();
+            newRange.setStart(newLine.firstChild, 2);
+            newRange.setEnd(newLine.firstChild, 2);
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+        }
+    }
+});
+</script>
+</body></html>

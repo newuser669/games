@@ -21,7 +21,8 @@
         }
 
         body {
-            background-color: #000000;
+            background: url('/background.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: #ffffff;
             font-family: 'MinecraftFont', sans-serif;
             margin: 0;
@@ -34,6 +35,7 @@
             height: auto;
             cursor: default;
             position: relative;
+            animation: colorChange 10s infinite;
         }
 
         #snow-container {
@@ -63,11 +65,36 @@
             }
         }
 
+        @keyframes colorChange {
+            0% {
+                color: #ff0000;
+            }
+            20% {
+                color: #ff7f00;
+            }
+            40% {
+                color: #ffff00;
+            }
+            60% {
+                color: #00ff00;
+            }
+            80% {
+                color: #0000ff;
+            }
+            100% {
+                color: #ff0000;
+            }
+        }
+
+        h1, #subtitle, p, a, button, .clock, #weather-widget {
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3);
+            animation: colorChange 10s infinite;
+        }
+
         h1 {
             font-size: 3em;
             text-align: center;
             font-family: 'MinecraftFont', sans-serif;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
             margin-top: 80px;
         }
 
@@ -111,6 +138,15 @@
             transform: translateY(2px);
         }
 
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
         /* Clock and Weather Widget Styles */
         .top-bar {
             position: absolute;
@@ -124,6 +160,9 @@
 
         .clock {
             font-size: 1.5em;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 10px;
         }
 
         #weather-widget {
@@ -133,6 +172,14 @@
             border-radius: 10px;
             font-size: 0.9em;
             cursor: pointer;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
         }
     </style>
 </head>
@@ -151,15 +198,15 @@
     <span id="subtitle">Loading...</span>
 
     <p style="text-align: center; max-width: 600px; margin: 20px auto;">
-        <a href="/projects.html" style="text-decoration: none;">
+        <a href="/projects.html">
             <button>Start playing!</button>
         </a><br />
-        <a href="/extras/index.html" style="text-decoration: none;">
+        <a href="/extras/index.html">
             <button>Extra stuff</button>
         </a><br />
     </p>
     <img id="specialImage" src="" alt="Special Image" style="display: none; max-width: 300px; margin-top: 20px; border-radius: 15%;" />
-    
+
     <script src="/js/subtitle.js"></script>
     <script>
         // Default city

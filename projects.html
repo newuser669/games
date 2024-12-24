@@ -23,15 +23,20 @@
         }
 
         body {
-            background-color: #000000; /* Solid black background */
+            background: linear-gradient(45deg, #330000, #331a00, #333300, #003300, #000033, #1a0033, #330033);
+            background-size: 400% 400%;
             color: #ffffff;
             font-family: 'MinecraftFont', sans-serif; /* Use the custom font */
             text-decoration: none;
             text-align: center;
             margin: 0;
-            padding: 0;
-            position: relative; /* Set position relative for absolute positioning of glow */
-            cursor: default; /* Show the default cursor */
+            animation: gradientBackground 15s ease infinite;
+        }
+
+        @keyframes gradientBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         p {

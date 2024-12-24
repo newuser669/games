@@ -184,7 +184,12 @@
     </p>
     <img id="specialImage" src="" alt="Special Image" style="display: none; max-width: 300px; margin-top: 20px; border-radius: 15%;" />
 
-    <script src="/js/subtitle.js"></script>
+    <script>
+        // Dynamically append a timestamp to the subtitle.js URL to prevent caching
+        const script = document.createElement('script');
+        script.src = `/js/subtitle.js?v=${new Date().getTime()}`;
+        document.head.appendChild(script);
+    </script>
     <script>
         // Default city
         let defaultCity = 'Midland,CA'; // Set default location as Midland, Canada

@@ -49,6 +49,14 @@ function getRandomGreeting() {
         "Why do they call it oven if you food oven the cold food of out hot eat the oven?",
         'We do not speak of <span class="red-text">THE CLOCK INCIDENT</span>',
         "virtually insane!",
+        "please don't touch the screen, it hurts",
+        "please do not eat your dad's pet fish's food, it is not for you, you are not a fish.",
+        "please do not eat your pet washing machine, it could damage your washing machine.",
+        "remember to eat your (vege)tables",
+        "we good from state to state, you go to the state, you will be fine 👍",
+        "you're hairy, wizard!",
+        "D: = de-colon = decolonize?",
+        "what's the difference between a piano, a tuna, and a pot of glue? you can tune a piano, but you can't piano.",
     ];
 
     var randomIndex = Math.floor(Math.random() * greetings.length);

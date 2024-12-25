@@ -19,8 +19,7 @@ function getRandomGreeting() {
         "if you ever have a problem with the website, try clearing your cache",
         "wash your hands",
         "pov: inside of a microwave",
-        "mr beast burger exposed",
-        "I eat water like air - Sun Tzu, the art of war (2021) (probably) [GONE WRONG] [GONE SEXUAL]",
+        "mr beast burger exposed - the truth revealed (not clickbait) [GONE WRONG]",
         "kanye west - nitrus town aldis",
         "I'm in Spain without the pain",
         "i would like a number 9, a number 9 large, a number 6 with extra dip, a number 7, two number 45s, one with cheese, and a large soda",
@@ -35,6 +34,8 @@ function getRandomGreeting() {
         "do you smell it?",
         "no, this is Patrick!",
         "𝒇𝒓𝒆𝒂𝒌𝒚",
+        "stop posting about San Andreas, I'm tired of seeing it!",
+        "I 'accidentally hit the orphanage' with my 'car' and now I'm 'going to jail' whatever that means...",
         "hawk 2: ah!",
         "merry crispyness! marry chris! happy new... chris!",
         "microwaving Delson",
@@ -53,10 +54,13 @@ function getRandomGreeting() {
         "please do not eat your dad's pet fish's food, it is not for you, you are not a fish.",
         "please do not eat your pet washing machine, it could damage your washing machine.",
         "remember to eat your (vege)tables",
-        "we good from state to state, you go to the state, you will be fine 👍",
+        "we good from state to state, you go to the state, you WILL BE FINE 👍",
         "you're hairy, wizard!",
         "D: = de-colon = decolonize?",
         "what's the difference between a piano, a tuna, and a pot of glue? you can tune a piano, but you can't piano.",
+        "the quick brown fox jumps over the lazy dog",
+        "eat my shorts",
+        "Why won't you adopt me? Because you're <span class='red-text'>adopted</span>.",
     ];
 
     var randomIndex = Math.floor(Math.random() * greetings.length);

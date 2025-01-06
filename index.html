@@ -15,6 +15,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>gamesinclass</title>
+    <script>
+        const latestUpdate = "added an update section";
+        const previousUpdates = [
+        "added fixes and new cars to slowroads"
+        ];
+    </script>
     <style>
         @font-face {
             font-family: 'MinecraftFont';
@@ -74,7 +80,7 @@
             }
         }
 
-        h1, #subtitle, p, a, button, .clock {
+        h1, #subtitle, p, a, button, .clock, #update-alert-title, #previous-updates p {
             text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
             animation: colorChange 10s infinite;
         }
@@ -154,6 +160,35 @@
             font-size: 0.8em;
             color: rgba(255, 255, 255, 0.7);
         }
+
+        #update-alert {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #33333380;
+            color: #777575f6;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        #update-alert.expanded {
+            width: 300px;
+            height: auto;
+        }
+        #update-alert-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        #update-alert-content {
+            display: none;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        #update-alert.expanded #update-alert-content {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -174,7 +209,27 @@
     </p>
     <img id="specialImage" src="" alt="Special Image" style="display: none; max-width: 300px; margin-top: 20px; border-radius: 15%;" />
 
+    <div id="update-alert">
+        <div id="update-alert-title"></div>
+        <div id="update-alert-content">
+            <div id="previous-updates" style="display: none;"></div>
+        </div>
+    </div>
+
     <script>
+        document.getElementById('update-alert').addEventListener('click', function() {
+            this.classList.toggle('expanded');
+            document.getElementById('previous-updates').style.display = this.classList.contains('expanded') ? 'block' : 'none';
+        });
+
+        document.getElementById('update-alert-title').innerText = latestUpdate;
+        const previousUpdatesContainer = document.getElementById('previous-updates');
+        previousUpdates.forEach(update => {
+            const updateElement = document.createElement('p');
+            updateElement.innerText = update;
+            previousUpdatesContainer.appendChild(updateElement);
+        });
+
         const script = document.createElement('script');
         script.src = `/js/subtitle.js?v=${new Date().getTime()}`;
         document.head.appendChild(script);
@@ -200,7 +255,7 @@
                 const rgb = lastColor.match(/\d+/g).map(Number);
                 const complementaryColor = `rgb(${255 - rgb[0]}, ${255 - rgb[1]}, ${255 - rgb[2]})`;
                 body.style.color = complementaryColor;
-                document.querySelectorAll('h1, #subtitle, p, a, button, .clock').forEach(el => {
+                document.querySelectorAll('h1, #subtitle, p, a, button, .clock, #update-alert-title, #previous-updates p').forEach(el => {
                     el.style.color = complementaryColor;
                 });
             }

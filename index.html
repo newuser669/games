@@ -86,15 +86,15 @@
         }
 
         h1 {
-            font-size: 3em;
+            font-size: 1.8em; /* 3/5 the size of the original 3em */
             text-align: center;
             font-family: 'MinecraftFont', sans-serif;
-            margin-top: 20px;
+            margin-top: 10px; /* Move the title up */
         }
 
         #subtitle {
-            font-size: 1.5em;
-            margin: 10px 0;
+            font-size: 1.125em; /* 3/4 the size of the original 1.5em */
+            margin: 5px 0; /* Move the subtitle up */
             align-items: center;
             justify-content: center;
             font-family: 'MinecraftFont', sans-serif;
@@ -115,7 +115,7 @@
             display: inline-block;
             border-radius: 25px;
             transition: background 0.3s, transform 0.3s;
-            margin: 10px;
+            margin: 5px; /* Reduce the gap between buttons */
         }
 
         button:hover {
@@ -140,7 +140,7 @@
 
         .top-bar {
             position: absolute;
-            top: 20px;
+            top: 10px; /* Move the clock more up */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -189,6 +189,13 @@
         #update-alert.expanded #update-alert-content {
             display: block;
         }
+
+        #specialImage {
+            display: none;
+            max-width: 150px; /* Half the size */
+            margin-top: 0px; /* Reduce the gap between buttons and image */
+            border-radius: 15%;
+        }
     </style>
 </head>
 <body>
@@ -207,7 +214,7 @@
             <button>Extra stuff</button>
         </a><br />
     </p>
-    <img id="specialImage" src="" alt="Special Image" style="display: none; max-width: 300px; margin-top: 20px; border-radius: 15%;" />
+    <img id="specialImage" src="" alt="Special Image" style="display: none; max-width: 150px; margin-top: 10px; border-radius: 15%;" />
 
     <div id="update-alert">
         <div id="update-alert-title"></div>
@@ -229,6 +236,33 @@
             updateElement.innerText = update;
             previousUpdatesContainer.appendChild(updateElement);
         });
+
+        async function fetchSpecialImages() {
+            try {
+                const response = await fetch('/specialimages/');
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+                const imageElements = Array.from(doc.querySelectorAll('a')).filter(el => el.href.match(/\.(jpe?g|png|gif)$/i));
+                const imagePaths = imageElements.map(el => el.getAttribute('href'));
+                return imagePaths;
+            } catch (error) {
+                console.error('Error fetching special images:', error);
+                return [];
+            }
+        }
+
+        async function setRandomSpecialImage() {
+            const specialImages = await fetchSpecialImages();
+            if (specialImages.length > 0) {
+                const randomImage = specialImages[Math.floor(Math.random() * specialImages.length)];
+                const specialImage = document.getElementById('specialImage');
+                specialImage.src = randomImage;
+                specialImage.style.display = 'block';
+            }
+        }
+
+        setRandomSpecialImage();
 
         const script = document.createElement('script');
         script.src = `/js/subtitle.js?v=${new Date().getTime()}`;

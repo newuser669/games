@@ -19,6 +19,7 @@ function getRandomGreeting() {
         "if you ever have a problem with the website, try clearing your cache",
         "wash your hands",
         "pov: inside of a microwave",
+        "'2024 music' ❌ '20204 music' ✅ only a few more years to go!",
         "mr beast burger exposed - the truth revealed (not clickbait) [GONE WRONG]",
         "kanye west - nitrus town aldis",
         "I'm in Spain without the pain",

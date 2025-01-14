@@ -20,6 +20,12 @@
         const previousUpdates = [
         "added an update section"
         ];
+        const specialImages = [
+            './specialimages/maxwell.png',
+            './specialimages/petah.jpg',
+            './specialimages/sillyguy.png',
+            './specialimages/stopposting.jpg',
+        ];
     </script>
     <style>
         @font-face {
@@ -237,28 +243,18 @@
             previousUpdatesContainer.appendChild(updateElement);
         });
 
-        async function fetchSpecialImages() {
-            try {
-                const response = await fetch('/specialimages/');
-                const text = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(text, 'text/html');
-                const imageElements = Array.from(doc.querySelectorAll('a')).filter(el => el.href.match(/\.(jpe?g|png|gif)$/i));
-                const imagePaths = imageElements.map(el => el.getAttribute('href'));
-                return imagePaths;
-            } catch (error) {
-                console.error('Error fetching special images:', error);
-                return [];
-            }
-        }
-
-        async function setRandomSpecialImage() {
-            const specialImages = await fetchSpecialImages();
+        function setRandomSpecialImage() {
             if (specialImages.length > 0) {
                 const randomImage = specialImages[Math.floor(Math.random() * specialImages.length)];
                 const specialImage = document.getElementById('specialImage');
+                specialImage.onerror = () => {
+                    console.error('Failed to load image:', randomImage);
+                    specialImage.style.display = 'none';
+                };
+                specialImage.onload = () => {
+                    specialImage.style.display = 'block';
+                };
                 specialImage.src = randomImage;
-                specialImage.style.display = 'block';
             }
         }
 

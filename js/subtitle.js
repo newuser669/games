@@ -62,6 +62,8 @@ function getRandomGreeting() {
         "the quick brown fox jumps over the lazy dog",
         "eat my shorts",
         "Why won't you adopt me? Because you're <span class='red-text'>adopted</span>.",
+        "I'm in the ocean",
+        "GET OUT!",
     ];
 
     var randomIndex = Math.floor(Math.random() * greetings.length);

@@ -104,9 +104,9 @@
 
         .container {
             display: grid;
-            gap: 2rem;
+            gap: 1rem; /* Reduced from 2rem */
             place-items: center;
-            padding: 2rem;
+            padding: 1rem; /* Reduced from 2rem */
             animation: fadeInUp 0.8s ease;
         }
 
@@ -115,7 +115,7 @@
             border-radius: 24px;
             box-shadow: 8px 8px 16px var(--shadow-dark),
                        -8px -8px 16px var(--shadow-light);
-            padding: 2rem;
+            padding: 1rem; /* Reduced from 2rem */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -143,7 +143,7 @@
 
         button {
             width: 100%;
-            padding: 0.75rem;  /* Reduced from 1rem */
+            padding: 0.1rem;  /* Reduced from 1rem */
             border: none;
             border-radius: 12px;
             background: var(--bg-secondary);
@@ -170,6 +170,8 @@
             display: block;
             animation: float 6s ease-in-out infinite;
             filter: brightness(1.1); /* Slight brightness boost to help glow blend */
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes glowPulse {
@@ -207,27 +209,42 @@
             animation: glowPulse 2.5s ease-in-out infinite !important;
         }
 
+        .image-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            box-shadow: 0 -6px 12px var(--glow-top),
+                        6px 0 12px var(--glow-right),
+                        0 6px 12px var(--glow-bottom),
+                        -6px 0 12px var(--glow-left);
+            z-index: 1000;
+        }
+
         .clock {
             position: fixed;
-            top: 2rem;
-            right: 2rem;
-            padding: 1rem 2rem;
+            top: 1rem; /* Reduced from 2rem */
+            right: 1rem; /* Reduced from 2rem */
+            padding: 0.5rem 1rem; /* Reduced from 1rem 2rem */
             background: var(--bg-secondary);
             border-radius: 50px;
             box-shadow: 4px 4px 8px var(--shadow-dark);
             color: var(--text-primary);
-            font-size: 1.2em;
+            font-size: 1em; /* Reduced from 1.2em */
             z-index: 100;
             font-family: var(--font-minecraft);
         }
 
         #update-alert {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
+            bottom: 1rem; /* Reduced from 2rem */
+            right: 1rem; /* Reduced from 2rem */
             background: var(--bg-secondary);
             border-radius: 16px;
-            padding: 1rem;
+            padding: 0.4rem; /* Reduced from 1rem */
             box-shadow: 8px 8px 16px var(--shadow-dark);
             max-width: 300px;
             backdrop-filter: blur(10px);
@@ -392,13 +409,13 @@
                 specialImage.onload = () => {
                     const colors = getRegionColors(specialImage);
                     specialImage.style.setProperty('--glow-top', 
-                        `rgba(${colors.top.r}, ${colors.top.g}, ${colors.top.b}, 0.8)`);
+                        `rgba(${colors.top.r}, ${colors.top.g}, ${colors.top.b}, 0.4)`);
                     specialImage.style.setProperty('--glow-right',
-                        `rgba(${colors.right.r}, ${colors.right.g}, ${colors.right.b}, 0.8)`);
+                        `rgba(${colors.right.r}, ${colors.right.g}, ${colors.right.b}, 0.4)`);
                     specialImage.style.setProperty('--glow-bottom',
-                        `rgba(${colors.bottom.r}, ${colors.bottom.g}, ${colors.bottom.b}, 0.8)`);
+                        `rgba(${colors.bottom.r}, ${colors.bottom.g}, ${colors.bottom.b}, 0.4)`);
                     specialImage.style.setProperty('--glow-left',
-                        `rgba(${colors.left.r}, ${colors.left.g}, ${colors.left.b}, 0.8)`);
+                        `rgba(${colors.left.r}, ${colors.left.g}, ${colors.left.b}, 0.4)`);
                     specialImage.classList.add('image-glow');
                     specialImage.style.display = 'block';
                 };

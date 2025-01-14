@@ -45,7 +45,6 @@ function getRandomGreeting() {
         "I'm in Spain without the A",
         "youtube.com/watch?v=dQw4w9WgXcQ",
         "your UPS package is delayed.",
-        "silly little guy ↓",
         "may I please have a water?",
         "umm what do I press to shoot? - Peter Griffin",
         "Why do they call it oven if you food oven the cold food of out hot eat the oven?",
@@ -64,15 +63,22 @@ function getRandomGreeting() {
         "Why won't you adopt me? Because you're <span class='red-text'>adopted</span>.",
         "I'm in the ocean",
         "GET OUT!",
+        "In the kitchen, wrist twistin' like it's stir-fry (Whip it)",
+        "m-m-m-m-maybach music",
+        "lil baby vs dababy vs baby keem vs bbno$ = baby royale",
+        "I'm so groovy",
+        "I give the opp arachnophobia",
+        "brand new whip got no keys",
+        "Mike WiLL Made-It",
+        "wheezy outta here",
+        "pull up on your block, then break it down: we playin' Tetris",
     ];
 
     var randomIndex = Math.floor(Math.random() * greetings.length);
     var selectedGreeting = greetings[randomIndex];
 
     // Check for specific greetings
-    if (selectedGreeting === "silly little guy ↓") {
-        specificGreetingSelected = true;
-    } else if (selectedGreeting === "virtually insane!") {
+    if (selectedGreeting === "virtually insane!") {
         startTitleDrift();
     }
 

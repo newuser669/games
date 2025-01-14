@@ -30,204 +30,286 @@
             './specialimages/images.jpg',
             './specialimages/eye-of-rah-dread.gif',
             './specialimages/happy-shrek.gif',
+            './specialimages/metro-boomin-heroes-and-villains.gif',
+            './specialimages/school-bus-monster-bus.gif',
         ];
     </script>
     <style>
         @font-face {
             font-family: 'MinecraftFont';
-            src: url('/minecraft_font.woff') format('woff');
+            src: url('/minecraft_font.woff2') format('woff2'),
+                 url('/minecraft_font.woff') format('woff');
             font-weight: normal;
             font-style: normal;
+            font-display: swap;
         }
 
-        body {
-            background: linear-gradient(45deg, #330033, #330000, #331a00, #333300, #003300, #000033, #1a0033, #330033);
-            background-size: 400% 400%;
-            font-family: 'MinecraftFont', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            height: 100vh;
-            cursor: default;
-            position: relative;
-            animation: gradientBackground 30s linear infinite;
-            scroll-behavior: smooth;
+        :root {
+            --bg-primary: #13151a;
+            --bg-secondary: #1c1f26;
+            --text-primary: #ffffff;
+            --text-secondary: #9ba1a6;
+            --shadow-light: rgba(255, 255, 255, 0.05);
+            --shadow-dark: rgba(0, 0, 0, 0.2);
+            --font-minecraft: 'MinecraftFont', system-ui, -apple-system, sans-serif;
         }
 
-        @keyframes gradientBackground {
-            0% {
-                background-position: 0% 100%;
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            50% {
-                background-position: 100% 0%;
-            }
-            100% {
-                background-position: 0% 100%;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
         @keyframes colorChange {
-            0% {
-                color: #ff0000;
-            }
-            20% {
-                color: #ff7f00;
-            }
-            40% {
-                color: #ffff00;
-            }
-            60% {
-                color: #00ff00;
-            }
-            80% {
-                color: #0000ff;
-            }
-            100% {
-                color: #ff0000;
-            }
+            0% { color: #ff0000; }
+            20% { color: #ff7f00; }
+            40% { color: #ffff00; }
+            60% { color: #00ff00; }
+            80% { color: #0000ff; }
+            100% { color: #ff0000; }
         }
 
-        h1, #subtitle, p, a, button, .clock, #update-alert-title, #previous-updates p {
+        .rainbow-text {
             text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
             animation: colorChange 10s infinite;
+            -webkit-text-fill-color: initial !important;
+            background: none !important;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-minecraft);
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr min(1200px, 90%) 1fr;
+            overflow: hidden;
+        }
+
+        body > * {
+            grid-column: 2;
+        }
+
+        .container {
+            display: grid;
+            gap: 2rem;
+            place-items: center;
+            padding: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .neumorphic {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            box-shadow: 8px 8px 16px var(--shadow-dark),
+                       -8px -8px 16px var(--shadow-light);
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .neumorphic:hover {
+            transform: translateY(-5px);
+            box-shadow: 12px 12px 20px var(--shadow-dark),
+                       -12px -12px 20px var(--shadow-light);
         }
 
         h1 {
-            font-size: 1.8em; /* 3/5 the size of the original 3em */
-            text-align: center;
-            font-family: 'MinecraftFont', sans-serif;
-            margin-top: 10px; /* Move the title up */
+            font-size: 3em;
+            margin: 0;
+            animation: float 6s ease-in-out infinite, colorChange 10s infinite;
+            -webkit-text-fill-color: initial !important;
+            background: none !important;
+            font-family: var(--font-minecraft);
         }
 
-        #subtitle {
-            font-size: 1.125em; /* 3/4 the size of the original 1.5em */
-            margin: 5px 0; /* Move the subtitle up */
-            align-items: center;
-            justify-content: center;
-            font-family: 'MinecraftFont', sans-serif;
-        }
-
-        .red-text {
-            color: red;
+        .button-container {
+            display: grid;
+            gap: 0.5rem;  /* Reduced from 1rem */
+            width: 100%;
+            max-width: 300px;  /* Reduced from 400px */
         }
 
         button {
+            width: 100%;
+            padding: 0.75rem;  /* Reduced from 1rem */
+            border: none;
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1em;  /* Reduced from 1.1em */
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            border-radius: 25px;
-            transition: background 0.3s, transform 0.3s;
-            margin: 5px; /* Reduce the gap between buttons */
+            box-shadow: inset 4px 4px 8px var(--shadow-light),
+                       inset -4px -4px 8px var(--shadow-dark);
+            transition: all 0.3s ease;
+            font-family: var(--font-minecraft);
         }
 
         button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.05);
+            background: var(--bg-secondary);
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 8px var(--shadow-dark);
         }
 
-        button:active {
-            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5),
-                        -2px -2px 4px rgba(255, 255, 255, 0.2);
-            transform: translateY(2px);
+        #specialImage {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            display: block;
+            animation: float 6s ease-in-out infinite;
+            filter: brightness(1.1); /* Slight brightness boost to help glow blend */
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
+        @keyframes glowPulse {
+            0% {
+                filter: 
+                    brightness(1.1)
+                    drop-shadow(0 -6px 12px var(--glow-top))
+                    drop-shadow(6px 0 12px var(--glow-right))
+                    drop-shadow(0 6px 12px var(--glow-bottom))
+                    drop-shadow(-6px 0 12px var(--glow-left));
+            }
+            50% {
+                filter: 
+                    brightness(1.1)
+                    drop-shadow(0 -7px 14px var(--glow-top))
+                    drop-shadow(7px 0 14px var(--glow-right))
+                    drop-shadow(0 7px 14px var(--glow-bottom))
+                    drop-shadow(-7px 0 14px var(--glow-left));
+            }
+            100% {
+                filter: 
+                    brightness(1.1)
+                    drop-shadow(0 -6px 12px var(--glow-top))
+                    drop-shadow(6px 0 12px var(--glow-right))
+                    drop-shadow(0 6px 12px var(--glow-bottom))
+                    drop-shadow(-6px 0 12px var(--glow-left));
+            }
         }
 
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .top-bar {
-            position: absolute;
-            top: 10px; /* Move the clock more up */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            z-index: 2;
+        .image-glow {
+            --glow-top: rgba(255, 255, 255, 0.3);
+            --glow-right: rgba(255, 255, 255, 0.3);
+            --glow-bottom: rgba(255, 255, 255, 0.3);
+            --glow-left: rgba(255, 255, 255, 0.3);
+            animation: glowPulse 2.5s ease-in-out infinite !important;
         }
 
         .clock {
-            font-size: 1.5em;
-            padding: 10px;
-        }
-
-        footer {
-            position: absolute;
-            bottom: 20px;
-            text-align: center;
-            font-size: 0.8em;
-            color: rgba(255, 255, 255, 0.7);
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            background: var(--bg-secondary);
+            border-radius: 50px;
+            box-shadow: 4px 4px 8px var(--shadow-dark);
+            color: var(--text-primary);
+            font-size: 1.2em;
+            z-index: 100;
+            font-family: var(--font-minecraft);
         }
 
         #update-alert {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #33333380;
-            color: #777575f6;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 8px 8px 16px var(--shadow-dark);
+            max-width: 300px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--shadow-light);
             transition: all 0.3s ease;
-            z-index: 1000;
+            cursor: pointer;
+            font-family: var(--font-minecraft);
         }
-        #update-alert.expanded {
-            width: 300px;
-            height: auto;
+
+        #update-alert:hover {
+            transform: translateY(-5px);
         }
-        #update-alert-title {
-            font-size: 16px;
-            font-weight: bold;
-        }
+
         #update-alert-content {
             display: none;
-            margin-top: 10px;
-            font-size: 14px;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
         }
+
         #update-alert.expanded #update-alert-content {
             display: block;
         }
 
-        #specialImage {
-            display: none;
-            max-width: 150px; /* Half the size */
-            margin-top: 0px; /* Reduce the gap between buttons and image */
-            border-radius: 15%;
+        #update-alert-title {
+            animation: colorChange 10s infinite;
+            font-family: var(--font-minecraft);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .clock { 
+                top: 1rem;
+                right: 1rem;
+                font-size: 1em;
+            }
+            #update-alert {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+
+        #pipes-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        #subtitle {
+            padding: 1rem;
+            border: none;
+            border-radius: 30px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1.1em;
+            font-family: var(--font-minecraft);
         }
     </style>
 </head>
 <body>
-    <div class="top-bar">
-        <div class="clock" id="clock"></div>
-    </div>
+    <canvas id="pipes-canvas"></canvas>
+    <div class="clock" id="clock"></div>
 
-    <h1>gamesinclass</h1>
-    <span id="subtitle">Loading...</span>
+    <main class="container">
+        <h1 class="rainbow-text">gamesinclass</h1>
+        <span id="subtitle" class="neumorphic rainbow-text">Loading...</span>
+        
+        <img id="specialImage" src="" alt="Special Image" style="display: none;" />
+        
+        <div class="button-container">
+            <a href="/projects.html">
+                <button class="neumorphic">Start playing!</button>
+            </a>
+            <a href="/extras/index.html">
+                <button class="neumorphic">Extra stuff</button>
+            </a>
+        </div>
+    </main>
 
-    <p style="text-align: center; max-width: 600px; margin: 20px auto;">
-        <a href="/projects.html">
-            <button>Start playing!</button>
-        </a><br />
-        <a href="/extras/index.html">
-            <button>Extra stuff</button>
-        </a><br />
-    </p>
-    <img id="specialImage" src="" alt="Special Image" style="display: none; max-width: 150px; margin-top: 10px; border-radius: 15%;" />
-
-    <div id="update-alert">
+    <div id="update-alert" class="neumorphic">
         <div id="update-alert-title"></div>
         <div id="update-alert-content">
             <div id="previous-updates" style="display: none;"></div>
@@ -248,17 +330,79 @@
             previousUpdatesContainer.appendChild(updateElement);
         });
 
+        function getRegionColors(image) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = image.width;
+            canvas.height = image.height;
+            ctx.drawImage(image, 0, 0);
+            
+            const w = canvas.width;
+            const h = canvas.height;
+            const regions = {
+                top: ctx.getImageData(0, 0, w, h/3),
+                right: ctx.getImageData(2*w/3, 0, w/3, h),
+                bottom: ctx.getImageData(0, 2*h/3, w, h/3),
+                left: ctx.getImageData(0, 0, w/3, h)
+            };
+            
+            const colors = {};
+            
+            for (const [region, data] of Object.entries(regions)) {
+                let r = 0, g = 0, b = 0, count = 0;
+                let maxBrightness = 0;
+                let brightestR = 0, brightestG = 0, brightestB = 0;
+                
+                for (let i = 0; i < data.data.length; i += 4) {
+                    const brightness = (data.data[i] + data.data[i + 1] + data.data[i + 2]) / 3;
+                    if (brightness > maxBrightness) {
+                        maxBrightness = brightness;
+                        brightestR = data.data[i];
+                        brightestG = data.data[i + 1];
+                        brightestB = data.data[i + 2];
+                    }
+                }
+                
+                // Enhance saturation
+                const avg = (brightestR + brightestG + brightestB) / 3;
+                brightestR = brightestR + (brightestR - avg) * 0.5;
+                brightestG = brightestG + (brightestG - avg) * 0.5;
+                brightestB = brightestB + (brightestB - avg) * 0.5;
+                
+                colors[region] = {
+                    r: Math.min(255, Math.max(0, Math.round(brightestR))),
+                    g: Math.min(255, Math.max(0, Math.round(brightestG))),
+                    b: Math.min(255, Math.max(0, Math.round(brightestB)))
+                };
+            }
+            
+            return colors;
+        }
+
         function setRandomSpecialImage() {
             if (specialImages.length > 0) {
                 const randomImage = specialImages[Math.floor(Math.random() * specialImages.length)];
                 const specialImage = document.getElementById('specialImage');
+                
                 specialImage.onerror = () => {
                     console.error('Failed to load image:', randomImage);
                     specialImage.style.display = 'none';
                 };
+                
                 specialImage.onload = () => {
+                    const colors = getRegionColors(specialImage);
+                    specialImage.style.setProperty('--glow-top', 
+                        `rgba(${colors.top.r}, ${colors.top.g}, ${colors.top.b}, 0.8)`);
+                    specialImage.style.setProperty('--glow-right',
+                        `rgba(${colors.right.r}, ${colors.right.g}, ${colors.right.b}, 0.8)`);
+                    specialImage.style.setProperty('--glow-bottom',
+                        `rgba(${colors.bottom.r}, ${colors.bottom.g}, ${colors.bottom.b}, 0.8)`);
+                    specialImage.style.setProperty('--glow-left',
+                        `rgba(${colors.left.r}, ${colors.left.g}, ${colors.left.b}, 0.8)`);
+                    specialImage.classList.add('image-glow');
                     specialImage.style.display = 'block';
                 };
+                
                 specialImage.src = randomImage;
             }
         }
@@ -296,6 +440,110 @@
             }
         }
         setInterval(updateTextColor, 1000);
+
+        class Pipe {
+            constructor(canvas, ctx) {
+                this.canvas = canvas;
+                this.ctx = ctx;
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * this.canvas.width;
+                this.y = Math.random() * this.canvas.height;
+                this.z = 0;
+                this.direction = Math.floor(Math.random() * 6); // 0-5: front,back,left,right,up,down
+                this.color = `hsl(${Math.random() * 360}, 50%, 50%)`;
+                this.length = 0;
+                this.maxLength = Math.random() * 50 + 50;
+                this.size = Math.random() * 10 + 5;
+            }
+
+            update() {
+                const speed = 2;
+                switch(this.direction) {
+                    case 0: this.x += speed; break; // right
+                    case 1: this.x -= speed; break; // left
+                    case 2: this.y += speed; break; // down
+                    case 3: this.y -= speed; break; // up
+                    case 4: this.z += speed; break; // forward
+                    case 5: this.z -= speed; break; // backward
+                }
+
+                this.length += speed;
+
+                if (this.length > this.maxLength || 
+                    this.x < 0 || this.x > this.canvas.width ||
+                    this.y < 0 || this.y > this.canvas.height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                const perspective = 1000;
+                const scale = perspective / (perspective + this.z);
+                
+                this.ctx.beginPath();
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = this.size * scale;
+                this.ctx.lineCap = 'round';
+                
+                const startX = this.x * scale;
+                const startY = this.y * scale;
+                let endX = startX;
+                let endY = startY;
+
+                switch(this.direction) {
+                    case 0: endX = (this.x - this.length) * scale; break;
+                    case 1: endX = (this.x + this.length) * scale; break;
+                    case 2: endY = (this.y - this.length) * scale; break;
+                    case 3: endY = (this.y + this.length) * scale; break;
+                }
+
+                this.ctx.moveTo(startX, startY);
+                this.ctx.lineTo(endX, endY);
+                this.ctx.stroke();
+            }
+        }
+
+        const canvas = document.getElementById('pipes-canvas');
+        const ctx = canvas.getContext('2d');
+        const pipes = [];
+        const numPipes = 50;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for(let i = 0; i < numPipes; i++) {
+            pipes.push(new Pipe(canvas, ctx));
+        }
+
+        function animate() {
+            // Clear the entire canvas completely
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(19, 21, 26, 1)'; // Solid background color
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            pipes.forEach(pipe => {
+                pipe.update();
+                // Save current global alpha
+                const currentAlpha = ctx.globalAlpha;
+                // Set lower opacity for pipes
+                ctx.globalAlpha = 0.2;
+                pipe.draw();
+                // Restore original global alpha
+                ctx.globalAlpha = currentAlpha;
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
     </script>
 </body>
 </html>

@@ -26,6 +26,10 @@
             --text-color: #ffffff;
             --shadow-dark: rgba(0, 0, 0, 0.5);
             --shadow-light: rgba(255, 255, 255, 0.1);
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         body {
@@ -483,7 +487,7 @@
                 .map(project => `
                     <a href="${project.link}" class="game-link">
                         <div class="game-tile">
-                            <img class="game-icon" src="${project.imgSrc}" alt="${project.title}" loading="lazy" />
+                            <img class="game-icon" src="${project.imgSrc}" alt="${project.title}" />
                             <p class="game-title">${project.title}</p>
                         </div>
                     </a>

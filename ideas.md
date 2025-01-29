@@ -3,3 +3,11 @@
     -magnolia
     -thefatrat mayday
 - take me to a silly wikipedia article button
+- sites
+    - blob physics https://oimo.io/works/blob/
+    - water physics https://oimo.io/works/drops/
+    - https://thelifeengine.net/
+    - https://oimo.io/works/reversi/
+    - https://littlealchemy.com/
+    - https://littlealchemy2.com/
+    - https://cookieconsentspeed.run/

@@ -419,6 +419,7 @@
             constructor(canvas, ctx) {
                 this.canvas = canvas;
                 this.ctx = ctx;
+                this.opacity = 0; // Add opacity property
                 this.reset();
             }
 
@@ -431,10 +432,18 @@
                 this.length = 0;
                 this.maxLength = Math.random() * 50 + 50;
                 this.size = Math.random() * 10 + 5;
+                this.opacity = 0; // Reset opacity
+                this.fading = false; // Track if pipe is fading out
             }
 
             update() {
                 const speed = 2;
+                
+                // Fade in when new
+                if (!this.fading && this.opacity < 0.2) {
+                    this.opacity += 0.01;
+                }
+
                 switch(this.direction) {
                     case 0: this.x += speed; break;
                     case 1: this.x -= speed; break;
@@ -446,9 +455,16 @@
 
                 this.length += speed;
 
-                if (this.length > this.maxLength || 
-                    this.x < 0 || this.x > this.canvas.width ||
-                    this.y < 0 || this.y > this.canvas.height) {
+                // Start fading out before reset
+                if (this.length > this.maxLength - 20 || 
+                    this.x < 20 || this.x > this.canvas.width - 20 ||
+                    this.y < 20 || this.y > this.canvas.height - 20) {
+                    this.fading = true;
+                    this.opacity -= 0.01;
+                }
+
+                // Only reset when fully faded
+                if (this.opacity <= 0) {
                     this.reset();
                 }
             }
@@ -461,6 +477,7 @@
                 this.ctx.strokeStyle = this.color;
                 this.ctx.lineWidth = this.size * scale;
                 this.ctx.lineCap = 'round';
+                this.ctx.globalAlpha = this.opacity;
                 
                 const startX = this.x * scale;
                 const startY = this.y * scale;
@@ -483,7 +500,7 @@
         const canvas = document.getElementById('pipes-canvas');
         const ctx = canvas.getContext('2d');
         const pipes = [];
-        const numPipes = 50;
+        const numPipes = 15;
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -504,10 +521,7 @@
 
             pipes.forEach(pipe => {
                 pipe.update();
-                const currentAlpha = ctx.globalAlpha;
-                ctx.globalAlpha = 0.2;
                 pipe.draw();
-                ctx.globalAlpha = currentAlpha;
             });
 
             requestAnimationFrame(animate);
@@ -774,7 +788,7 @@
             const batteryLevel = document.getElementById('battery-level');
             
             const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
+            const hours = now.getHours().toString().padStart(1, '0');
             const minutes = now.getMinutes().toString().padStart(2, '0');
             const seconds = now.getSeconds().toString().padStart(2, '0');
             

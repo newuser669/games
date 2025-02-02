@@ -656,6 +656,23 @@
         #specialImage:hover .song-overlay {
             opacity: 1;
         }
+
+        #spotify-song-title {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--text-color);
+            font-size: 1em;
+            font-family: var(--font-minecraft);
+            margin-top: 0.5rem;
+            backdrop-filter: blur(5px);
+            display: none;
+        }
+
+        #spotify-song-title.visible {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -676,6 +693,7 @@
     <div class="title-section">
         <h1 class="rainbow-text">gamesinclass</h1>
         <span id="subtitle" class="neumorphic rainbow-text">Loading...</span>
+        <span id="spotify-song-title"></span>
         <img id="specialImage" src="" alt="Special Image" style="display: none;" />
         <div class="scroll-indicator">\/</div>
     </div>
@@ -697,10 +715,6 @@
             <label>24-hour Time</label>
             <input type="checkbox" id="time24h" checked>
         </div>
-        <div class="setting-item">
-            <label>Image Float Effect</label>
-            <input type="checkbox" id="imageFloat" checked>
-        </div>
         <div class="setting-category">
             <h4>Spotify Integration <i class="bi bi-question-circle info-icon" id="showSpotifyTutorial"></i></h4>
             <div class="setting-item">
@@ -717,20 +731,12 @@
                 </button>
             </div>
             <div class="setting-item">
-                <label>Show Album Art in Toolbar</label>
-                <input type="checkbox" id="showSpotifyArt">
-            </div>
-            <div class="setting-item">
                 <label>Replace Special Image with Album</label>
                 <input type="checkbox" id="replaceWithAlbum">
             </div>
             <div class="setting-item">
                 <label>Show Song Overlay on Album</label>
                 <input type="checkbox" id="showSongOverlay" disabled>
-            </div>
-            <div class="setting-item">
-                <label>Show Title in Toolbar</label>
-                <input type="checkbox" id="showTitleInToolbar" checked>
             </div>
         </div>
     </div>
@@ -1160,12 +1166,9 @@
         const defaultSettings = {
             pipeCount: 15,
             time24h: true,
-            imageFloat: true,
             spotifyClientId: '',  // Remove spotifyTutorialSeen since we don't need it anymore
-            showSpotifyArt: true,
             replaceWithAlbum: false,
-            showSongOverlay: true,
-            showTitleInToolbar: true
+            showSongOverlay: true
         };
 
         let settings = {
@@ -1191,17 +1194,13 @@
             const clock = document.getElementById('clock');
             const pipeCountSlider = document.getElementById('pipeCount');
             const time24hToggle = document.getElementById('time24h');
-            const imageFloatToggle = document.getElementById('imageFloat');
 
             // Initialize controls with saved values
             pipeCountSlider.value = settings.pipeCount;
             time24hToggle.checked = settings.time24h;
-            imageFloatToggle.checked = settings.imageFloat;
 
             // Apply initial settings
             updatePipeCount(settings.pipeCount);
-            document.getElementById('specialImage').style.animation = 
-                settings.imageFloat ? 'float 3s ease-in-out infinite' : 'none';
 
             // Event listeners
             clock.addEventListener('click', () => {
@@ -1222,13 +1221,6 @@
 
             time24hToggle.addEventListener('change', (e) => {
                 settings.time24h = e.target.checked;
-                saveSettings();
-            });
-
-            imageFloatToggle.addEventListener('change', (e) => {
-                settings.imageFloat = e.target.checked;
-                document.getElementById('specialImage').style.animation = 
-                    settings.imageFloat ? 'float 3s ease-in-out infinite' : 'none';
                 saveSettings();
             });
 
@@ -1297,17 +1289,12 @@
                 }
             });
 
-            const showSpotifyArtToggle = document.getElementById('showSpotifyArt');
             const replaceWithAlbumToggle = document.getElementById('replaceWithAlbum');
+            const showSongOverlayToggle = document.getElementById('showSongOverlay');
 
-            showSpotifyArtToggle.checked = settings.showSpotifyArt;
             replaceWithAlbumToggle.checked = settings.replaceWithAlbum;
-
-            showSpotifyArtToggle.addEventListener('change', (e) => {
-                settings.showSpotifyArt = e.target.checked;
-                saveSettings();
-                spotifyManager.updatePlaybackInfo();
-            });
+            showSongOverlayToggle.checked = settings.showSongOverlay;
+            showSongOverlayToggle.disabled = !settings.replaceWithAlbum;
 
             replaceWithAlbumToggle.addEventListener('change', (e) => {
                 settings.replaceWithAlbum = e.target.checked;
@@ -1316,22 +1303,8 @@
                 spotifyManager.updatePlaybackInfo();
             });
 
-            const showSongOverlayToggle = document.getElementById('showSongOverlay');
-        
-            showSongOverlayToggle.checked = settings.showSongOverlay;
-            showSongOverlayToggle.disabled = !settings.replaceWithAlbum;
-
             showSongOverlayToggle.addEventListener('change', (e) => {
                 settings.showSongOverlay = e.target.checked;
-                saveSettings();
-                spotifyManager.updatePlaybackInfo();
-            });
-
-            const showTitleInToolbarToggle = document.getElementById('showTitleInToolbar');
-            showTitleInToolbarToggle.checked = settings.showTitleInToolbar;
-
-            showTitleInToolbarToggle.addEventListener('change', (e) => {
-                settings.showTitleInToolbar = e.target.checked;
                 saveSettings();
                 spotifyManager.updatePlaybackInfo();
             });
@@ -1466,13 +1439,19 @@
                 const spotifyInfo = document.getElementById('spotify-info');
                 const spotifyTrack = document.getElementById('spotify-track');
                 const specialImage = document.getElementById('specialImage');
+                const spotifyTitle = document.getElementById('spotify-song-title');
                 
                 if (playback && playback.item) {
                     spotifyInfo.classList.add('visible');
-                    if (settings.showTitleInToolbar) {
-                        spotifyTrack.textContent = `${playback.item.name} - ${playback.item.artists[0].name}`;
-                    } else {
+                    const songInfo = `${playback.item.name} - ${playback.item.artists[0].name}`;
+
+                    if (settings.replaceWithAlbum) {
                         spotifyTrack.textContent = "Playing";
+                        spotifyTitle.textContent = songInfo;
+                        spotifyTitle.classList.add('visible');
+                    } else {
+                        spotifyTrack.textContent = songInfo;
+                        spotifyTitle.classList.remove('visible');
                     }
 
                     // Update album art in toolbar
@@ -1480,7 +1459,7 @@
                     const spotifyIcon = spotifyInfo.querySelector('i');
                     const existingImg = spotifyInfo.querySelector('img');
 
-                    if (settings.showSpotifyArt && albumArt) {
+                    if (!settings.replaceWithAlbum && albumArt) {
                         if (spotifyIcon) spotifyIcon.style.display = 'none';
                         if (existingImg) {
                             existingImg.src = albumArt;
@@ -1520,6 +1499,7 @@
                     }
                 } else {
                     spotifyInfo.classList.remove('visible');
+                    spotifyTitle.classList.remove('visible');
                     if (!settings.replaceWithAlbum) {
                         setRandomSpecialImage();
                     }

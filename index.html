@@ -673,6 +673,20 @@
         #spotify-song-title.visible {
             display: block;
         }
+
+        #weather-info {
+            font-size: 0.9em;
+            opacity: 0.9;
+            padding-left: 8px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #weather-info i {
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -687,6 +701,10 @@
         <div id="spotify-info">
             <i class="bi bi-spotify"></i>
             <span id="spotify-track"></span>
+        </div>
+        <div id="weather-info">
+            <i class="bi bi-thermometer-half"></i>
+            <span id="weather-text">Loading...</span>
         </div>
     </div>
     
@@ -733,6 +751,16 @@
             <div class="setting-item">
                 <label>Replace Special Image with Album</label>
                 <input type="checkbox" id="replaceWithAlbum">
+            </div>
+        </div>
+        <div class="setting-category">
+            <h4>Weather <i class="bi bi-question-circle info-icon" id="showWeatherInfo"></i></h4>
+            <div class="setting-item">
+                <label>Location Code</label>
+                <input type="text" id="weatherLocation" placeholder="s0000516" value="s0000516">
+            </div>
+            <div class="setting-note">
+                Default: Midland (s0000516) - <a href="https://dd.weather.gc.ca/citypage_weather/docs/site_list_en.csv" target="_blank" style="color: #3498db">View Locations</a>
             </div>
         </div>
     </div>
@@ -1163,7 +1191,8 @@
             pipeCount: 15,
             time24h: true,
             spotifyClientId: '',
-            replaceWithAlbum: false
+            replaceWithAlbum: false,
+            weatherLocation: 's0000516' // Midland, Ontario
         };
 
         let settings = {
@@ -1291,8 +1320,27 @@
             replaceWithAlbumToggle.addEventListener('change', (e) => {
                 settings.replaceWithAlbum = e.target.checked;
                 saveSettings();
-                spotifyManager.updatePlaybackInfo();
+                
+                if (!e.target.checked) {
+                    // Reload page when option is turned off
+                    window.location.reload();
+                } else {
+                    spotifyManager.updatePlaybackInfo();
+                }
             });
+
+            const weatherLocation = document.getElementById('weatherLocation');
+            weatherLocation.value = settings.weatherLocation;
+
+            weatherLocation.addEventListener('change', (e) => {
+                settings.weatherLocation = e.target.value.trim();
+                saveSettings();
+                weatherManager.stopWeatherCheck();
+                weatherManager.startWeatherCheck();
+            });
+
+            // Start weather updates
+            weatherManager.startWeatherCheck();
         }
 
         function updateClock() {
@@ -1354,7 +1402,16 @@
             constructor() {
                 this.accessToken = localStorage.getItem('spotify_access_token');
                 this.refreshTimer = null;
-                this.checkLoginCallback();
+                this.autoConnect();
+            }
+
+            async autoConnect() {
+                // Try to connect if we have a client ID but no access token
+                if (!this.accessToken && settings.spotifyClientId) {
+                    this.authorize();
+                } else {
+                    this.checkLoginCallback();
+                }
             }
 
             getClientId() {
@@ -1502,6 +1559,72 @@
                 spotifyManager.updatePlaybackInfo();
             }
         });
+
+        // Add weather fetching functionality
+        class WeatherManager {
+            constructor() {
+                this.updateTimer = null;
+                this.currentLocation = settings.weatherLocation;
+                // Hide weather info initially
+                document.getElementById('weather-info').style.display = 'none';
+            }
+
+            async fetchWeather() {
+                try {
+                    // Updated URL to use the correct path structure
+                    const response = await fetch(`https://dd.weather.gc.ca/citypage_weather/ON/${settings.weatherLocation}_e.xml`);
+                    if (!response.ok) {
+                        throw new Error('Weather data not available');
+                    }
+
+                    const text = await response.text();
+                    const parser = new DOMParser();
+                    const xml = parser.parseFromString(text, "text/xml");
+                    
+                    const currentConditions = xml.querySelector('currentConditions');
+                    const temperature = currentConditions.querySelector('temperature').textContent;
+                    const condition = currentConditions.querySelector('condition').textContent;
+                    
+                    const weatherInfo = document.getElementById('weather-info');
+                    const weatherText = document.getElementById('weather-text');
+                    weatherText.textContent = `${temperature}°C ${condition}`;
+
+                    // Update weather icon based on condition
+                    const weatherIcon = weatherInfo.querySelector('i');
+                    const iconClass = this.getWeatherIcon(condition.toLowerCase());
+                    weatherIcon.className = `bi ${iconClass}`;
+
+                    // Show weather info only if we successfully got data
+                    weatherInfo.style.display = 'flex';
+                } catch (error) {
+                    console.error('Weather API error:', error);
+                    document.getElementById('weather-info').style.display = 'none';
+                }
+            }
+
+            getWeatherIcon(condition) {
+                if (condition.includes('rain')) return 'bi-cloud-rain';
+                if (condition.includes('snow')) return 'bi-cloud-snow';
+                if (condition.includes('cloud')) return 'bi-cloud';
+                if (condition.includes('clear') || condition.includes('sunny')) return 'bi-sun';
+                return 'bi-thermometer-half';
+            }
+
+            startWeatherCheck() {
+                this.fetchWeather();
+                // Update every 30 minutes
+                this.updateTimer = setInterval(() => this.fetchWeather(), 30 * 60 * 1000);
+            }
+
+            stopWeatherCheck() {
+                if (this.updateTimer) {
+                    clearInterval(this.updateTimer);
+                }
+            }
+        }
+
+        // Initialize WeatherManager
+        const weatherManager = new WeatherManager();
     </script>
 </body>
 </html>

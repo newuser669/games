@@ -375,8 +375,9 @@
 
         #clock {
             position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
             top: 20px;
-            right: 20px;
             background: rgba(0, 0, 0, 0.5);
             color: var(--text-color);
             padding: 8px 12px;
@@ -389,6 +390,8 @@
             align-items: center;
             gap: 12px;
             cursor: pointer;
+            white-space: nowrap;
+            max-width: 90vw;
         }
 
         #clock i {
@@ -496,6 +499,7 @@
             gap: 8px;
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         #spotify-info.visible {
@@ -527,6 +531,7 @@
         @media (max-width: 768px) {
             #spotify-info {
                 max-width: 120px;
+                white-space: nowrap;
             }
         }
 
@@ -722,6 +727,10 @@
             <div class="setting-item">
                 <label>Show Song Overlay on Album</label>
                 <input type="checkbox" id="showSongOverlay" disabled>
+            </div>
+            <div class="setting-item">
+                <label>Show Title in Toolbar</label>
+                <input type="checkbox" id="showTitleInToolbar" checked>
             </div>
         </div>
     </div>
@@ -1155,7 +1164,8 @@
             spotifyClientId: '',  // Remove spotifyTutorialSeen since we don't need it anymore
             showSpotifyArt: true,
             replaceWithAlbum: false,
-            showSongOverlay: true
+            showSongOverlay: true,
+            showTitleInToolbar: true
         };
 
         let settings = {
@@ -1316,6 +1326,15 @@
                 saveSettings();
                 spotifyManager.updatePlaybackInfo();
             });
+
+            const showTitleInToolbarToggle = document.getElementById('showTitleInToolbar');
+            showTitleInToolbarToggle.checked = settings.showTitleInToolbar;
+
+            showTitleInToolbarToggle.addEventListener('change', (e) => {
+                settings.showTitleInToolbar = e.target.checked;
+                saveSettings();
+                spotifyManager.updatePlaybackInfo();
+            });
         }
 
         function updateClock() {
@@ -1450,7 +1469,11 @@
                 
                 if (playback && playback.item) {
                     spotifyInfo.classList.add('visible');
-                    spotifyTrack.textContent = `${playback.item.name} - ${playback.item.artists[0].name}`;
+                    if (settings.showTitleInToolbar) {
+                        spotifyTrack.textContent = `${playback.item.name} - ${playback.item.artists[0].name}`;
+                    } else {
+                        spotifyTrack.textContent = "Playing";
+                    }
 
                     // Update album art in toolbar
                     const albumArt = playback.item.album.images[playback.item.album.images.length - 1]?.url;

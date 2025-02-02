@@ -71,6 +71,24 @@
             padding: 1.25rem;
             box-shadow: 6px 6px 12px var(--shadow-dark);
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-tile::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 35px;
+            background: transparent;
+            z-index: -1;
+            filter: blur(15px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-tile:hover::before {
+            opacity: 0.7;
         }
 
         .game-tile:hover {
@@ -211,7 +229,7 @@
             object-fit: contain; /* Changed from 'cover' to 'contain' to preserve aspect ratio */
             border-radius: 12px;
             display: block;
-            animation: float 6s ease-in-out infinite;
+            animation: float 3s ease-in-out infinite;
             position: relative;
             z-index: 1;
             margin-top: 2rem;
@@ -220,6 +238,18 @@
         @keyframes glowPulse {
             0%, 50%, 100% {
                 filter: brightness(1.1);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
             }
         }
 
@@ -358,6 +388,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            cursor: pointer;
         }
 
         #clock i {
@@ -386,6 +417,222 @@
                 font-size: 0.8em;
             }
         }
+
+        .settings-popup {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background: rgba(14, 14, 14, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            z-index: 999;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            min-width: 250px;
+            transform: translateY(-20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .settings-popup.visible {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .settings-popup h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.1em;
+            color: var(--text-color);
+        }
+
+        .setting-item {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .setting-item label {
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+
+        .setting-item input[type="range"] {
+            width: 100px;
+        }
+
+        .setting-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        .setting-item input[type="text"] {
+            width: 120px;
+            padding: 4px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--text-color);
+            font-size: 0.9em;
+        }
+
+        .setting-note {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        #spotify-info {
+            font-size: 0.9em;
+            opacity: 0.9;
+            padding-left: 8px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+            align-items: center;
+            gap: 8px;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #spotify-info.visible {
+            display: flex;
+        }
+
+        #spotify-info img {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .spotify-connect-btn {
+            background: #1DB954;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+        }
+
+        .spotify-connect-btn:hover {
+            background: #1ed760;
+        }
+
+        @media (max-width: 768px) {
+            #spotify-info {
+                max-width: 120px;
+            }
+        }
+
+        .tutorial-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: rgba(14, 14, 14, 0.98);
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 400px;
+            width: 90%;
+            z-index: 1001;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .tutorial-popup.visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .tutorial-popup h3 {
+            color: #1DB954;
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tutorial-content {
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+
+        .tutorial-steps {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .tutorial-steps li {
+            margin: 10px 0;
+            text-align: left;
+        }
+
+        .warning-text {
+            color: #ff6b6b;
+            font-weight: bold;
+            padding: 10px;
+            border: 1px solid #ff6b6b;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .tutorial-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tutorial-button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .tutorial-button.primary {
+            background: #1DB954;
+            color: white;
+        }
+
+        .tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(3px);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .tutorial-overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .info-icon {
+            cursor: help;
+            color: #1DB954;
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body>
@@ -397,6 +644,10 @@
         <span id="battery-level"></span>
         <i id="os-icon"></i>
         <i id="browser-icon"></i>
+        <div id="spotify-info">
+            <i class="bi bi-spotify"></i>
+            <span id="spotify-track"></span>
+        </div>
     </div>
     
     <div class="title-section">
@@ -412,6 +663,60 @@
     </div>
 
     <button id="back-to-top" aria-label="Back to top">↑</button>
+
+    <div class="settings-popup" id="settings">
+        <h3>Settings</h3>
+        <div class="setting-item">
+            <label for="pipeCount">Background Pipes</label>
+            <input type="range" id="pipeCount" min="5" max="30" value="15">
+        </div>
+        <div class="setting-item">
+            <label>24-hour Time</label>
+            <input type="checkbox" id="time24h" checked>
+        </div>
+        <div class="setting-item">
+            <label>Image Float Effect</label>
+            <input type="checkbox" id="imageFloat" checked>
+        </div>
+        <div class="setting-category">
+            <h4>Spotify Integration <i class="bi bi-question-circle info-icon" id="showSpotifyTutorial"></i></h4>
+            <div class="setting-item">
+                <label>Client ID</label>
+                <input type="text" id="spotifyClientId" placeholder="Enter Client ID">
+            </div>
+            <div class="setting-note">
+                Get your Client ID from the <a href="https://developer.spotify.com/dashboard" target="_blank" style="color: #1DB954">Spotify Dashboard</a>
+            </div>
+            <div class="setting-item">
+                <label>Connect Spotify</label>
+                <button class="spotify-connect-btn" id="spotifyConnect" disabled>
+                    Connect
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="tutorial-overlay" id="spotifyTutorialOverlay"></div>
+    <div class="tutorial-popup" id="spotifyTutorial">
+        <h3><i class="bi bi-spotify"></i> Spotify Integration Tutorial</h3>
+        <div class="warning-text">
+            <i class="bi bi-exclamation-triangle"></i> WARNING: This feature is highly experimental and may not work as expected. Use at your own risk.
+        </div>
+        <div class="tutorial-content">
+            To connect your Spotify account, follow these steps:
+            <ol class="tutorial-steps">
+                <li>Go to the <a href="https://developer.spotify.com/dashboard" target="_blank" style="color: #1DB954">Spotify Developer Dashboard</a></li>
+                <li>Create a new app (name it whatever you want)</li>
+                <li>Copy the Client ID from your app</li>
+                <li>Add this site's URL to the Redirect URIs in your app settings</li>
+                <li>Paste the Client ID in the settings here</li>
+                <li>Click Connect and authorize the app</li>
+            </ol>
+        </div>
+        <div class="tutorial-buttons">
+            <button class="tutorial-button primary" id="closeTutorial">Close</button>
+        </div>
+    </div>
 
     <script>
         // Add the Pipe class and animation code from index.html
@@ -553,11 +858,44 @@
                 .map(project => `
                     <a href="${project.link}" class="game-link">
                         <div class="game-tile">
-                            <img class="game-icon" src="${project.imgSrc}" alt="${project.title}" />
+                            <img class="game-icon" src="${project.imgSrc}" 
+                                 alt="${project.title}" 
+                                 onload="addGameTileGlow(this)" />
                             <p class="game-title">${project.title}</p>
                         </div>
                     </a>
                 `).join("");
+        }
+
+        function addGameTileGlow(img) {
+            const tile = img.closest('.game-tile');
+            if (!tile) return;
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            ctx.drawImage(img, 0, 0);
+
+            try {
+                // Sample colors from different regions of the image
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+                const colors = [];
+                const samples = 4; // Number of color samples
+                
+                for (let i = 0; i < samples; i++) {
+                    const offset = Math.floor((imageData.length / 4) * (i / samples)) * 4;
+                    colors.push(`rgba(${imageData[offset]}, ${imageData[offset + 1]}, ${imageData[offset + 2]}, 1)`);
+                }
+
+                // Create gradient background
+                const gradient = colors.join(', ');
+                tile.style.setProperty('--glow-colors', gradient);
+                tile.querySelector('::before').style.background = 
+                    `linear-gradient(45deg, ${gradient})`;
+            } catch (e) {
+                console.error('Error processing image colors:', e);
+            }
         }
 
         window.addEventListener("scroll", () => {
@@ -780,6 +1118,143 @@
             return 'bi-browser'; // Generic browser icon fallback
         }
 
+        const defaultSettings = {
+            pipeCount: 15,
+            time24h: true,
+            imageFloat: true,
+            spotifyClientId: ''  // Remove spotifyTutorialSeen since we don't need it anymore
+        };
+
+        let settings = {
+            ...defaultSettings,
+            ...JSON.parse(localStorage.getItem('siteSettings') || '{}')
+        };
+
+        function saveSettings() {
+            localStorage.setItem('siteSettings', JSON.stringify(settings));
+        }
+
+        function updatePipeCount(count) {
+            while (pipes.length > count) {
+                pipes.pop();
+            }
+            while (pipes.length < count) {
+                pipes.push(new Pipe(canvas, ctx));
+            }
+        }
+
+        function initializeSettings() {
+            const settingsPopup = document.getElementById('settings');
+            const clock = document.getElementById('clock');
+            const pipeCountSlider = document.getElementById('pipeCount');
+            const time24hToggle = document.getElementById('time24h');
+            const imageFloatToggle = document.getElementById('imageFloat');
+
+            // Initialize controls with saved values
+            pipeCountSlider.value = settings.pipeCount;
+            time24hToggle.checked = settings.time24h;
+            imageFloatToggle.checked = settings.imageFloat;
+
+            // Apply initial settings
+            updatePipeCount(settings.pipeCount);
+            document.getElementById('specialImage').style.animation = 
+                settings.imageFloat ? 'float 3s ease-in-out infinite' : 'none';
+
+            // Event listeners
+            clock.addEventListener('click', () => {
+                settingsPopup.classList.toggle('visible');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!settingsPopup.contains(e.target) && !clock.contains(e.target)) {
+                    settingsPopup.classList.remove('visible');
+                }
+            });
+
+            pipeCountSlider.addEventListener('input', (e) => {
+                settings.pipeCount = parseInt(e.target.value);
+                updatePipeCount(settings.pipeCount);
+                saveSettings();
+            });
+
+            time24hToggle.addEventListener('change', (e) => {
+                settings.time24h = e.target.checked;
+                saveSettings();
+            });
+
+            imageFloatToggle.addEventListener('change', (e) => {
+                settings.imageFloat = e.target.checked;
+                document.getElementById('specialImage').style.animation = 
+                    settings.imageFloat ? 'float 3s ease-in-out infinite' : 'none';
+                saveSettings();
+            });
+
+            const spotifyClientId = document.getElementById('spotifyClientId');
+            const spotifyConnectBtn = document.getElementById('spotifyConnect');
+
+            // Initialize Spotify client ID
+            spotifyClientId.value = settings.spotifyClientId || '';
+            spotifyConnectBtn.disabled = !settings.spotifyClientId;
+
+            // Add client ID input listener
+            spotifyClientId.addEventListener('input', (e) => {
+                settings.spotifyClientId = e.target.value.trim();
+                spotifyConnectBtn.disabled = !settings.spotifyClientId;
+                saveSettings();
+                
+                // Disconnect if client ID changes
+                if (spotifyManager.accessToken) {
+                    spotifyManager.disconnect();
+                    spotifyConnectBtn.textContent = 'Connect';
+                }
+            });
+
+            // Update connect button initialization
+            spotifyConnectBtn.addEventListener('click', () => {
+                if (!settings.spotifyClientId) return;
+                
+                if (spotifyManager.accessToken) {
+                    spotifyManager.disconnect();
+                    spotifyConnectBtn.textContent = 'Connect';
+                } else {
+                    spotifyManager.authorize();
+                    spotifyConnectBtn.textContent = 'Disconnect';
+                }
+            });
+
+            if (spotifyManager.accessToken) {
+                spotifyConnectBtn.textContent = 'Disconnect';
+            }
+
+            const tutorialPopup = document.getElementById('spotifyTutorial');
+            const tutorialOverlay = document.getElementById('spotifyTutorialOverlay');
+            const showTutorialBtn = document.getElementById('showSpotifyTutorial');
+            const closeTutorialBtn = document.getElementById('closeTutorial');
+
+            function showTutorial(e) {
+                e.stopPropagation(); // Prevent settings from closing
+                tutorialPopup.classList.add('visible');
+                tutorialOverlay.classList.add('visible');
+            }
+
+            function hideTutorial() {
+                tutorialPopup.classList.remove('visible');
+                tutorialOverlay.classList.remove('visible');
+            }
+
+            // Show tutorial only when info icon is clicked
+            showTutorialBtn.addEventListener('click', showTutorial);
+            closeTutorialBtn.addEventListener('click', hideTutorial);
+            tutorialOverlay.addEventListener('click', hideTutorial);
+
+            // Close tutorial when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!tutorialPopup.contains(e.target) && !showTutorialBtn.contains(e.target)) {
+                    hideTutorial();
+                }
+            });
+        }
+
         function updateClock() {
             const timeSpan = document.getElementById('time');
             const dayText = document.getElementById('day-text');
@@ -788,7 +1263,9 @@
             const batteryLevel = document.getElementById('battery-level');
             
             const now = new Date();
-            const hours = now.getHours().toString().padStart(1, '0');
+            const hours = settings.time24h ? 
+                now.getHours().toString().padStart(2, '0') :
+                (now.getHours() % 12 || 12).toString();
             const minutes = now.getMinutes().toString().padStart(2, '0');
             const seconds = now.getSeconds().toString().padStart(2, '0');
             
@@ -826,6 +1303,107 @@
         // Remove the network status event listeners
         setInterval(updateClock, 1000);
         updateClock();
+
+        document.addEventListener('DOMContentLoaded', initializeSettings);
+
+        // Spotify configuration
+        const SPOTIFY_REDIRECT_URI = window.location.origin + window.location.pathname;
+        const SPOTIFY_SCOPES = 'user-read-playback-state';
+
+        class SpotifyManager {
+            constructor() {
+                this.accessToken = localStorage.getItem('spotify_access_token');
+                this.refreshTimer = null;
+                this.checkLoginCallback();
+            }
+
+            getClientId() {
+                return settings.spotifyClientId;
+            }
+
+            authorize() {
+                const clientId = this.getClientId();
+                if (!clientId) return;
+                
+                const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT_URI)}&scope=${encodeURIComponent(SPOTIFY_SCOPES)}`;
+                window.location.href = authUrl;
+            }
+
+            checkLoginCallback() {
+                const hash = window.location.hash;
+                if (hash) {
+                    const params = new URLSearchParams(hash.substring(1));
+                    this.accessToken = params.get('access_token');
+                    if (this.accessToken) {
+                        localStorage.setItem('spotify_access_token', this.accessToken);
+                        window.location.hash = '';
+                        this.startPlaybackCheck();
+                    }
+                } else if (this.accessToken) {
+                    this.startPlaybackCheck();
+                }
+            }
+
+            async getCurrentPlayback() {
+                if (!this.accessToken) return null;
+                
+                try {
+                    const response = await fetch('https://api.spotify.com/v1/me/player', {
+                        headers: {
+                            'Authorization': `Bearer ${this.accessToken}`
+                        }
+                    });
+
+                    if (response.status === 401) {
+                        // Token expired
+                        this.accessToken = null;
+                        localStorage.removeItem('spotify_access_token');
+                        return null;
+                    }
+
+                    if (response.status === 204) {
+                        // No active playback
+                        return null;
+                    }
+
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.error('Spotify API error:', error);
+                    return null;
+                }
+            }
+
+            startPlaybackCheck() {
+                this.updatePlaybackInfo();
+                this.refreshTimer = setInterval(() => this.updatePlaybackInfo(), 5000);
+            }
+
+            async updatePlaybackInfo() {
+                const playback = await this.getCurrentPlayback();
+                const spotifyInfo = document.getElementById('spotify-info');
+                const spotifyTrack = document.getElementById('spotify-track');
+                
+                if (playback && playback.item) {
+                    spotifyInfo.classList.add('visible');
+                    spotifyTrack.textContent = `${playback.item.name} - ${playback.item.artists[0].name}`;
+                } else {
+                    spotifyInfo.classList.remove('visible');
+                }
+            }
+
+            disconnect() {
+                this.accessToken = null;
+                localStorage.removeItem('spotify_access_token');
+                if (this.refreshTimer) {
+                    clearInterval(this.refreshTimer);
+                }
+                document.getElementById('spotify-info').classList.remove('visible');
+            }
+        }
+
+        // Initialize Spotify integration
+        const spotifyManager = new SpotifyManager();
     </script>
 </body>
 </html>

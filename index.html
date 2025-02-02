@@ -734,10 +734,6 @@
                 <label>Replace Special Image with Album</label>
                 <input type="checkbox" id="replaceWithAlbum">
             </div>
-            <div class="setting-item">
-                <label>Show Song Overlay on Album</label>
-                <input type="checkbox" id="showSongOverlay" disabled>
-            </div>
         </div>
     </div>
 
@@ -1166,9 +1162,8 @@
         const defaultSettings = {
             pipeCount: 15,
             time24h: true,
-            spotifyClientId: '',  // Remove spotifyTutorialSeen since we don't need it anymore
-            replaceWithAlbum: false,
-            showSongOverlay: true
+            spotifyClientId: '',
+            replaceWithAlbum: false
         };
 
         let settings = {
@@ -1290,21 +1285,11 @@
             });
 
             const replaceWithAlbumToggle = document.getElementById('replaceWithAlbum');
-            const showSongOverlayToggle = document.getElementById('showSongOverlay');
 
             replaceWithAlbumToggle.checked = settings.replaceWithAlbum;
-            showSongOverlayToggle.checked = settings.showSongOverlay;
-            showSongOverlayToggle.disabled = !settings.replaceWithAlbum;
 
             replaceWithAlbumToggle.addEventListener('change', (e) => {
                 settings.replaceWithAlbum = e.target.checked;
-                showSongOverlayToggle.disabled = !e.target.checked;
-                saveSettings();
-                spotifyManager.updatePlaybackInfo();
-            });
-
-            showSongOverlayToggle.addEventListener('change', (e) => {
-                settings.showSongOverlay = e.target.checked;
                 saveSettings();
                 spotifyManager.updatePlaybackInfo();
             });
@@ -1445,64 +1430,46 @@
                     spotifyInfo.classList.add('visible');
                     const songInfo = `${playback.item.name} - ${playback.item.artists[0].name}`;
 
-                    if (settings.replaceWithAlbum) {
-                        spotifyTrack.textContent = "Playing";
-                        spotifyTitle.textContent = songInfo;
-                        spotifyTitle.classList.add('visible');
-                    } else {
+                    // Show full info in toolbar if in games section or not using album replacement
+                    if (isInGamesSection || !settings.replaceWithAlbum) {
                         spotifyTrack.textContent = songInfo;
                         spotifyTitle.classList.remove('visible');
-                    }
+                        
+                        // Show album art in toolbar
+                        const albumArt = playback.item.album.images[playback.item.album.images.length - 1]?.url;
+                        const spotifyIcon = spotifyInfo.querySelector('i');
+                        const existingImg = spotifyInfo.querySelector('img');
 
-                    // Update album art in toolbar
-                    const albumArt = playback.item.album.images[playback.item.album.images.length - 1]?.url;
-                    const spotifyIcon = spotifyInfo.querySelector('i');
-                    const existingImg = spotifyInfo.querySelector('img');
-
-                    if (!settings.replaceWithAlbum && albumArt) {
                         if (spotifyIcon) spotifyIcon.style.display = 'none';
                         if (existingImg) {
                             existingImg.src = albumArt;
-                        } else {
+                        } else if (albumArt) {
                             const img = document.createElement('img');
                             img.src = albumArt;
                             img.alt = 'Album Art';
                             spotifyInfo.insertBefore(img, spotifyTrack);
                         }
                     } else {
-                        if (existingImg) existingImg.remove();
-                        if (spotifyIcon) spotifyIcon.style.display = '';
-                    }
-
-                    // Update special image replacement
-                    if (settings.replaceWithAlbum && playback.item.album.images[0]?.url) {
-                        specialImage.src = playback.item.album.images[0].url;
-                        specialImage.style.display = 'block';
+                        // Show minimal info in toolbar if using album replacement
+                        spotifyTrack.textContent = "Playing";
+                        spotifyTitle.textContent = songInfo;
+                        spotifyTitle.classList.add('visible');
                         
-                        // Handle song overlay
-                        let overlay = specialImage.querySelector('.song-overlay');
-                        if (settings.showSongOverlay) {
-                            if (!overlay) {
-                                overlay = document.createElement('div');
-                                overlay.className = 'song-overlay';
-                                specialImage.style.position = 'relative';
-                                specialImage.appendChild(overlay);
-                            }
-                            overlay.textContent = `${playback.item.name} - ${playback.item.artists[0].name}`;
-                        } else if (overlay) {
-                            overlay.remove();
+                        // Remove album art from toolbar
+                        const existingImg = spotifyInfo.querySelector('img');
+                        if (existingImg) existingImg.remove();
+                        const spotifyIcon = spotifyInfo.querySelector('i');
+                        if (spotifyIcon) spotifyIcon.style.display = '';
+
+                        // Update special image if using album replacement
+                        if (playback.item.album.images[0]?.url) {
+                            specialImage.src = playback.item.album.images[0].url;
+                            specialImage.style.display = 'block';
                         }
-                    } else if (!settings.replaceWithAlbum) {
-                        const overlay = specialImage.querySelector('.song-overlay');
-                        if (overlay) overlay.remove();
-                        setRandomSpecialImage();
                     }
                 } else {
                     spotifyInfo.classList.remove('visible');
                     spotifyTitle.classList.remove('visible');
-                    if (!settings.replaceWithAlbum) {
-                        setRandomSpecialImage();
-                    }
                 }
             }
 
@@ -1518,6 +1485,23 @@
 
         // Initialize Spotify integration
         const spotifyManager = new SpotifyManager();
+
+        // Add scroll position check
+        let isInGamesSection = false;
+
+        window.addEventListener('scroll', () => {
+            const gamesSection = document.querySelector('.games-section');
+            const scrollPosition = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const wasInGamesSection = isInGamesSection;
+
+            isInGamesSection = scrollPosition > windowHeight * 0.5;
+            
+            // Update Spotify display if section changed
+            if (wasInGamesSection !== isInGamesSection) {
+                spotifyManager.updatePlaybackInfo();
+            }
+        });
     </script>
 </body>
 </html>

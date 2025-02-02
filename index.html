@@ -508,6 +508,7 @@
             width: 20px;
             height: 20px;
             border-radius: 4px;
+            object-fit: cover;
         }
 
         .spotify-connect-btn {
@@ -685,13 +686,21 @@
                 <input type="text" id="spotifyClientId" placeholder="Enter Client ID">
             </div>
             <div class="setting-note">
-                Get your Client ID from the <a href="https://developer.spotify.com/dashboard" target="_blank" style="color: #1DB954">Spotify Dashboard</a>
+                Get your Client ID from the <a href="https://developers.spotify.com/dashboard" target="_blank" style="color: #1DB954">Spotify Dashboard</a>
             </div>
             <div class="setting-item">
                 <label>Connect Spotify</label>
                 <button class="spotify-connect-btn" id="spotifyConnect" disabled>
                     Connect
                 </button>
+            </div>
+            <div class="setting-item">
+                <label>Show Album Art in Toolbar</label>
+                <input type="checkbox" id="showSpotifyArt">
+            </div>
+            <div class="setting-item">
+                <label>Replace Special Image with Album</label>
+                <input type="checkbox" id="replaceWithAlbum">
             </div>
         </div>
     </div>
@@ -705,7 +714,7 @@
         <div class="tutorial-content">
             To connect your Spotify account, follow these steps:
             <ol class="tutorial-steps">
-                <li>Go to the <a href="https://developer.spotify.com/dashboard" target="_blank" style="color: #1DB954">Spotify Developer Dashboard</a></li>
+                <li>Go to the <a href="https://developers.spotify.com/dashboard" target="_blank" style="color: #1DB954">Spotify Dashboard</a></li>
                 <li>Create a new app (name it whatever you want)</li>
                 <li>Copy the Client ID from your app</li>
                 <li>Add this site's URL to the Redirect URIs in your app settings</li>
@@ -1122,7 +1131,9 @@
             pipeCount: 15,
             time24h: true,
             imageFloat: true,
-            spotifyClientId: ''  // Remove spotifyTutorialSeen since we don't need it anymore
+            spotifyClientId: '',  // Remove spotifyTutorialSeen since we don't need it anymore
+            showSpotifyArt: true,
+            replaceWithAlbum: false
         };
 
         let settings = {
@@ -1252,6 +1263,24 @@
                 if (!tutorialPopup.contains(e.target) && !showTutorialBtn.contains(e.target)) {
                     hideTutorial();
                 }
+            });
+
+            const showSpotifyArtToggle = document.getElementById('showSpotifyArt');
+            const replaceWithAlbumToggle = document.getElementById('replaceWithAlbum');
+
+            showSpotifyArtToggle.checked = settings.showSpotifyArt;
+            replaceWithAlbumToggle.checked = settings.replaceWithAlbum;
+
+            showSpotifyArtToggle.addEventListener('change', (e) => {
+                settings.showSpotifyArt = e.target.checked;
+                saveSettings();
+                spotifyManager.updatePlaybackInfo();
+            });
+
+            replaceWithAlbumToggle.addEventListener('change', (e) => {
+                settings.replaceWithAlbum = e.target.checked;
+                saveSettings();
+                spotifyManager.updatePlaybackInfo();
             });
         }
 
@@ -1383,12 +1412,44 @@
                 const playback = await this.getCurrentPlayback();
                 const spotifyInfo = document.getElementById('spotify-info');
                 const spotifyTrack = document.getElementById('spotify-track');
+                const specialImage = document.getElementById('specialImage');
                 
                 if (playback && playback.item) {
                     spotifyInfo.classList.add('visible');
                     spotifyTrack.textContent = `${playback.item.name} - ${playback.item.artists[0].name}`;
+
+                    // Update album art in toolbar
+                    const albumArt = playback.item.album.images[playback.item.album.images.length - 1]?.url;
+                    const spotifyIcon = spotifyInfo.querySelector('i');
+                    const existingImg = spotifyInfo.querySelector('img');
+
+                    if (settings.showSpotifyArt && albumArt) {
+                        if (spotifyIcon) spotifyIcon.style.display = 'none';
+                        if (existingImg) {
+                            existingImg.src = albumArt;
+                        } else {
+                            const img = document.createElement('img');
+                            img.src = albumArt;
+                            img.alt = 'Album Art';
+                            spotifyInfo.insertBefore(img, spotifyTrack);
+                        }
+                    } else {
+                        if (existingImg) existingImg.remove();
+                        if (spotifyIcon) spotifyIcon.style.display = '';
+                    }
+
+                    // Update special image replacement
+                    if (settings.replaceWithAlbum && playback.item.album.images[0]?.url) {
+                        specialImage.src = playback.item.album.images[0].url;
+                        specialImage.style.display = 'block';
+                    } else if (!settings.replaceWithAlbum) {
+                        setRandomSpecialImage();
+                    }
                 } else {
                     spotifyInfo.classList.remove('visible');
+                    if (!settings.replaceWithAlbum) {
+                        setRandomSpecialImage();
+                    }
                 }
             }
 

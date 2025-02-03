@@ -1015,11 +1015,8 @@
                             ${Math.min(255, rgb[2] * (1 + pulseFactor))})`;
                     }
 
-                    // Enhanced opacity based on energy
-                    const maxOpacity = 0.4 + (window.musicData.energy * 0.6); // Increased from 0.3
-                    if (!this.fading && this.opacity < maxOpacity) {
-                        this.opacity += 0.02; // Faster fade in
-                    }
+                    // Set opacity to 100% when in reactive mode
+                    this.opacity = 1.0;
 
                     // Use doubled BPM for bouncing
                     const bpmScaleBounce = (window.musicData.bpm * 2) / 120;

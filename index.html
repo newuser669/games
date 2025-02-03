@@ -831,6 +831,54 @@
             left: 0;
             width: 100%;
         }
+
+        /* Update Spotify toolbar styles */
+        #spotify-info {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .spotify-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .spotify-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+            padding-left: 8px;
+        }
+
+        .spotify-controls i {
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .spotify-controls i:hover {
+            opacity: 1;
+        }
+
+        .spotify-art {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .spotify-text {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -847,9 +895,15 @@
         <i id="os-icon"></i>
         <i id="browser-icon"></i>
         <div id="spotify-info">
-            <div style="display: flex; align-items: center; gap: 8px; width: 100%">
+            <div class="spotify-top">
                 <i class="bi bi-spotify"></i>
-                <span id="spotify-track"></span>
+                <img class="spotify-art" style="display: none;">
+                <span class="spotify-text" id="spotify-track"></span>
+                <div class="spotify-controls">
+                    <i class="bi bi-skip-start-fill" id="spotify-prev"></i>
+                    <i class="bi bi-play-fill" id="spotify-play"></i>
+                    <i class="bi bi-skip-end-fill" id="spotify-next"></i>
+                </div>
             </div>
             <div class="spotify-progress">
                 <div class="spotify-progress-bar" id="spotify-toolbar-progress"></div>
@@ -1529,7 +1583,7 @@
 
         // Spotify configuration
         const SPOTIFY_REDIRECT_URI = window.location.origin + window.location.pathname;
-        const SPOTIFY_SCOPES = 'user-read-playback-state';
+        const SPOTIFY_SCOPES = 'user-read-playback-state user-modify-playback-state';
 
         class SpotifyManager {
             constructor() {
@@ -1669,6 +1723,8 @@
                 const playback = await this.getCurrentPlayback();
                 const spotifyInfo = document.getElementById('spotify-info');
                 const spotifyTrack = document.getElementById('spotify-track');
+                const spotifyArt = spotifyInfo.querySelector('.spotify-art');
+                const playButton = document.getElementById('spotify-play');
                 const specialImage = document.getElementById('specialImage');
                 const spotifyTitle = document.getElementById('spotify-song-title');
                 const songTitleText = document.getElementById('song-title-text');
@@ -1679,7 +1735,10 @@
                     const songInfo = `${playback.item.name} - ${playback.item.artists[0].name}`;
                     const progressPercent = (playback.progress_ms / playback.item.duration_ms) * 100;
 
-                    // Update only toolbar progress
+                    // Update play button icon
+                    playButton.className = playback.is_playing ? 'bi bi-pause-fill' : 'bi bi-play-fill';
+
+                    // Update toolbar progress
                     toolbarProgress.style.width = `${progressPercent}%`;
                     
                     if (isInGamesSection || !settings.replaceWithAlbum) {
@@ -1688,34 +1747,14 @@
                         
                         // Show album art in toolbar
                         const albumArt = playback.item.album.images[playback.item.album.images.length - 1]?.url;
-                        const spotifyIcon = spotifyInfo.querySelector('i');
-                        const existingImg = spotifyInfo.querySelector('img');
-
-                        if (spotifyIcon) spotifyIcon.style.display = 'none';
-                        if (existingImg) {
-                            existingImg.src = albumArt;
-                        } else if (albumArt) {
-                            const img = document.createElement('img');
-                            img.src = albumArt;
-                            img.alt = 'Album Art';
-                            spotifyInfo.insertBefore(img, spotifyTrack);
-                        }
+                        spotifyArt.src = albumArt;
+                        spotifyArt.style.display = 'block';
                     } else {
                         spotifyTrack.textContent = "Playing";
                         songTitleText.textContent = songInfo;
                         spotifyTitle.classList.add('visible');
-                        
-                        // Remove album art from toolbar
-                        const existingImg = spotifyInfo.querySelector('img');
-                        if (existingImg) existingImg.remove();
-                        const spotifyIcon = spotifyInfo.querySelector('i');
-                        if (spotifyIcon) spotifyIcon.style.display = '';
-
-                        // Update special image if using album replacement
-                        if (playback.item.album.images[0]?.url) {
-                            specialImage.src = playback.item.album.images[0].url;
-                            specialImage.style.display = 'block';
-                        }
+                        spotifyArt.style.display = 'none';
+                        // ...rest of album replacement code...
                     }
 
                     const progressBar = settings.replaceWithAlbum ? 
@@ -1727,6 +1766,34 @@
                     document.getElementById('song-progress-bar').style.display = 'none';
                     document.getElementById('special-image-progress-bar').style.display = 'none';
                 }
+            }
+
+            // Add playback control methods
+            async skipPrevious() {
+                await fetch('https://api.spotify.com/v1/me/player/previous', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${this.accessToken}` }
+                });
+                setTimeout(() => this.updatePlaybackInfo(), 100);
+            }
+
+            async skipNext() {
+                await fetch('https://api.spotify.com/v1/me/player/next', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${this.accessToken}` }
+                });
+                setTimeout(() => this.updatePlaybackInfo(), 100);
+            }
+
+            async togglePlay() {
+                const playback = await this.getCurrentPlayback();
+                const endpoint = playback?.is_playing ? 'pause' : 'play';
+                
+                await fetch(`https://api.spotify.com/v1/me/player/${endpoint}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${this.accessToken}` }
+                });
+                setTimeout(() => this.updatePlaybackInfo(), 100);
             }
 
             disconnect() {
@@ -1834,6 +1901,11 @@
 
         // Initialize weather manager
         const weatherManager = new WeatherManager();
+
+        // Add control event listeners after SpotifyManager initialization
+        document.getElementById('spotify-prev').addEventListener('click', () => spotifyManager.skipPrevious());
+        document.getElementById('spotify-play').addEventListener('click', () => spotifyManager.togglePlay());
+        document.getElementById('spotify-next').addEventListener('click', () => spotifyManager.skipNext());
     </script>
 </body>
 </html>

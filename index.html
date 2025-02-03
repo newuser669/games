@@ -216,10 +216,13 @@
             object-fit: contain; /* Changed from 'cover' to 'contain' to preserve aspect ratio */
             border-radius: 12px;
             display: block;
-            animation: float 3s ease-in-out infinite;
             position: relative;
             z-index: 1;
             margin-top: 2rem;
+            /* Remove float animation from base styles */
+            backface-visibility: hidden; /* Prevent ghosting */
+            transform-style: preserve-3d; /* Help with ghosting */
+            will-change: transform; /* Optimize animations */
         }
 
         @keyframes glowPulse {
@@ -859,9 +862,6 @@
         <span id="subtitle" class="neumorphic rainbow-text">Loading...</span>
         <span id="spotify-song-title">
             <span id="song-title-text"></span>
-            <div class="spotify-progress">
-                <div class="spotify-progress-bar" id="spotify-title-progress"></div>
-            </div>
         </span>
         <div id="song-progress-bar" class="progress-bar" style="display: none;"></div>
         <img id="specialImage" src="" alt="Special Image" style="display: none;" />
@@ -1673,16 +1673,14 @@
                 const spotifyTitle = document.getElementById('spotify-song-title');
                 const songTitleText = document.getElementById('song-title-text');
                 const toolbarProgress = document.getElementById('spotify-toolbar-progress');
-                const titleProgress = document.getElementById('spotify-title-progress');
                 
                 if (playback && playback.item) {
                     spotifyInfo.classList.add('visible');
                     const songInfo = `${playback.item.name} - ${playback.item.artists[0].name}`;
                     const progressPercent = (playback.progress_ms / playback.item.duration_ms) * 100;
 
-                    // Update all progress bars with the same value
+                    // Update only toolbar progress
                     toolbarProgress.style.width = `${progressPercent}%`;
-                    titleProgress.style.width = `${progressPercent}%`;
                     
                     if (isInGamesSection || !settings.replaceWithAlbum) {
                         spotifyTrack.textContent = songInfo;

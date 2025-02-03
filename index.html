@@ -905,6 +905,14 @@
                 <label>Replace Special Image with Album</label>
                 <input type="checkbox" id="replaceWithAlbum">
             </div>
+            <div class="setting-item">
+                <label>BPM Timing</label>
+                <select id="bpmTiming">
+                    <option value="half">Half-time</option>
+                    <option value="normal">Normal</option>
+                    <option value="double">Double-time</option>
+                </select>
+            </div>
         </div>
         <div class="setting-category">
             <h4>Weather</h4>
@@ -963,15 +971,34 @@
     </div>
 
     <script>
-        // Add the Pipe class and animation code from index.html
+        // Move settings initialization to the top
+        const defaultSettings = {
+            pipeCount: 15,
+            time24h: true,
+            spotifyClientId: '',
+            replaceWithAlbum: false,
+            weatherApiKey: 'bd5e378503939ddaee76f12ad7a97608',
+            weatherLat: 44.744155,
+            weatherLon: -79.885203,
+            useDeviceLocation: true,
+            bpmTiming: 'normal'
+        };
+
+        let settings = {
+            ...defaultSettings,
+            ...JSON.parse(localStorage.getItem('siteSettings') || '{}')
+        };
+
+        // Now continue with Pipe class and other code
         class Pipe {
             constructor(canvas, ctx) {
                 this.canvas = canvas;
                 this.ctx = ctx;
-                this.opacity = 0; // Add opacity property
+                this.opacity = 0.4; // Start with default opacity
                 this.pulsePhase = Math.random() * Math.PI * 2; // Add phase for pulsing
                 this.baseLength = Math.random() * 50 + 50; // Store base length for bouncing
                 this.colorIndex = Math.floor(Math.random() * 5); // Index for color array
+                this.spawnTime = Date.now();
                 this.reset();
             }
 
@@ -988,6 +1015,8 @@
                 this.opacity = 0; // Reset opacity
                 this.fading = false; // Track if pipe is fading out
                 this.bouncePhase = Math.random() * Math.PI * 2;
+                this.spawnTime = Date.now();
+                this.lifetime = 0;
             }
 
             update() {
@@ -1031,11 +1060,42 @@
                         this.color = window.musicData.mainColors[this.colorIndex % window.musicData.mainColors.length];
                     }
 
+                    // Calculate BPM-based timing
+                    const baseBpm = window.musicData.bpm;
+                    let effectiveBpm = baseBpm;
+                    
+                    // Apply BPM timing mode
+                    switch(settings.bpmTiming) {
+                        case 'half': effectiveBpm = baseBpm / 2; break;
+                        case 'double': effectiveBpm = baseBpm * 2; break;
+                    }
+                    
+                    // Convert BPM to milliseconds
+                    const beatInterval = 60000 / effectiveBpm;
+                    this.lifetime = Date.now() - this.spawnTime;
+
+                    // If pipe has lived for one beat interval, start fading
+                    if (this.lifetime >= beatInterval) {
+                        this.fading = true;
+                        this.opacity -= 0.05; // Faster fade out
+                    } else {
+                        this.opacity = 1.0;
+                    }
+
                 } else {
                     this.size = this.baseSize;
                     this.length = this.baseLength;
-                    // Maintain higher default opacity when no music is playing
-                    if (!this.fading && this.opacity < defaultOpacity) {
+                    
+                    // Maintain opacity and handle fading for non-music state
+                    if (this.length > this.maxLength - 20 || 
+                        this.x < 20 || this.x > this.canvas.width - 20 ||
+                        this.y < 20 || this.y > this.canvas.height - 20) {
+                        this.fading = true;
+                    }
+
+                    if (this.fading) {
+                        this.opacity -= 0.01;
+                    } else if (this.opacity < defaultOpacity) {
                         this.opacity += 0.01;
                     }
                 }
@@ -1095,7 +1155,7 @@
 
         const canvas = document.getElementById('pipes-canvas');
         const ctx = canvas.getContext('2d');
-        const pipes = [];
+        let pipes = [];
         const numPipes = 15;
 
         function resizeCanvas() {
@@ -1106,19 +1166,38 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        for(let i = 0; i < numPipes; i++) {
-            pipes.push(new Pipe(canvas, ctx));
+        // Initial pipe setup
+        function initializePipes() {
+            pipes = [];
+            for(let i = 0; i < settings.pipeCount; i++) {
+                pipes.push(new Pipe(canvas, ctx));
+            }
         }
+        initializePipes();
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'rgba(19, 21, 26, 0.2)'; // More transparent background
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+            // Remove dead pipes and add new ones immediately
+            for (let i = pipes.length - 1; i >= 0; i--) {
+                if (pipes[i].opacity <= 0) {
+                    pipes.splice(i, 1);
+                    pipes.push(new Pipe(canvas, ctx));
+                }
+            }
+
+            // Draw all pipes
             pipes.forEach(pipe => {
                 pipe.update();
                 pipe.draw();
             });
+
+            // Ensure we always have enough pipes
+            while (pipes.length < settings.pipeCount) {
+                pipes.push(new Pipe(canvas, ctx));
+            }
 
             requestAnimationFrame(animate);
         }
@@ -1321,31 +1400,14 @@
             return 'bi-browser'; // Generic browser icon fallback
         }
 
-        const defaultSettings = {
-            pipeCount: 15,
-            time24h: true,
-            spotifyClientId: '',
-            replaceWithAlbum: false,
-            weatherApiKey: 'bd5e378503939ddaee76f12ad7a97608',
-            weatherLat: 44.744155,
-            weatherLon: -79.885203,
-            useDeviceLocation: true
-        };
-
-        let settings = {
-            ...defaultSettings,
-            ...JSON.parse(localStorage.getItem('siteSettings') || '{}')
-        };
-
         function saveSettings() {
             localStorage.setItem('siteSettings', JSON.stringify(settings));
         }
 
         function updatePipeCount(count) {
-            while (pipes.length > count) {
-                pipes.pop();
-            }
-            while (pipes.length < count) {
+            // Clear existing pipes and create new ones
+            pipes = [];
+            for(let i = 0; i < count; i++) {
                 pipes.push(new Pipe(canvas, ctx));
             }
         }
@@ -1532,6 +1594,14 @@
                 weatherManager.updateWeather();
                 setInterval(() => weatherManager.updateWeather(), 60000); // Check every minute
             }
+
+            const bpmTiming = document.getElementById('bpmTiming');
+            bpmTiming.value = settings.bpmTiming;
+            
+            bpmTiming.addEventListener('change', (e) => {
+                settings.bpmTiming = e.target.value;
+                saveSettings();
+            });
         }
 
         function updateClock() {

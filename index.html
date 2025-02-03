@@ -34,6 +34,7 @@
         }
 
         body {
+            cursor: url('./cursor.png'), auto; /* Updated path with leading slash */
             background: #131517; /* Dark gray background */
             color: var(--text-color);
             font-family: 'MinecraftFont', system-ui, -apple-system, sans-serif;
@@ -191,12 +192,13 @@
 
         #cursorGlow {
             position: fixed;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 10%, transparent 70%);
+            width: 40px;  /* Reduced from 120px */
+            height: 40px; /* Reduced from 120px */
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
             pointer-events: none;
             transform: translate(-50%, -50%);
-            z-index: 9999;
+            z-index: 10000; /* Increased to be above everything */
+            mix-blend-mode: overlay; /* This will make it blend with colors underneath */
         }
 
         #specialImage {
@@ -831,7 +833,6 @@
         <span id="day-text"></span>
         <span id="battery-level"></span>
         <span id="weather-info">
-            <i class="bi bi-thermometer-half"></i>
             <span id="weather-temp"></span>
         </span>
         <i id="os-icon"></i>
@@ -1004,8 +1005,20 @@
 
         document.addEventListener("mousemove", (e) => {
             requestAnimationFrame(() => {
+                const cursorGlow = document.getElementById("cursorGlow");
                 cursorGlow.style.left = `${e.clientX}px`;
                 cursorGlow.style.top = `${e.clientY}px`;
+                
+                // Get color under cursor
+                const element = document.elementFromPoint(e.clientX, e.clientY);
+                if (element) {
+                    const color = window.getComputedStyle(element).backgroundColor;
+                    if (color && color !== 'transparent' && color !== 'rgba(0, 0, 0, 0)') {
+                        cursorGlow.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
+                    } else {
+                        cursorGlow.style.background = 'radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%)';
+                    }
+                }
             });
         });
 
@@ -1063,15 +1076,6 @@
             './specialimages/images.jpg',
             './specialimages/eye-of-rah-dread.gif',
             './specialimages/happy-shrek.gif',
-            './specialimages/bbno$_dance.gif',
-            './specialimages/cr1tikal_dance1.gif',
-            './specialimages/cr1tikal_dance2.gif',
-            './specialimages/cr1tikal_dance3.gif',
-            './specialimages/cr1tikal_wooo.gif',
-            './specialimages/dougdoug_waluigi_dance.gif',
-            './specialimages/druski_dance.gif',
-            './specialimages/wizard_yensid_groovy.gif',
-            './specialimages/wizard_yensid_woahhh.gif',
         ];
 
         // Replace the entire getRegionColors and setRandomSpecialImage functions with this simpler version:

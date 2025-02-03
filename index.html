@@ -361,15 +361,17 @@
         }
 
         #clock {
+            min-width: 0;
             position: fixed;
             left: 50%;
             transform: translateX(-50%);
             top: 20px;
             background: rgba(0, 0, 0, 0.5);
             color: var(--text-color);
-            padding: 8px 12px;
+            padding: 8px 16px;
             border-radius: 15px;
-            font-size: 1rem;
+            font-size: clamp(0.8rem, 2.2vw, 1.1rem);
+            line-height: 1;
             z-index: 1000;
             backdrop-filter: blur(5px);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
@@ -378,33 +380,67 @@
             gap: 12px;
             cursor: pointer;
             white-space: nowrap;
-            max-width: 90vw;
+            max-width: 95vw;
+            width: auto;
+        }
+
+        #clock > * {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            line-height: 1;
+            font-size: 1em;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            padding-left: 12px;
+            margin: 0;
+        }
+
+        #clock > *:first-child {
+            border-left: none;
+            padding-left: 0;
         }
 
         #clock i {
-            font-size: 14px;
-            opacity: 0.8;
+            font-size: 0.9em;
+            padding: 0;
+            border: none;
         }
 
-        #day-text, #battery-level {
-            font-size: 0.9em;
-            opacity: 0.9;
-            padding-left: 8px;
+        #weather-info,
+        #spotify-info {
             border-left: 1px solid rgba(255, 255, 255, 0.2);
+            padding-left: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        #spotify-info img {
+            width: 1.2em;
+            height: 1.2em;
         }
 
         @media (max-width: 768px) {
             #clock {
-                font-size: 0.9rem;
-                padding: 6px 10px;
-                top: 10px;
-                right: 10px;
+                padding: 6px 12px;
+                gap: 8px;
+                font-size: clamp(0.75rem, 2vw, 0.9rem);
             }
-            #clock i {
-                font-size: 12px;
+
+            #clock > * {
+                padding-left: 8px;
+                gap: 4px;
             }
-            #day-text, #battery-level {
-                font-size: 0.8em;
+        }
+
+        @media (max-width: 480px) {
+            #clock {
+                padding: 4px 10px;
+                gap: 6px;
+            }
+
+            #clock > * {
+                padding-left: 6px;
             }
         }
 
@@ -414,11 +450,14 @@
             right: 20px;
             background: rgba(14, 14, 14, 0.95);
             border-radius: 15px;
-            padding: 20px;
+            padding: 15px;
             z-index: 999;
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             min-width: 250px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
             transform: translateY(-20px);
             opacity: 0;
             pointer-events: none;
@@ -438,16 +477,17 @@
         }
 
         .setting-item {
-            margin: 15px 0;
+            margin: 10px 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 15px;
+            gap: 10px;
         }
 
         .setting-item label {
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: var(--text-color);
+            flex-shrink: 0;
         }
 
         .setting-item input[type="range"] {
@@ -460,19 +500,19 @@
         }
 
         .setting-item input[type="text"] {
-            width: 120px;
-            padding: 4px 8px;
+            width: 110px;
+            padding: 3px 6px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 4px;
             background: rgba(0, 0, 0, 0.2);
             color: var(--text-color);
-            font-size: 0.9em;
+            font-size: 0.85em;
         }
 
         .setting-note {
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: rgba(255, 255, 255, 0.6);
-            margin-top: 4px;
+            margin-top: 2px;
             text-align: right;
         }
 
@@ -519,6 +559,15 @@
             #spotify-info {
                 max-width: 120px;
                 white-space: nowrap;
+            }
+
+            .settings-popup {
+                padding: 12px;
+                max-height: 70vh;
+            }
+
+            .setting-item {
+                margin: 8px 0;
             }
         }
 
@@ -655,24 +704,12 @@
             margin-top: 0.5rem;
             backdrop-filter: blur(5px);
             display: none;
+            position: relative;
+            padding-bottom: 12px;
         }
 
         #spotify-song-title.visible {
             display: block;
-        }
-
-        #weather-info {
-            font-size: 0.9em;
-            opacity: 0.9;
-            padding-left: 8px;
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        #weather-info i {
-            font-size: 14px;
         }
 
         .progress-bar {
@@ -721,6 +758,76 @@
         .reset-button:hover {
             background: #ff8787;
         }
+
+        #weather-info {
+            font-size: 0.9em;
+            opacity: 0.9;
+            padding-left: 8px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #weather-info i {
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            #weather-info {
+                display: none;
+            }
+        }
+
+        .setting-category {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .setting-category h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.95em;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #spotify-info {
+            /* ...existing styles... */
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .spotify-progress {
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 1px;
+            overflow: hidden;
+            margin-top: 2px;
+        }
+
+        .spotify-progress-bar {
+            height: 100%;
+            background: #1DB954;
+            width: 0;
+            transition: width 0.1s linear;
+        }
+
+        #spotify-song-title {
+            /* ...existing styles... */
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        #spotify-song-title .spotify-progress {
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -730,22 +837,32 @@
         <span id="time"></span>
         <span id="day-text"></span>
         <span id="battery-level"></span>
+        <span id="weather-info">
+            <i class="bi bi-thermometer-half"></i>
+            <span id="weather-temp"></span>
+        </span>
         <i id="os-icon"></i>
         <i id="browser-icon"></i>
         <div id="spotify-info">
-            <i class="bi bi-spotify"></i>
-            <span id="spotify-track"></span>
-        </div>
-        <div id="weather-info">
-            <i class="bi bi-thermometer-half"></i>
-            <span id="weather-text">Loading...</span>
+            <div style="display: flex; align-items: center; gap: 8px; width: 100%">
+                <i class="bi bi-spotify"></i>
+                <span id="spotify-track"></span>
+            </div>
+            <div class="spotify-progress">
+                <div class="spotify-progress-bar" id="spotify-toolbar-progress"></div>
+            </div>
         </div>
     </div>
     
     <div class="title-section">
         <h1 class="rainbow-text">gamesinclass</h1>
         <span id="subtitle" class="neumorphic rainbow-text">Loading...</span>
-        <span id="spotify-song-title"></span>
+        <span id="spotify-song-title">
+            <span id="song-title-text"></span>
+            <div class="spotify-progress">
+                <div class="spotify-progress-bar" id="spotify-title-progress"></div>
+            </div>
+        </span>
         <div id="song-progress-bar" class="progress-bar" style="display: none;"></div>
         <img id="specialImage" src="" alt="Special Image" style="display: none;" />
         <div id="special-image-progress-bar" class="progress-bar" style="display: none;"></div>
@@ -790,13 +907,25 @@
             </div>
         </div>
         <div class="setting-category">
-            <h4>Weather <i class="bi bi-question-circle info-icon" id="showWeatherInfo"></i></h4>
+            <h4>Weather</h4>
             <div class="setting-item">
-                <label>Location Code</label>
-                <input type="text" id="weatherLocation" placeholder="s0000281" value="s0000281">
+                <label>OpenWeather API Key</label>
+                <input type="text" id="weatherApiKey" placeholder="Enter API key">
+            </div>
+            <div class="setting-item">
+                <label>Latitude</label>
+                <input type="number" id="weatherLat" placeholder="44.744155" step="0.000001">
+            </div>
+            <div class="setting-item">
+                <label>Longitude</label>
+                <input type="number" id="weatherLon" placeholder="-79.885203" step="0.000001">
+            </div>
+            <div class="setting-item">
+                <label>Use Device Location</label>
+                <input type="checkbox" id="useDeviceLocation" checked>
             </div>
             <div class="setting-note">
-                Default: Midland (s0000281) - <a href="https://dd.weather.gc.ca/citypage_weather/docs/site_list_en.csv" target="_blank" style="color: #3498db">View Locations</a>
+                Get your API key from <a href="https://openweathermap.org/api" target="_blank">OpenWeatherMap</a>
             </div>
         </div>
         <div class="danger-zone">
@@ -1049,54 +1178,7 @@
             './specialimages/happy-shrek.gif',
         ];
 
-        // Add the image processing functions
-        function getRegionColors(image) {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = image.width;
-            canvas.height = image.height;
-            ctx.drawImage(image, 0, 0);
-            
-            const w = canvas.width;
-            const h = canvas.height;
-            const regions = {
-                top: ctx.getImageData(0, 0, w, h/3),
-                right: ctx.getImageData(2*w/3, 0, w/3, h),
-                bottom: ctx.getImageData(0, 2*h/3, w, h/3),
-                left: ctx.getImageData(0, 0, w/3, h)
-            };
-            
-            const colors = {};
-            
-            for (const [region, data] of Object.entries(regions)) {
-                let maxBrightness = 0;
-                let brightestR = 0, brightestG = 0, brightestB = 0;
-                
-                for (let i = 0; i < data.data.length; i += 4) {
-                    const brightness = (data.data[i] + data.data[i + 1] + data.data[i + 2]) / 3;
-                    if (brightness > maxBrightness) {
-                        maxBrightness = brightness;
-                        brightestR = data.data[i];
-                        brightestG = data.data[i + 1];
-                        brightestB = data.data[i + 2];
-                    }
-                }
-                
-                const avg = (brightestR + brightestG + brightestB) / 3;
-                brightestR = brightestR + (brightestR - avg) * 0.5;
-                brightestG = brightestG + (brightestG - avg) * 0.5;
-                brightestB = brightestB + (brightestB - avg) * 0.5;
-                
-                colors[region] = {
-                    r: Math.min(255, Math.max(0, Math.round(brightestR))),
-                    g: Math.min(255, Math.max(0, Math.round(brightestG))),
-                    b: Math.min(255, Math.max(0, Math.round(brightestB)))
-                };
-            }
-            
-            return colors;
-        }
-
+        // Replace the entire getRegionColors and setRandomSpecialImage functions with this simpler version:
         function setRandomSpecialImage() {
             if (specialImages.length > 0) {
                 const randomImage = specialImages[Math.floor(Math.random() * specialImages.length)];
@@ -1108,15 +1190,6 @@
                 };
                 
                 specialImage.onload = () => {
-                    const colors = getRegionColors(specialImage);
-                    specialImage.style.setProperty('--glow-top', 
-                        `rgba(${colors.top.r}, ${colors.top.g}, ${colors.top.b}, 0.4)`);
-                    specialImage.style.setProperty('--glow-right',
-                        `rgba(${colors.right.r}, ${colors.right.g}, ${colors.right.b}, 0.4)`);
-                    specialImage.style.setProperty('--glow-bottom',
-                        `rgba(${colors.bottom.r}, ${colors.bottom.g}, ${colors.bottom.b}, 0.4)`);
-                    specialImage.style.setProperty('--glow-left',
-                        `rgba(${colors.left.r}, ${colors.left.g}, ${colors.left.b}, 0.4)`);
                     specialImage.classList.add('image-glow');
                     specialImage.style.display = 'block';
                 };
@@ -1206,7 +1279,10 @@
             time24h: true,
             spotifyClientId: '',
             replaceWithAlbum: false,
-            weatherLocation: 's0000281' // Midland, Ontario
+            weatherApiKey: 'bd5e378503939ddaee76f12ad7a97608',
+            weatherLat: 44.744155,
+            weatherLon: -79.885203,
+            useDeviceLocation: true
         };
 
         let settings = {
@@ -1343,19 +1419,6 @@
                 }
             });
 
-            const weatherLocation = document.getElementById('weatherLocation');
-            weatherLocation.value = settings.weatherLocation;
-
-            weatherLocation.addEventListener('change', (e) => {
-                settings.weatherLocation = e.target.value.trim();
-                saveSettings();
-                weatherManager.stopWeatherCheck();
-                weatherManager.startWeatherCheck();
-            });
-
-            // Start weather updates
-            weatherManager.startWeatherCheck();
-
             // Add reset functionality
             const resetButton = document.getElementById('resetSettings');
             resetButton.addEventListener('click', () => {
@@ -1364,6 +1427,53 @@
                     window.location.reload();
                 }
             });
+
+            const weatherApiKey = document.getElementById('weatherApiKey');
+            weatherApiKey.value = settings.weatherApiKey || '';
+
+            weatherApiKey.addEventListener('input', (e) => {
+                settings.weatherApiKey = e.target.value.trim();
+                saveSettings();
+                weatherManager.updateWeather();
+            });
+
+            const weatherLat = document.getElementById('weatherLat');
+            const weatherLon = document.getElementById('weatherLon');
+            const useDeviceLocation = document.getElementById('useDeviceLocation');
+
+            weatherLat.value = settings.weatherLat;
+            weatherLon.value = settings.weatherLon;
+            useDeviceLocation.checked = settings.useDeviceLocation;
+
+            weatherLat.addEventListener('input', (e) => {
+                settings.weatherLat = parseFloat(e.target.value);
+                saveSettings();
+                weatherManager.updateWeather();
+            });
+
+            weatherLon.addEventListener('input', (e) => {
+                settings.weatherLon = parseFloat(e.target.value);
+                saveSettings();
+                weatherManager.updateWeather();
+            });
+
+            useDeviceLocation.addEventListener('change', (e) => {
+                settings.useDeviceLocation = e.target.checked;
+                weatherLat.disabled = e.target.checked;
+                weatherLon.disabled = e.target.checked;
+                saveSettings();
+                weatherManager.updateWeather();
+            });
+
+            // Set initial disabled state of coordinate inputs
+            weatherLat.disabled = settings.useDeviceLocation;
+            weatherLon.disabled = settings.useDeviceLocation;
+
+            // Start weather updates
+            if (settings.weatherApiKey) {
+                weatherManager.updateWeather();
+                setInterval(() => weatherManager.updateWeather(), 60000); // Check every minute
+            }
         }
 
         function updateClock() {
@@ -1425,10 +1535,17 @@
             constructor() {
                 this.accessToken = localStorage.getItem('spotify_access_token');
                 this.refreshTimer = null;
+                this.isProduction = window.location.hostname === 'gamesinclass.pages.dev';
                 this.autoConnect();
             }
 
             async autoConnect() {
+                // Only auto-connect on production domain
+                if (!this.isProduction) {
+                    console.log('Spotify auto-connect disabled on non-production domain');
+                    return;
+                }
+
                 // Try to connect if we have a client ID but no access token
                 if (!this.accessToken && settings.spotifyClientId) {
                     this.authorize();
@@ -1505,12 +1622,19 @@
                 const spotifyTrack = document.getElementById('spotify-track');
                 const specialImage = document.getElementById('specialImage');
                 const spotifyTitle = document.getElementById('spotify-song-title');
+                const songTitleText = document.getElementById('song-title-text');
+                const toolbarProgress = document.getElementById('spotify-toolbar-progress');
+                const titleProgress = document.getElementById('spotify-title-progress');
                 
                 if (playback && playback.item) {
                     spotifyInfo.classList.add('visible');
                     const songInfo = `${playback.item.name} - ${playback.item.artists[0].name}`;
+                    const progressPercent = (playback.progress_ms / playback.item.duration_ms) * 100;
 
-                    // Show full info in toolbar if in games section or not using album replacement
+                    // Update all progress bars with the same value
+                    toolbarProgress.style.width = `${progressPercent}%`;
+                    titleProgress.style.width = `${progressPercent}%`;
+                    
                     if (isInGamesSection || !settings.replaceWithAlbum) {
                         spotifyTrack.textContent = songInfo;
                         spotifyTitle.classList.remove('visible');
@@ -1530,9 +1654,8 @@
                             spotifyInfo.insertBefore(img, spotifyTrack);
                         }
                     } else {
-                        // Show minimal info in toolbar if using album replacement
                         spotifyTrack.textContent = "Playing";
-                        spotifyTitle.textContent = songInfo;
+                        songTitleText.textContent = songInfo;
                         spotifyTitle.classList.add('visible');
                         
                         // Remove album art from toolbar
@@ -1552,8 +1675,7 @@
                         document.getElementById('special-image-progress-bar') : 
                         document.getElementById('song-progress-bar');
                     progressBar.style.display = 'block';
-                    const progress = (playback.progress_ms / playback.item.duration_ms) * 100;
-                    progressBar.querySelector('::before').style.width = `${progress}%`;
+                    progressBar.querySelector('::before').style.width = `${progressPercent}%`;
                 } else {
                     document.getElementById('song-progress-bar').style.display = 'none';
                     document.getElementById('special-image-progress-bar').style.display = 'none';
@@ -1590,94 +1712,80 @@
             }
         });
 
-        // Add weather fetching functionality
+        // Add WeatherManager class
         class WeatherManager {
             constructor() {
-                this.updateTimer = null;
-                this.currentLocation = settings.weatherLocation;
-                this.proxyUrl = 'https://simple-proxy.ronr29533.workers.dev';
-                document.getElementById('weather-info').style.display = 'none';
+                this.lastUpdate = 0;
+                this.updateInterval = 10 * 60 * 1000; // 10 minutes
             }
 
-            async fetchWeather() {
+            async getLocation() {
+                if (!settings.useDeviceLocation) {
+                    return {
+                        latitude: settings.weatherLat,
+                        longitude: settings.weatherLon
+                    };
+                }
+
+                return new Promise((resolve, reject) => {
+                    if (!navigator.geolocation) {
+                        resolve({
+                            latitude: settings.weatherLat,
+                            longitude: settings.weatherLon
+                        });
+                        return;
+                    }
+
+                    navigator.geolocation.getCurrentPosition(
+                        position => resolve(position.coords),
+                        error => resolve({
+                            latitude: settings.weatherLat,
+                            longitude: settings.weatherLon
+                        })
+                    );
+                });
+            }
+
+            async getWeather() {
+                if (!settings.weatherApiKey) return null;
+                
                 try {
-                    const targetUrl = `https://weather.gc.ca/rss/city/${settings.weatherLocation}_e.xml`;
-                    const response = await fetch(`${this.proxyUrl}?url=${encodeURIComponent(targetUrl)}`);
-                    
+                    const coords = await this.getLocation();
+                    const response = await fetch(
+                        `https://api.openweathermap.org/data/2.5/weather?lat=${coords.latitude}&lon=${coords.longitude}&appid=${settings.weatherApiKey}&units=metric`
+                    );
+
                     if (!response.ok) {
-                        throw new Error('Weather data not available');
+                        throw new Error('Weather API error');
                     }
 
-                    const text = await response.text();
-                    const parser = new DOMParser();
-                    const xml = parser.parseFromString(text, "application/xml");
-
-                    // Find the Current Conditions entry
-                    const entries = xml.querySelectorAll('entry');
-                    let currentConditionsEntry = null;
-                    
-                    for (const entry of entries) {
-                        const title = entry.querySelector('title').textContent;
-                        if (title.includes('Current Conditions:')) {
-                            currentConditionsEntry = entry;
-                            break;
-                        }
-                    }
-
-                    if (!currentConditionsEntry) {
-                        throw new Error('Current conditions not found');
-                    }
-
-                    // Parse the title for basic info
-                    const titleText = currentConditionsEntry.querySelector('title').textContent;
-                    const [, condition, temperature] = titleText.match(/Current Conditions: (.*?), (.*?)°C/) || [];
-
-                    if (!condition || !temperature) {
-                        throw new Error('Could not parse weather data');
-                    }
-
-                    const weatherInfo = document.getElementById('weather-info');
-                    const weatherText = document.getElementById('weather-text');
-                    weatherText.textContent = `${temperature}°C ${condition}`;
-
-                    const weatherIcon = weatherInfo.querySelector('i');
-                    const iconClass = this.getWeatherIcon(condition.toLowerCase());
-                    weatherIcon.className = `bi ${iconClass}`;
-
-                    weatherInfo.style.display = 'flex';
-                    weatherInfo.classList.add('visible');
+                    return await response.json();
                 } catch (error) {
-                    console.error('Weather API error:', error);
-                    const weatherInfo = document.getElementById('weather-info');
-                    weatherInfo.style.display = 'none';
-                    weatherInfo.classList.remove('visible');
+                    console.error('Weather error:', error);
+                    return null;
                 }
             }
 
-            getWeatherIcon(condition) {
-                if (condition.includes('rain') || condition.includes('drizzle')) return 'bi-cloud-rain';
-                if (condition.includes('snow') || condition.includes('flurries')) return 'bi-cloud-snow';
-                if (condition.includes('cloud') || condition.includes('overcast')) return 'bi-cloud';
-                if (condition.includes('clear') || condition.includes('sunny')) return 'bi-sun';
-                if (condition.includes('fog') || condition.includes('mist')) return 'bi-cloud-fog';
-                if (condition.includes('thunder') || condition.includes('storm')) return 'bi-cloud-lightning';
-                return 'bi-thermometer-half';
-            }
+            async updateWeather() {
+                const now = Date.now();
+                if (now - this.lastUpdate < this.updateInterval) return;
 
-            startWeatherCheck() {
-                this.fetchWeather();
-                // Update every 30 minutes
-                this.updateTimer = setInterval(() => this.fetchWeather(), 30 * 60 * 1000);
-            }
+                const weatherInfo = await this.getWeather();
+                const weatherTemp = document.getElementById('weather-temp');
+                const weatherInfo_el = document.getElementById('weather-info');
 
-            stopWeatherCheck() {
-                if (this.updateTimer) {
-                    clearInterval(this.updateTimer);
+                if (weatherInfo) {
+                    const temp = Math.round(weatherInfo.main.temp);
+                    weatherTemp.textContent = `${temp}°C`;
+                    weatherInfo_el.style.display = 'flex';
+                    this.lastUpdate = now;
+                } else {
+                    weatherInfo_el.style.display = 'none';
                 }
             }
         }
 
-        // Initialize WeatherManager
+        // Initialize weather manager
         const weatherManager = new WeatherManager();
     </script>
 </body>

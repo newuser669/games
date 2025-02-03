@@ -989,28 +989,38 @@
 
             update() {
                 const speed = 2;
+                const defaultOpacity = 0.4; // Increased from 0.2
                 
                 // Add music reactivity when Spotify is playing
                 if (window.musicData && window.musicData.isPlaying) {
-                    // Pulse size based on BPM
-                    const bpmScale = (window.musicData.bpm / 120); // Normalize around 120 BPM
-                    const pulseAmount = Math.sin(this.pulsePhase + (Date.now() * 0.001 * bpmScale * Math.PI)) * 0.3 + 1;
-                    this.size = this.baseSize * pulseAmount;
+                    // Enhanced beat reaction
+                    const bpmScale = (window.musicData.bpm / 120); 
+                    const intensityMultiplier = 1.5; // Increased effect intensity
+                    const beatTime = Date.now() * 0.001 * bpmScale * Math.PI;
                     
-                    // Use song's color if available
+                    // Stronger pulse effect
+                    const pulseAmount = Math.sin(this.pulsePhase + beatTime) * 0.5 + 1;
+                    this.size = this.baseSize * pulseAmount * intensityMultiplier;
+                    
+                    // Color pulsing with beat
                     if (window.musicData.dominantColor) {
-                        this.color = window.musicData.dominantColor;
+                        const rgb = window.musicData.dominantColor.match(/\d+/g).map(Number);
+                        const pulseFactor = (pulseAmount - 0.5) * 0.3;
+                        this.color = `rgb(
+                            ${Math.min(255, rgb[0] * (1 + pulseFactor))},
+                            ${Math.min(255, rgb[1] * (1 + pulseFactor))},
+                            ${Math.min(255, rgb[2] * (1 + pulseFactor))})`;
                     }
 
-                    // Adjust opacity based on song energy
-                    const maxOpacity = 0.2 + (window.musicData.energy * 0.3);
+                    // Enhanced opacity based on energy
+                    const maxOpacity = 0.4 + (window.musicData.energy * 0.6); // Increased from 0.3
                     if (!this.fading && this.opacity < maxOpacity) {
-                        this.opacity += 0.01;
+                        this.opacity += 0.02; // Faster fade in
                     }
                 } else {
                     this.size = this.baseSize;
-                    // Maintain default opacity when no music is playing
-                    if (!this.fading && this.opacity < 0.2) {
+                    // Maintain higher default opacity when no music is playing
+                    if (!this.fading && this.opacity < defaultOpacity) {
                         this.opacity += 0.01;
                     }
                 }
@@ -1087,7 +1097,7 @@
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(19, 21, 26, 0.3)'; // Changed from 1 to 0.3 opacity
+            ctx.fillStyle = 'rgba(19, 21, 26, 0.2)'; // More transparent background
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             pipes.forEach(pipe => {

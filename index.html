@@ -824,6 +824,92 @@
             left: 0;
             width: 100%;
         }
+
+        /* Update shape styles */
+        .shape {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+            opacity: 0.06;
+            will-change: transform;
+        }
+
+        .square {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            animation: rotate 20s linear infinite;
+        }
+
+        .circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 60px solid rgba(255, 255, 255, 0.5);
+            animation: rotate 15s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Add/update these styles */
+        .shapes-container {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 100vh;
+            max-width: 1400px; /* Limit maximum width */
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            display: grid;
+            gap: 20px;
+            padding: 20px;
+            margin: 0 auto;
+        }
+
+        .shape {
+            position: relative; /* Change from fixed/absolute to relative */
+            margin: auto; /* Center in grid cell */
+            left: auto;
+            top: auto;
+            transform-origin: center;
+            justify-self: center;
+            align-self: center;
+        }
+
+        .square {
+            width: 50px;  /* Slightly reduced size */
+            height: 50px;
+        .circle {
+            width: 50px;  /* Slightly reduced size */
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .triangle {
+            border-left: 25px solid transparent;    /* Adjusted for new size */
+            border-right: 25px solid transparent;   /* Adjusted for new size */
+            border-bottom: 50px solid rgba(255, 255, 255, 0.5); /* Adjusted for new size */
+            animation: rotate 15s linear infinite;
+        }
     </style>
 </head>
 <body>
@@ -948,6 +1034,9 @@
             <button class="tutorial-button primary" id="closeTutorial">Close</button>
         </div>
     </div>
+
+    <!-- Add this right after <body> tag -->
+    <div class="shapes-container"></div>
 
     <script>
         // Move settings initialization to the top
@@ -1805,6 +1894,50 @@
 
         // Initialize weather manager
         const weatherManager = new WeatherManager();
+
+        // Replace createTessellation function
+        function createTessellation() {
+            const container = document.querySelector('.shapes-container');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Calculate cells to fit viewport
+            const targetCellSize = 120; // Desired size including gap
+            const availableWidth = window.innerWidth - 40; // Subtract padding
+            const availableHeight = window.innerHeight - 40;
+            
+            // Calculate number of columns and rows that will fit
+            const cols = Math.max(2, Math.floor(availableWidth / targetCellSize));
+            const rows = Math.max(2, Math.floor(availableHeight / targetCellSize));
+            
+            // Calculate actual cell size to fill space evenly
+            const cellWidth = availableWidth / cols;
+            const cellHeight = availableHeight / rows;
+            
+            // Update grid template
+            container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+            container.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+            
+            const shapes = ['square', 'circle', 'triangle'];
+            
+            // Fill grid with shapes
+            for (let i = 0; i < rows * cols; i++) {
+                const shape = document.createElement('div');
+                const type = shapes[Math.floor(Math.random() * shapes.length)];
+                shape.className = `shape ${type}`;
+                
+                if (type !== 'circle') {
+                    shape.style.animationDelay = `${Math.random() * -20}s`;
+                }
+                
+                container.appendChild(shape);
+            }
+        }
+
+        // Call on load and resize
+        window.addEventListener('load', createTessellation);
+        window.addEventListener('resize', createTessellation);
     </script>
 </body>
 </html>

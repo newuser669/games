@@ -55,39 +55,102 @@
             display: inline-block;
             border-radius: 30px;
             transition: transform 0.3s ease;
+            perspective: 1000px;
+            transform-style: preserve-3d;
         }
 
         .game-tile {
-            background-color: rgba(14, 14, 14, 0.5); /* Changed from var(--background-dark) to semi-transparent */
+            background: rgba(14, 14, 14, 0.2);
             border-radius: 30px;
             padding: 1.25rem;
-            box-shadow: 6px 6px 12px var(--shadow-dark);
-            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.4),
+                0 1px 2px rgba(255, 255, 255, 0.1),
+                inset 0 0 5px rgba(255, 255, 255, 0.05);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
             z-index: 1;
+            backdrop-filter: blur(10px) saturate(180%);
+            -webkit-backdrop-filter: blur(10px) saturate(180%);
+            transform-style: preserve-3d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            will-change: transform;
+            overflow: hidden;
         }
 
         .game-tile::before {
-            display: none; /* Remove the glow effect */
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(
+                130deg,
+                rgba(255, 255, 255, 0.3) 0%,
+                rgba(255, 255, 255, 0.1) 30%,
+                transparent 60%,
+                rgba(255, 255, 255, 0.2) 100%
+            );
+            opacity: 0.5;
+            z-index: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .game-tile::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(255, 255, 255, 0.15) 0%,
+                transparent 60%
+            );
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 2;
+            pointer-events: none;
         }
 
         .game-tile:hover {
-            box-shadow: 8px 8px 16px var(--shadow-dark);
-            transform: translateY(-4px);
+            background: rgba(20, 20, 20, 0.3);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.5),
+                0 2px 5px rgba(255, 255, 255, 0.1),
+                inset 0 0 10px rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .game-tile:hover::before {
+            opacity: 0.8;
+        }
+
+        .game-tile:hover::after {
+            opacity: 1;
         }
 
         .game-icon {
-            border-radius: 30px;
+            position: relative;
+            z-index: 3;
+            border-radius: 20px;
             width: 100%;
             height: auto;
             object-fit: contain;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: translateZ(0);
+            box-shadow: 
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                0 0 2px rgba(255, 255, 255, 0.1);
         }
 
         .game-title {
+            position: relative;
+            z-index: 3;
             font-size: 1.375rem;
             font-weight: bold;
             color: var(--text-color);
             margin: 0.625rem 0 0;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            text-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                0 0 2px rgba(255, 255, 255, 0.1);
         }
 
         .flex-container {
@@ -896,6 +959,8 @@
         .square {
             width: 50px;  /* Slightly reduced size */
             height: 50px;
+        }  /* Added missing closing brace */
+        
         .circle {
             width: 50px;  /* Slightly reduced size */
             height: 50px;
@@ -1001,6 +1066,16 @@
                 Get your API key from <a href="https://openweathermap.org/api" target="_blank">OpenWeatherMap</a>
             </div>
         </div>
+        <div class="setting-category">
+            <h4>Performance</h4>
+            <div class="setting-item">
+                <label>Enable Animations</label>
+                <input type="checkbox" id="enableAnimations">
+            </div>
+            <div class="setting-note">
+                Disable animations to improve performance on low-end devices
+            </div>
+        </div>
         <div class="danger-zone">
             <h4>Danger Zone</h4>
             <div class="setting-item">
@@ -1048,6 +1123,7 @@
             weatherLat: 44.744155,
             weatherLon: -79.885203,
             useDeviceLocation: true,
+            enableAnimations: !(/Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)),
         };
 
         let settings = {
@@ -1074,6 +1150,7 @@
             }
         }
 
+        // Replace the renderGames function
         function renderGames(gamesToRender) {
             gameContainer.innerHTML = gamesToRender
                 .map(project => `
@@ -1085,7 +1162,41 @@
                         </div>
                     </a>
                 `).join("");
+            
+            // Wait for next frame to ensure DOM is updated
+            requestAnimationFrame(() => {
+                attachCardListeners();
+            });
         }
+
+        // Update the card state tracking
+        const cardStates = new WeakMap();
+
+        // Update the attachCardListeners function
+        function attachCardListeners() {
+            // First remove any existing listeners
+            document.querySelectorAll('.game-link').forEach(card => {
+                const clone = card.cloneNode(true);
+                card.parentNode.replaceChild(clone, card);
+            });
+
+            // Then attach new listeners
+            document.querySelectorAll('.game-link').forEach(card => {
+                card.addEventListener('mouseenter', handleTilt, { passive: true });
+                card.addEventListener('mousemove', handleTilt, { passive: true });
+                card.addEventListener('mouseleave', resetTilt, { passive: true });
+            });
+        }
+
+        // Move visibility change listener outside of attachCardListeners
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                cardStates.clear();
+                document.querySelectorAll('.game-tile').forEach(card => {
+                    resetTilt({ currentTarget: card.parentElement });
+                });
+            }
+        });
 
         window.addEventListener("scroll", () => {
             const scrolled = window.scrollY > 100;
@@ -1439,6 +1550,21 @@
                 weatherManager.updateWeather();
                 setInterval(() => weatherManager.updateWeather(), 60000); // Check every minute
             }
+
+            const enableAnimationsToggle = document.getElementById('enableAnimations');
+            enableAnimationsToggle.checked = settings.enableAnimations;
+
+            enableAnimationsToggle.addEventListener('change', (e) => {
+                settings.enableAnimations = e.target.checked;
+                saveSettings();
+                
+                // Reset all cards if animations are disabled
+                if (!settings.enableAnimations) {
+                    cardStates.forEach((_, card) => {
+                        resetTilt({ currentTarget: card.parentElement });
+                    });
+                }
+            });
         }
 
         function updateClock() {
@@ -1938,6 +2064,197 @@
         // Call on load and resize
         window.addEventListener('load', createTessellation);
         window.addEventListener('resize', createTessellation);
+
+        // Add cursor-based tilt effect
+        document.querySelectorAll('.game-link').forEach(card => {
+            card.addEventListener('mousemove', handleTilt);
+            card.addEventListener('mouseleave', resetTilt);
+        });
+
+        let frameRequest = null;
+
+        function handleTilt(e) {
+            if (!settings.enableAnimations) return;
+            
+            const card = e.currentTarget.querySelector('.game-tile');
+            if (!card) return;
+
+            // Cancel any pending frame
+            if (frameRequest) {
+                cancelAnimationFrame(frameRequest);
+            }
+
+            const rect = card.getBoundingClientRect();
+            const x = e.pageX - rect.left - window.scrollX;
+            const y = e.pageY - rect.top - window.scrollY;
+            
+            cardStates.set(card, { rect, x, y, timestamp: Date.now() });
+            
+            // Immediate update for responsive feel
+            frameRequest = requestAnimationFrame(() => {
+                updateCardAnimation(card);
+                frameRequest = null;
+            });
+        }
+
+        function updateCardAnimation(card) {
+            const state = cardStates.get(card);
+            if (!state) return;
+
+            const { rect, x, y } = state;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = ((y - centerY) / 10) * 0.8;
+            const rotateY = ((centerX - x) / 10) * 0.8;
+            
+            card.style.transform = `
+                perspective(1000px) 
+                rotateX(${rotateX}deg) 
+                rotateY(${rotateY}deg) 
+                scale3d(1.05, 1.05, 1.05)
+            `;
+            
+            const shadowX = (x - centerX) / 5;
+            const shadowY = (y - centerY) / 5;
+            card.style.boxShadow = `
+                ${shadowX}px ${shadowY}px 20px var(--shadow-dark),
+                -2px -2px 10px rgba(255, 255, 255, 0.05)
+            `;
+
+            const gradientX = ((x / rect.width) * 100);
+            card.style.background = `
+                linear-gradient(
+                    ${gradientX}deg,
+                    rgba(14, 14, 14, 0.3) 0%,
+                    rgba(14, 14, 14, 0.5) 100%
+                )
+            `;
+        }
+
+        function resetTilt(e) {
+            const card = e.currentTarget.querySelector('.game-tile');
+            if (!card) return;
+
+            cardStates.delete(card);
+            
+            if (frameRequest) {
+                cancelAnimationFrame(frameRequest);
+                frameRequest = null;
+            }
+
+            // Only reset styles if animations are disabled or card is no longer hovered
+            if (!settings.enableAnimations || !e.currentTarget.matches(':hover')) {
+                card.style.transform = 'none';
+                card.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(255, 255, 255, 0.1)';
+                card.style.background = 'rgba(14, 14, 14, 0.2)';
+            }
+        }
+
+        // Update scroll handling with throttling
+        let lastScrollTime = 0;
+        const scrollThrottle = 16; // ~60fps
+
+        window.addEventListener('scroll', () => {
+            const now = Date.now();
+            if (now - lastScrollTime >= scrollThrottle) {
+                lastScrollTime = now;
+                
+                if (frameRequest) {
+                    cancelAnimationFrame(frameRequest);
+                }
+                
+                frameRequest = requestAnimationFrame(() => {
+                    cardStates.forEach((state, card) => {
+                        const newRect = card.getBoundingClientRect();
+                        state.rect = newRect;
+                        updateCardAnimation(card);
+                    });
+                    frameRequest = null;
+                });
+            }
+        }, { passive: true });
+
+        // Update event listener attachment
+        function attachCardListeners() {
+            document.querySelectorAll('.game-link').forEach(card => {
+                const tile = card.querySelector('.game-tile');
+                if (!tile) return;
+                
+                // Store the event handlers to ensure proper cleanup
+                const handlers = {
+                    enter: (e) => handleTilt(e),
+                    move: (e) => handleTilt(e),
+                    leave: (e) => resetTilt(e)
+                };
+                
+                card.addEventListener('mouseenter', handlers.enter, { passive: true });
+                card.addEventListener('mousemove', handlers.move, { passive: true });
+                card.addEventListener('mouseleave', handlers.leave, { passive: true });
+                
+                // Store handlers for cleanup
+                card._tiltHandlers = handlers;
+            });
+        }
+
+        // Remove shapes container and related code
+        document.querySelector('.shapes-container')?.remove();
+
+        // Add new animation state tracking
+        let isAnimating = false;
+        let lastScrollY = window.scrollY;
+        let scrollTimeout;
+        let scrollRAF;
+
+        // Update scroll handling
+        function handleScroll() {
+            if (!settings.enableAnimations) return;
+            
+            // Clear existing timeouts/frames
+            clearTimeout(scrollTimeout);
+            if (scrollRAF) cancelAnimationFrame(scrollRAF);
+
+            // Start animation if not already running
+            if (!isAnimating) {
+                isAnimating = true;
+                animateScroll();
+            }
+
+            // Reset timeout to stop animation
+            scrollTimeout = setTimeout(() => {
+                isAnimating = false;
+                if (scrollRAF) {
+                    cancelAnimationFrame(scrollRAF);
+                    scrollRAF = null;
+                }
+            }, 100);
+        }
+
+        function animateScroll() {
+            if (!isAnimating) return;
+
+            const currentScrollY = window.scrollY;
+            if (currentScrollY !== lastScrollY) {
+                cardStates.forEach((state, card) => {
+                    const newRect = card.getBoundingClientRect();
+                    state.rect = newRect;
+                    updateCardAnimation(card);
+                });
+                lastScrollY = currentScrollY;
+            }
+
+            scrollRAF = requestAnimationFrame(animateScroll);
+        }
+
+        // Update event listeners
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('wheel', (e) => {
+            // Detect trackpad by checking deltaMode and small delta values
+            const isTrackpad = e.deltaMode === 0 && Math.abs(e.deltaY) < 50;
+            if (isTrackpad) {
+                handleScroll();
+            }
+        }, { passive: true });
     </script>
 </body>
 </html>

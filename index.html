@@ -57,6 +57,14 @@
             transition: transform 0.3s ease;
             perspective: 1000px;
             transform-style: preserve-3d;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .game-link.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .game-tile {
@@ -198,15 +206,15 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 2rem;
+            transform: translateY(0);
+            transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1),
+                        opacity 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+            will-change: transform, opacity;
         }
 
-        h1 {
-            font-size: 3em;
-            margin: 0;
-            animation: float 6s ease-in-out infinite, colorChange 10s infinite;
-            -webkit-text-fill-color: initial !important;
-            background: none !important;
-            font-family: var(--font-minecraft);
+        .title-section.fade-up {
+            transform: translateY(-50px);
+            opacity: 0.2;
         }
 
         #subtitle {
@@ -224,12 +232,16 @@
             min-height: 100vh;
             padding-top: 2rem;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.65, 0, 0.35, 1),
+                        transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
             pointer-events: none;
+            will-change: transform, opacity;
         }
 
         .games-section.visible {
             opacity: 1;
+            transform: translateY(0);
             pointer-events: all;
         }
 
@@ -253,15 +265,10 @@
             opacity: 1;
         }
 
-        #cursorGlow {
+        #cursorGlow { /* Cursor glow styles */
             position: fixed;
             width: 40px;  /* Reduced from 120px */
             height: 40px; /* Reduced from 120px */
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            z-index: 10000; /* Increased to be above everything */
-            mix-blend-mode: overlay; /* This will make it blend with colors underneath */
         }
 
         #specialImage {
@@ -275,7 +282,6 @@
             position: relative;
             z-index: 1;
             margin-top: 2rem;
-            /* Remove float animation from base styles */
             backface-visibility: hidden; /* Prevent ghosting */
             transform-style: preserve-3d; /* Help with ghosting */
             will-change: transform; /* Optimize animations */
@@ -287,18 +293,6 @@
             }
         }
 
-        @keyframes float {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0);
-            }
-        }
-
         .image-glow {
             animation: float 6s ease-in-out infinite !important;
         }
@@ -306,7 +300,7 @@
         /* Scroll indicator arrow */
         .scroll-indicator {
             position: absolute;
-            bottom: 40px;
+            bottom: 20px;  /* Changed from 40px to 20px */
             left: 50%;
             transform: translateX(-50%);
             font-size: 2rem;
@@ -975,6 +969,50 @@
             border-bottom: 50px solid rgba(255, 255, 255, 0.5); /* Adjusted for new size */
             animation: rotate 15s linear infinite;
         }
+
+        /* Add new tooltip styles */
+        .title-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .title-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 6px 10px;  /* Reduced padding */
+            border-radius: 4px;  /* Slightly smaller radius */
+            font-size: 0.8em;   /* Smaller font */
+            width: 200px;       /* Reduced width */
+            top: calc(100% + 8px); /* Slightly closer to title */
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            pointer-events: none;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .title-tooltip::before {
+            content: '';
+            position: absolute;
+            top: -4px;  /* Smaller arrow */
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 4px solid transparent;   /* Smaller arrow */
+            border-right: 4px solid transparent;  /* Smaller arrow */
+            border-bottom: 4px solid rgba(0, 0, 0, 0.9); /* Smaller arrow */
+        }
+
+        .title-container:hover .title-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
     </style>
 </head>
 <body>
@@ -1000,7 +1038,22 @@
     </div>
     
     <div class="title-section">
-        <h1 class="rainbow-text">gamesinclass</h1>
+        <h1 class="rainbow-text">
+            <script>
+                // 1 in 250 chance for Japanese title
+                if (Math.random() < 1/250) {
+                    document.write(`
+                        <span class="title-container">
+                            授業中のゲーム
+                            <span class="title-tooltip">授業中 (Jugyōchū) means "during class." ゲーム (Gēmu) means "games."</span>
+                        </span>
+                    `);
+                    document.title = "授業中のゲーム";
+                } else {
+                    document.write('gamesinclass');
+                }
+            </script>
+        </h1>
         <span id="subtitle" class="neumorphic rainbow-text">Loading...</span>
         <span id="spotify-song-title">
             <span id="song-title-text"></span>
@@ -1167,6 +1220,16 @@
             requestAnimationFrame(() => {
                 attachCardListeners();
             });
+
+            // After creating the tiles, add the staggered animation setup
+            const tiles = document.querySelectorAll('.game-link');
+            if (document.querySelector('.games-section').classList.contains('visible')) {
+                tiles.forEach((tile, index) => {
+                    setTimeout(() => {
+                        tile.classList.add('visible');
+                    }, index * 100);
+                });
+            }
         }
 
         // Update the card state tracking
@@ -1290,7 +1353,7 @@
                 };
                 
                 specialImage.onload = () => {
-                    specialImage.classList.add('image-glow');
+                    // Remove the image-glow class addition
                     specialImage.style.display = 'block';
                 };
                 
@@ -2255,6 +2318,34 @@
                 handleScroll();
             }
         }, { passive: true });
+
+        // Replace the scroll event listener for section visibility
+        window.addEventListener('scroll', () => {
+            const titleSection = document.querySelector('.title-section');
+            const gamesSection = document.querySelector('.games-section');
+            const scrollPosition = window.scrollY;
+            const windowHeight = window.innerHeight;
+            
+            // Calculate fade threshold
+            const fadeThreshold = windowHeight * 0.3;
+            
+            // Smooth title fade based on scroll position
+            if (scrollPosition > fadeThreshold) {
+                titleSection.classList.add('fade-up');
+                gamesSection.classList.add('visible');
+                
+                // Animate game tiles sequentially
+                const tiles = document.querySelectorAll('.game-link:not(.visible)');
+                tiles.forEach((tile, index) => {
+                    setTimeout(() => {
+                        tile.classList.add('visible');
+                    }, index * 100); // 100ms delay between each tile
+                });
+            } else {
+                titleSection.classList.remove('fade-up');
+                gamesSection.classList.remove('visible');
+            }
+        });
     </script>
 </body>
 </html>

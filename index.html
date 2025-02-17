@@ -265,12 +265,6 @@
             opacity: 1;
         }
 
-        #cursorGlow { /* Cursor glow styles */
-            position: fixed;
-            width: 40px;  /* Reduced from 120px */
-            height: 40px; /* Reduced from 120px */
-        }
-
         #specialImage {
             max-width: 300px;  /* Increased from 200px to allow for different aspect ratios */
             max-height: 300px; /* Increased from 200px to allow for different aspect ratios */
@@ -1016,7 +1010,6 @@
     </style>
 </head>
 <body>
-    <div id="cursorGlow" aria-hidden="true"></div>
     <div id="clock">
         <span id="time"></span>
         <span id="day-text"></span>
@@ -1187,7 +1180,6 @@
         const gameContainer = document.getElementById("game-container");
         const loader = document.getElementById("loader");
         const backToTopButton = document.getElementById("back-to-top");
-        const cursorGlow = document.getElementById("cursorGlow");
         let games = [];
 
         async function loadGames() {
@@ -1264,25 +1256,6 @@
         window.addEventListener("scroll", () => {
             const scrolled = window.scrollY > 100;
             backToTopButton.classList.toggle("visible", scrolled);
-        });
-
-        document.addEventListener("mousemove", (e) => {
-            requestAnimationFrame(() => {
-                const cursorGlow = document.getElementById("cursorGlow");
-                cursorGlow.style.left = `${e.clientX}px`;
-                cursorGlow.style.top = `${e.clientY}px`;
-                
-                // Get color under cursor
-                const element = document.elementFromPoint(e.clientX, e.clientY);
-                if (element) {
-                    const color = window.getComputedStyle(element).backgroundColor;
-                    if (color && color !== 'transparent' && color !== 'rgba(0, 0, 0, 0)') {
-                        cursorGlow.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
-                    } else {
-                        cursorGlow.style.background = 'radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%)';
-                    }
-                }
-            });
         });
 
         backToTopButton.addEventListener("click", () => {

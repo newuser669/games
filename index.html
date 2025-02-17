@@ -1156,9 +1156,6 @@
         </div>
     </div>
 
-    <!-- Add this right after <body> tag -->
-    <div class="shapes-container"></div>
-
     <script>
         // Move settings initialization to the top
         const defaultSettings = {
@@ -1246,9 +1243,12 @@
         // Move visibility change listener outside of attachCardListeners
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
-                cardStates.clear();
+                // WeakMap doesn't have clear(), so we'll reset cards individually
                 document.querySelectorAll('.game-tile').forEach(card => {
-                    resetTilt({ currentTarget: card.parentElement });
+                    if (cardStates.has(card)) {
+                        cardStates.delete(card);
+                        resetTilt({ currentTarget: card.parentElement });
+                    }
                 });
             }
         });
@@ -2058,48 +2058,8 @@
         const weatherManager = new WeatherManager();
 
         // Replace createTessellation function
-        function createTessellation() {
-            const container = document.querySelector('.shapes-container');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            // Calculate cells to fit viewport
-            const targetCellSize = 120; // Desired size including gap
-            const availableWidth = window.innerWidth - 40; // Subtract padding
-            const availableHeight = window.innerHeight - 40;
-            
-            // Calculate number of columns and rows that will fit
-            const cols = Math.max(2, Math.floor(availableWidth / targetCellSize));
-            const rows = Math.max(2, Math.floor(availableHeight / targetCellSize));
-            
-            // Calculate actual cell size to fill space evenly
-            const cellWidth = availableWidth / cols;
-            const cellHeight = availableHeight / rows;
-            
-            // Update grid template
-            container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-            container.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
-            
-            const shapes = ['square', 'circle', 'triangle'];
-            
-            // Fill grid with shapes
-            for (let i = 0; i < rows * cols; i++) {
-                const shape = document.createElement('div');
-                const type = shapes[Math.floor(Math.random() * shapes.length)];
-                shape.className = `shape ${type}`;
-                
-                if (type !== 'circle') {
-                    shape.style.animationDelay = `${Math.random() * -20}s`;
-                }
-                
-                container.appendChild(shape);
-            }
-        }
 
         // Call on load and resize
-        window.addEventListener('load', createTessellation);
-        window.addEventListener('resize', createTessellation);
 
         // Add cursor-based tilt effect
         document.querySelectorAll('.game-link').forEach(card => {
@@ -2201,48 +2161,20 @@
                 }
                 
                 frameRequest = requestAnimationFrame(() => {
-                    cardStates.forEach((state, card) => {
-                        const newRect = card.getBoundingClientRect();
-                        state.rect = newRect;
-                        updateCardAnimation(card);
+                    // Get all game tiles and update their animations if they have state
+                    document.querySelectorAll('.game-tile').forEach(card => {
+                        if (cardStates.has(card)) {
+                            const newRect = card.getBoundingClientRect();
+                            const state = cardStates.get(card);
+                            state.rect = newRect;
+                            updateCardAnimation(card);
+                        }
                     });
                     frameRequest = null;
                 });
             }
         }, { passive: true });
 
-        // Update event listener attachment
-        function attachCardListeners() {
-            document.querySelectorAll('.game-link').forEach(card => {
-                const tile = card.querySelector('.game-tile');
-                if (!tile) return;
-                
-                // Store the event handlers to ensure proper cleanup
-                const handlers = {
-                    enter: (e) => handleTilt(e),
-                    move: (e) => handleTilt(e),
-                    leave: (e) => resetTilt(e)
-                };
-                
-                card.addEventListener('mouseenter', handlers.enter, { passive: true });
-                card.addEventListener('mousemove', handlers.move, { passive: true });
-                card.addEventListener('mouseleave', handlers.leave, { passive: true });
-                
-                // Store handlers for cleanup
-                card._tiltHandlers = handlers;
-            });
-        }
-
-        // Remove shapes container and related code
-        document.querySelector('.shapes-container')?.remove();
-
-        // Add new animation state tracking
-        let isAnimating = false;
-        let lastScrollY = window.scrollY;
-        let scrollTimeout;
-        let scrollRAF;
-
-        // Update scroll handling
         function handleScroll() {
             if (!settings.enableAnimations) return;
             
@@ -2271,10 +2203,14 @@
 
             const currentScrollY = window.scrollY;
             if (currentScrollY !== lastScrollY) {
-                cardStates.forEach((state, card) => {
-                    const newRect = card.getBoundingClientRect();
-                    state.rect = newRect;
-                    updateCardAnimation(card);
+                // Update all cards that have state in the WeakMap
+                document.querySelectorAll('.game-tile').forEach(card => {
+                    if (cardStates.has(card)) {
+                        const newRect = card.getBoundingClientRect();
+                        const state = cardStates.get(card);
+                        state.rect = newRect;
+                        updateCardAnimation(card);
+                    }
                 });
                 lastScrollY = currentScrollY;
             }

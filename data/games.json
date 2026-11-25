@@ -220,11 +220,6 @@
     "cover": "projects/motox3m-winter/download.jpeg"
   },
   {
-    "name": "Universal Paperclips",
-    "path": "projects/paperclip/index.html",
-    "cover": "projects/paperclips.png"
-  },
-  {
     "name": "Paper.io",
     "path": "https://paper-io.com",
     "cover": "projects/paperio2/images/icon512.png"
@@ -325,6 +320,11 @@
     "cover": "projects/thisistheonlylevel/thisistheonlylevel.png"
   },
   {
+    "name": "Universal Paperclips",
+    "path": "projects/paperclip/index.html",
+    "cover": "projects/paperclips.png"
+  },
+  {
     "name": "We Become What We Behold",
     "path": "https://ncase.itch.io/wbwwb",
     "cover": "projects/wbwwb-master/wbwwb.png"
@@ -348,55 +348,5 @@
     "name": "World's Hardest Game 2",
     "path": "projects/worlds-hardest-game-2/index.html",
     "cover": "projects/worlds-hardest-game-2/the-worlds-hardest-game-2.jpg"
-  },
-  {
-    "name": "Run 2",
-    "path": "projects/Run%202/index.html",
-    "cover": "projects/Run%202/run-2-logo.jpg"
-  },
-  {
-    "name": "Ducklife1",
-    "path": "projects/ducklife1/index.html",
-    "cover": "projects/ducklife1/ducklife.png"
-  },
-  {
-    "name": "Ducklife2",
-    "path": "projects/ducklife2/index.html",
-    "cover": "projects/ducklife2/ducklife2.png"
-  },
-  {
-    "name": "Gartic",
-    "path": "projects/gartic/gartic.html",
-    "cover": "projects/gartic.jpg"
-  },
-  {
-    "name": "Movie",
-    "path": "projects/movie/index.html",
-    "cover": null
-  },
-  {
-    "name": "Paper.io 2",
-    "path": "projects/paperio2/index.html",
-    "cover": "projects/paperio2/images/logo.png"
-  },
-  {
-    "name": "Run 3",
-    "path": "projects/run%203/Run%203.html",
-    "cover": "projects/run%203/image_proxy.jpg"
-  },
-  {
-    "name": "Slitherio",
-    "path": "projects/slitherio/slitherio.html",
-    "cover": "projects/slitherio/7EDEF379-07A2-4604-B552-C0A3DB2D70BE.jpeg"
-  },
-  {
-    "name": "Slope",
-    "path": "projects/slope/index.html",
-    "cover": "projects/slope/slope4.jpeg"
-  },
-  {
-    "name": "Wbwwb master",
-    "path": "projects/wbwwb-master/index.html",
-    "cover": "projects/wbwwb-master/wbwwb.png"
   }
 ]

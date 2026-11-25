@@ -100,9 +100,9 @@
     "title": "Fleeing the Complex"
   },
   {
-    "link": "https://openguessr.com",
-    "imgSrc": "projects/geoguessr.png",
-    "title": "Geoguessr"
+    "link": "https://www.worldguessr.com",
+    "imgSrc": "https://www.worldguessr.com/worldguessr-1200x630.png",
+    "title": "WorldGuessr"
   },
   {
     "link": "projects/geodash/index.html",

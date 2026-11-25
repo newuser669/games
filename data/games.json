@@ -100,11 +100,6 @@
     "cover": "projects/complex.png"
   },
   {
-    "name": "Geoguessr",
-    "path": "https://openguessr.com",
-    "cover": "projects/geoguessr.png"
-  },
-  {
     "name": "Geometry Dash (Scratch)",
     "path": "projects/geodash/index.html",
     "cover": "projects/geodash/geoscratchicon.png"
@@ -348,5 +343,10 @@
     "name": "World's Hardest Game 2",
     "path": "projects/worlds-hardest-game-2/index.html",
     "cover": "projects/worlds-hardest-game-2/the-worlds-hardest-game-2.jpg"
+  },
+  {
+    "name": "WorldGuessr",
+    "path": "https://www.worldguessr.com",
+    "cover": "https://www.worldguessr.com/worldguessr-1200x630.png"
   }
 ]

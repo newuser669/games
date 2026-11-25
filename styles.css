@@ -1,4 +1,4 @@
-/* gamesinclass rehaul demo — one small stylesheet, no frameworks, no CDN. */
+/* gamesinclass — one small stylesheet, no frameworks, no CDN. */
 @font-face {
   font-family: "Minecraft";
   src: url("minecraft_font.woff") format("woff");
@@ -46,8 +46,6 @@ body {
 }
 .logo span { color: var(--accent); }
 
-.tagline { color: var(--muted); margin: 0.4rem 0 1.2rem; }
-
 .search-box input {
   width: min(480px, 90vw);
   padding: 0.7rem 1rem;
@@ -67,8 +65,6 @@ main {
 }
 
 section { margin-top: 2.2rem; }
-section h2 { font-size: 1.35rem; margin: 0 0 0.9rem; }
-.count { color: var(--muted); font-size: 0.95rem; font-weight: normal; }
 
 .grid {
   display: grid;
@@ -96,18 +92,10 @@ a.card:hover, a.card:focus-visible {
 
 .cover {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   background: var(--surface-2);
   display: block;
-}
-.cover-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Minecraft", monospace;
-  font-size: 2.4rem;
-  color: var(--muted);
 }
 .cover-fallback {
   display: flex;
@@ -119,8 +107,6 @@ a.card:hover, a.card:focus-visible {
   padding: 0.5rem;
   text-align: center;
 }
-
-.card.placeholder { border-style: dashed; opacity: 0.75; }
 
 .no-results { color: var(--muted); text-align: center; }
 

@@ -1,5 +1,5 @@
 "use strict";
-/* gamesinclass rehaul demo.
+/* gamesinclass.
    Loads data/games.json once, then renders cards in batches so the page
    never builds the whole library in the DOM at once. Cover images use
    native lazy loading. No third-party requests of any kind. */
@@ -7,7 +7,6 @@
 const BATCH_SIZE = 48;
 
 const grid = document.getElementById("game-grid");
-const countEl = document.getElementById("game-count");
 const loadMoreBtn = document.getElementById("load-more");
 const noResultsEl = document.getElementById("no-results");
 const searchInput = document.getElementById("search");
@@ -65,7 +64,6 @@ function applyFilter() {
     : allGames.slice();
   shown = 0;
   grid.textContent = "";
-  countEl.textContent = `(${filtered.length})`;
   renderBatch();
 }
 
@@ -86,6 +84,13 @@ if ("IntersectionObserver" in window) {
   observer.observe(loadMoreBtn);
 }
 
+/* On computers (fine pointer — mouse/trackpad), focus the search box on
+   load so typing filters instantly. Skipped on touch devices, where
+   autofocus would pop the keyboard open uninvited. */
+if (window.matchMedia("(pointer: fine)").matches) {
+  searchInput.focus({ preventScroll: true });
+}
+
 fetch("data/games.json")
   .then((res) => {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -97,7 +102,6 @@ fetch("data/games.json")
   })
   .catch((err) => {
     console.error("Failed to load games index:", err);
-    countEl.textContent = "";
     noResultsEl.hidden = false;
     noResultsEl.textContent =
       "Could not load data/games.json — is this page being served over HTTP?";
